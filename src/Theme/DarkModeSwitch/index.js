@@ -1,6 +1,8 @@
 import { styled } from "@mui/material/styles";
 import { Switch } from "@mui/material";
-export const DarkModeSwitch = styled(Switch)(({ theme }) => ({
+import { useDarkMode } from "..";
+
+const CustomSwitch = styled(Switch)(({ theme }) => ({
 	width: 62,
 	height: 34,
 	padding: 7,
@@ -19,12 +21,12 @@ export const DarkModeSwitch = styled(Switch)(({ theme }) => ({
 			"& + .MuiSwitch-track": {
 				opacity: 1,
 				backgroundColor:
-					theme.palette.mode === "dark" ? "#8796A5" : "#aab4be",
+					theme.palette.mode === "dark" ? "#aab4be" : "#8796A5",
 			},
 		},
 	},
 	"& .MuiSwitch-thumb": {
-		backgroundColor: theme.palette.mode === "dark" ? "#003892" : "#001e3c",
+		backgroundColor: theme.palette.mode === "dark" ? "#001e3c" : "#003892",
 		width: 32,
 		height: 32,
 		"&:before": {
@@ -47,3 +49,8 @@ export const DarkModeSwitch = styled(Switch)(({ theme }) => ({
 		borderRadius: 20 / 2,
 	},
 }));
+
+export const DarkModeSwitch = () => {
+	const { mode, toggleDarkMode } = useDarkMode();
+	return <CustomSwitch checked={mode === "dark"} onChange={toggleDarkMode} />;
+};

@@ -10,6 +10,8 @@ export default function Layout({ children }) {
 					width: "100vw",
 					height: "var(--body-height)",
 					overflowY: "scroll",
+					backgroundColor: "background.default",
+					color: "text.primary",
 				}}
 			>
 				<Grid
@@ -17,6 +19,7 @@ export default function Layout({ children }) {
 					xs={12}
 					sx={{
 						minHeight: "40vh",
+						paddingX: "1rem",
 					}}
 				>
 					{children}

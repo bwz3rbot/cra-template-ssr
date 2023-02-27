@@ -57,7 +57,12 @@ export const NavigationBar = () => {
 					overflow: "hidden",
 				}}
 			>
-				<AppBar position="sticky">
+				<AppBar
+					position="sticky"
+					sx={{
+						backgroundColor: "primary.main",
+					}}
+				>
 					<Toolbar variant="dense">
 						{!isMedium ? (
 							<>

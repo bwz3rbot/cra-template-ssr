@@ -2,9 +2,11 @@ import { createTheme, ThemeProvider as Provider } from "@mui/material/styles";
 import { red } from "@mui/material/colors";
 import { createContext, useContext, useState } from "react";
 import useCSSProps from "../useCSSProps";
+export { DarkModeSwitch } from "./DarkModeSwitch";
 const lightModeTheme = createTheme({
 	palette: {
 		mode: "light",
+
 		primary: {
 			main: "#556cd6",
 		},
@@ -22,8 +24,17 @@ const lightModeTheme = createTheme({
 const darkModeTheme = createTheme({
 	palette: {
 		mode: "dark",
+		text: {
+			primary: "#fff",
+			secondary: "#fff",
+		},
+		background: {
+			default: "#2f2f2f",
+		},
+
 		primary: {
-			main: "#556cd6",
+			// dark mode secondary darker greyish
+			main: "#121212",
 		},
 		secondary: {
 			main: "#19857b",
@@ -31,14 +42,12 @@ const darkModeTheme = createTheme({
 		error: {
 			main: red.A400,
 		},
-		background: {
-			default: "#fff",
-		},
 	},
 });
 
 const AppThemeContext = createContext({
-	DarkModeToggler: () => <></>,
+	toggleDarkMode: () => {},
+	mode: "light",
 });
 export const useDarkMode = () => useContext(AppThemeContext);
 
@@ -48,6 +57,7 @@ export default function ThemeContextProvider({ children }) {
 	return (
 		<AppThemeContext.Provider
 			value={{
+				mode: theme,
 				toggleDarkMode: () => {
 					setTheme(theme => {
 						return theme === "light" ? "dark" : "light";
