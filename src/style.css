@@ -1,0 +1,45 @@
+.html,
+body {
+	margin: 0;
+	padding: 0;
+	height: var(--app-height);
+	overflow: hidden;
+	/* Disables re-positioning caused by borders */
+	box-sizing: border-box !important;
+	/* Removes pull-to-refresh on IOS */
+	-webkit-overflow-scrolling: touch;
+}
+a,
+a:visited {
+	color: inherit;
+}
+
+input {
+	/* 16px or larger prevents IOS input zoom */
+	font-size: 18px !important;
+}
+
+/* width */
+*::-webkit-scrollbar {
+	width: 10px;
+}
+/* firefox scrollbar */
+* {
+	scrollbar-width: thin;
+	scrollbar-color: #888 #f1f1f1;
+}
+
+/* Track */
+*::-webkit-scrollbar-track {
+	background: #f1f1f1;
+}
+
+/* Handle */
+*::-webkit-scrollbar-thumb {
+	background: #888;
+}
+
+/* Handle on hover */
+*::-webkit-scrollbar-thumb:hover {
+	background: #555;
+}
