@@ -1,13 +1,7 @@
-import * as React from "react";
-import Box from "@mui/material/Box";
 import Avatar from "@mui/material/Avatar";
-import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import Divider from "@mui/material/Divider";
-import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
-import Tooltip from "@mui/material/Tooltip";
+import { Menu, MenuItem, ListItemIcon, Divider } from "@mui/material";
+import { Link } from "react-router-dom";
+
 import LoginIcon from "@mui/icons-material/Login";
 import PersonAdd from "@mui/icons-material/PersonAdd";
 import Settings from "@mui/icons-material/Settings";
@@ -15,19 +9,17 @@ import Logout from "@mui/icons-material/Logout";
 
 import { useFirebaseContext } from "../../../Firebase";
 
-export default function AccountMenu({ anchorEl, onClose }) {
-	const { logout, auth, user, loginWithGoogle } = useFirebaseContext();
-	const handleClose = () => {
-		onClose();
-	};
+export default function AccountMenu({ anchorEl, onClose = () => {} }) {
+	const { logout, auth, loginWithGoogle } = useFirebaseContext();
+
 	return (
-		<React.Fragment>
+		<>
 			<Menu
 				anchorEl={anchorEl}
 				id="account-menu"
 				open={!!anchorEl}
-				onClose={handleClose}
-				onClick={handleClose}
+				onClose={onClose}
+				onClick={onClose}
 				PaperProps={{
 					elevation: 0,
 					sx: {
@@ -57,45 +49,57 @@ export default function AccountMenu({ anchorEl, onClose }) {
 				transformOrigin={{ horizontal: "right", vertical: "top" }}
 				anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
 			>
-				<MenuItem>
-					<Avatar /> {user.username}
-				</MenuItem>
-				<MenuItem
-					onClick={() => {
-						console.log("logging out");
-						loginWithGoogle();
-					}}
-				>
-					<ListItemIcon>
-						<LoginIcon fontSize="small" />
-					</ListItemIcon>
-					Login
-				</MenuItem>
-				<Divider />
-				<MenuItem>
-					<ListItemIcon>
-						<PersonAdd fontSize="small" />
-					</ListItemIcon>
-					Add another account
-				</MenuItem>
-				<MenuItem>
-					<ListItemIcon>
-						<Settings fontSize="small" />
-					</ListItemIcon>
-					Settings
-				</MenuItem>
-				<MenuItem
-					onClick={() => {
-						console.log("logging out");
-						logout();
-					}}
-				>
-					<ListItemIcon>
-						<Logout fontSize="small" />
-					</ListItemIcon>
-					Logout
-				</MenuItem>
+				<div>
+					{auth?.currentUser?.isAnonymous ? (
+						<>
+							<MenuItem
+								onClick={() => {
+									loginWithGoogle();
+								}}
+							>
+								<ListItemIcon>
+									<LoginIcon fontSize="small" />
+								</ListItemIcon>
+								Login
+							</MenuItem>
+							<MenuItem>
+								<ListItemIcon>
+									<PersonAdd fontSize="small" />
+								</ListItemIcon>
+								Create Account
+							</MenuItem>
+						</>
+					) : (
+						<MenuItem>
+							<Avatar
+								src={auth?.currentUser?.photoURL}
+								alt={
+									auth?.currentUser?.displayName ||
+									"Anonymous"
+								}
+							/>
+							{auth?.currentUser?.displayName}
+						</MenuItem>
+					)}
+
+					<Divider />
+
+					<Link to="/settings">
+						<MenuItem>
+							<ListItemIcon>
+								<Settings fontSize="small" />
+							</ListItemIcon>
+							Settings
+						</MenuItem>
+					</Link>
+					<MenuItem onClick={logout}>
+						<ListItemIcon>
+							<Logout fontSize="small" />
+						</ListItemIcon>
+						Logout
+					</MenuItem>
+				</div>
 			</Menu>
-		</React.Fragment>
+		</>
 	);
 }

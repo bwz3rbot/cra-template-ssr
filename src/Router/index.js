@@ -3,7 +3,7 @@ import PageAbout from "../Page/About";
 import Page404 from "../Page/404";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
-export const RouterContext = ({ children }) => {
+export default function RouterContextProvider({ children }) {
 	return (
 		<BrowserRouter
 			window={typeof window !== "undefined" ? window : undefined}
@@ -12,7 +12,7 @@ export const RouterContext = ({ children }) => {
 			{children}
 		</BrowserRouter>
 	);
-};
+}
 export const Pages = () => {
 	return (
 		<Routes>

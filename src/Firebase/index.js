@@ -13,7 +13,6 @@ import {
 
 import { createContext, useContext, useEffect, useState } from "react";
 import { FIREBASE_CONFIG } from "./config";
-import { v4 as uuid } from "uuid";
 
 const Context = createContext({
 	app: null,
@@ -22,7 +21,11 @@ const Context = createContext({
 	login: () => {},
 	logout: () => {},
 	loginWithGoogle: () => {},
-	user: null,
+	user: {
+		uid: null,
+		username: null,
+		photoURL: null,
+	},
 });
 
 export default function FirebaseAppContextProvider({ children }) {
@@ -32,9 +35,6 @@ export default function FirebaseAppContextProvider({ children }) {
 		analytics: null,
 		initialized: false,
 	});
-	const [key, setKey] = useState(uuid());
-
-	const refreshState = () => setKey(uuid());
 
 	useEffect(() => {
 		if (state.initialized) return;
@@ -43,7 +43,12 @@ export default function FirebaseAppContextProvider({ children }) {
 			const app = initializeApp(FIREBASE_CONFIG);
 			const auth = getAuth(app);
 			onAuthStateChanged(auth, user => {
-				refreshState();
+				// state needs to be given a new reference to auth here
+				// or the currently logged in user it will be out of sync
+				setState(state => ({
+					...state,
+					auth,
+				}));
 			});
 			await setPersistence(auth, browserSessionPersistence);
 			const analytics = getAnalytics(app);
@@ -63,17 +68,16 @@ export default function FirebaseAppContextProvider({ children }) {
 
 	const handleAnonymousLogin = async () => {
 		if (!state.auth) return;
-		if (state.auth.currentUser) return;
 		signInAnonymously(state.auth);
 	};
 	useEffect(() => {
 		if (!state.initialized) return;
+		if (state.auth.currentUser) return;
 		handleAnonymousLogin();
 	}, [state]);
 
 	return (
 		<Context.Provider
-			key={key}
 			value={{
 				app: state.app,
 				auth: state.auth,
@@ -83,7 +87,7 @@ export default function FirebaseAppContextProvider({ children }) {
 					password,
 					onSuccess = () => {},
 					onError = () => {},
-				}) => {
+				} = {}) => {
 					if (!state.auth) return;
 					state.auth
 						.signInWithEmailAndPassword(email, password)
@@ -102,13 +106,6 @@ export default function FirebaseAppContextProvider({ children }) {
 				logout: () => {
 					if (!state.auth) return;
 					state.auth.signOut();
-				},
-				user: {
-					username:
-						state.auth?.currentUser?.displayName ||
-						"Anonymous User",
-					photoURL: state.auth?.currentUser?.photoURL,
-					isAnonymous: state.auth?.currentUser?.isAnonymous,
 				},
 			}}
 		>

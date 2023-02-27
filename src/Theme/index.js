@@ -42,7 +42,7 @@ const AppThemeContext = createContext({
 });
 export const useDarkMode = () => useContext(AppThemeContext);
 
-export const ThemeContext = ({ children }) => {
+export default function ThemeContextProvider({ children }) {
 	useCSSProps();
 	const [theme, setTheme] = useState("light");
 	return (
@@ -62,4 +62,4 @@ export const ThemeContext = ({ children }) => {
 			</Provider>
 		</AppThemeContext.Provider>
 	);
-};
+}

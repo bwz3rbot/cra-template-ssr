@@ -9,6 +9,10 @@ export default function QueryClientContextProvider({
 	children,
 	enableLogging = false,
 }) {
+	const log = (type, data) => {
+		enableLogging && console.log(type, data);
+	};
+
 	return (
 		<QueryClientProvider
 			client={
@@ -25,26 +29,21 @@ export default function QueryClientContextProvider({
 					},
 					queryCache: new QueryCache({
 						onError: err => {
-							enableLogging &&
-								console.log("query cache error", { err });
+							log("query cache error", { err });
 						},
 						onSuccess: data => {
-							enableLogging &&
-								console.log("query cache success", { data });
+							log("query cache success", { data });
 						},
 					}),
 					mutationCache: new MutationCache({
 						onError: err => {
-							enableLogging &&
-								console.log("mutation cache error", { err });
+							log("mutation cache error", { err });
 						},
 						onSuccess: data => {
-							enableLogging &&
-								console.log("mutation cache success", { data });
+							log("mutation cache success", { data });
 						},
 						onMutate: data => {
-							enableLogging &&
-								console.log("mutation cache mutate", { data });
+							log("mutation cache mutate", { data });
 						},
 					}),
 				})
