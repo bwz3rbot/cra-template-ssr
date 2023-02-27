@@ -18,6 +18,8 @@ import { NavDrawer } from "./Drawer";
 
 import WideLogo from "../Logo/wide.png";
 import RoundLogo from "../Logo/round.png";
+import AccountWidget from "./AccountWidget";
+
 export { Footer } from "./Footer";
 
 export const NavigationBar = () => {
@@ -115,7 +117,6 @@ export const NavigationBar = () => {
 								</Link>
 							</div>
 						)}
-
 						<div
 							style={{
 								display: "flex",
@@ -146,7 +147,7 @@ export const NavigationBar = () => {
 									);
 								})}
 						</div>
-						<Button color="inherit">Login</Button>
+						<AccountWidget />
 					</Toolbar>
 				</AppBar>
 			</Box>

@@ -1,6 +1,7 @@
 import { createTheme, ThemeProvider as Provider } from "@mui/material/styles";
 import { red } from "@mui/material/colors";
 import { createContext, useContext, useState } from "react";
+import useCSSProps from "../useCSSProps";
 const lightModeTheme = createTheme({
 	palette: {
 		mode: "light",
@@ -42,6 +43,7 @@ const AppThemeContext = createContext({
 export const useDarkMode = () => useContext(AppThemeContext);
 
 export const ThemeContext = ({ children }) => {
+	useCSSProps();
 	const [theme, setTheme] = useState("light");
 	return (
 		<AppThemeContext.Provider
