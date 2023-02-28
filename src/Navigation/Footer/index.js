@@ -1,8 +1,10 @@
+import { Fragment } from "react";
 import { Grid, Typography, Divider } from "@mui/material";
 import RoundLogo from "../../Logo/round.png";
 import { LinkSection } from "../Links";
 import { Link } from "react-router-dom";
 import { DarkModeSwitch } from "../../Theme";
+
 const LogoWrapper = () => {
 	return (
 		<Grid
@@ -95,7 +97,7 @@ export const Footer = () => {
 								{section.name}
 							</Typography>
 							{section.links.map(({ to, text, Icon }, index) => (
-								<>
+								<Fragment key={index}>
 									<Grid
 										key={index}
 										item
@@ -129,7 +131,7 @@ export const Footer = () => {
 											}}
 										/>
 									)}
-								</>
+								</Fragment>
 							))}
 						</Grid>
 					);

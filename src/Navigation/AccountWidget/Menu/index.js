@@ -2,18 +2,22 @@ import Avatar from "@mui/material/Avatar";
 import { Menu, MenuItem, ListItemIcon, Divider } from "@mui/material";
 import { Link } from "react-router-dom";
 
-import LoginIcon from "@mui/icons-material/Login";
-import PersonAdd from "@mui/icons-material/PersonAdd";
-import Settings from "@mui/icons-material/Settings";
-import Logout from "@mui/icons-material/Logout";
+import SignInIcon from "@mui/icons-material/Login";
+import PersonAddIcon from "@mui/icons-material/PersonAdd";
+import SettingsIcon from "@mui/icons-material/Settings";
+import SignOutIcon from "@mui/icons-material/Logout";
 
 import { useFirebaseContext } from "../../../Firebase";
 
+import SignInDialog from "../SignInDialog";
+
 export default function AccountMenu({ anchorEl, onClose = () => {} }) {
-	const { logout, auth, loginWithGoogle } = useFirebaseContext();
+	const { signOut, auth, setShowingSignInDialog, username } =
+		useFirebaseContext();
 
 	return (
 		<>
+			<SignInDialog />
 			<Menu
 				anchorEl={anchorEl}
 				id="account-menu"
@@ -53,18 +57,18 @@ export default function AccountMenu({ anchorEl, onClose = () => {} }) {
 					{auth?.currentUser?.isAnonymous ? (
 						<>
 							<MenuItem
-								onClick={() => {
-									loginWithGoogle();
-								}}
+								onClick={() => setShowingSignInDialog(true)}
 							>
 								<ListItemIcon>
-									<LoginIcon fontSize="small" />
+									<SignInIcon fontSize="small" />
 								</ListItemIcon>
-								Login
+								Sign In
 							</MenuItem>
-							<MenuItem>
+							<MenuItem
+								onClick={() => setShowingSignInDialog(true)}
+							>
 								<ListItemIcon>
-									<PersonAdd fontSize="small" />
+									<PersonAddIcon fontSize="small" />
 								</ListItemIcon>
 								Create Account
 							</MenuItem>
@@ -73,12 +77,9 @@ export default function AccountMenu({ anchorEl, onClose = () => {} }) {
 						<MenuItem>
 							<Avatar
 								src={auth?.currentUser?.photoURL}
-								alt={
-									auth?.currentUser?.displayName ||
-									"Anonymous"
-								}
+								alt={username || "Anonymous"}
 							/>
-							{auth?.currentUser?.displayName}
+							{username}
 						</MenuItem>
 					)}
 
@@ -87,16 +88,16 @@ export default function AccountMenu({ anchorEl, onClose = () => {} }) {
 					<Link to="/settings">
 						<MenuItem>
 							<ListItemIcon>
-								<Settings fontSize="small" />
+								<SettingsIcon fontSize="small" />
 							</ListItemIcon>
 							Settings
 						</MenuItem>
 					</Link>
-					<MenuItem onClick={logout}>
+					<MenuItem onClick={signOut}>
 						<ListItemIcon>
-							<Logout fontSize="small" />
+							<SignOutIcon fontSize="small" />
 						</ListItemIcon>
-						Logout
+						Sign Out
 					</MenuItem>
 				</div>
 			</Menu>

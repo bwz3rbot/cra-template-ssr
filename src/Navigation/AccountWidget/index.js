@@ -3,7 +3,7 @@ import { useFirebaseContext } from "../../Firebase/index";
 import { useState } from "react";
 import AccountMenu from "./Menu";
 export default function AccountWidget() {
-	const { auth } = useFirebaseContext();
+	const { auth, username } = useFirebaseContext();
 	const [menuAnchorEl, setMenuAnchorEl] = useState(null);
 
 	const setAnchorEl = e => setMenuAnchorEl(e.currentTarget);
@@ -13,9 +13,9 @@ export default function AccountWidget() {
 			<IconButton onClick={setAnchorEl}>
 				<Avatar
 					src={auth?.currentUser?.photoURL}
-					alt={auth?.currentUser?.displayName || "Anonymous"}
+					alt={username || "Anonymous"}
 				>
-					{auth.currentUser?.displayName?.slice(0, 1)}
+					{username?.slice(0, 1) || null}
 				</Avatar>
 			</IconButton>
 			<AccountMenu

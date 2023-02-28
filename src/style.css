@@ -20,7 +20,7 @@ a:hover {
 
 input {
 	/* 16px or larger prevents IOS input zoom */
-	font-size: 18px !important;
+	font-size: 16px !important;
 }
 
 /* width */

@@ -5,6 +5,8 @@ import {
 	getAuth,
 	signInAnonymously,
 	signInWithPopup,
+	signInWithEmailAndPassword,
+	createUserWithEmailAndPassword,
 	setPersistence,
 	browserSessionPersistence,
 	GoogleAuthProvider,
@@ -18,14 +20,23 @@ const Context = createContext({
 	app: null,
 	auth: null,
 	analytics: null,
-	login: () => {},
-	logout: () => {},
-	loginWithGoogle: () => {},
-	user: {
-		uid: null,
-		username: null,
-		photoURL: null,
-	},
+	username: null,
+	signInWithGoogle: ({ onSuccess = () => {}, onFailure = () => {} }) => {},
+	signInWithEmailAndPassword: ({
+		email,
+		password,
+		onSuccess = () => {},
+		onFailure = () => {},
+	}) => {},
+	signOut: () => {},
+	showingSignInDialog: false,
+	setShowingSignInDialog: () => {},
+	createAccount: ({
+		email,
+		password,
+		onSuccess = () => {},
+		onFailure = () => {},
+	}) => {},
 });
 
 export default function FirebaseAppContextProvider({ children }) {
@@ -36,6 +47,7 @@ export default function FirebaseAppContextProvider({ children }) {
 		initialized: false,
 	});
 
+	const [showingSignInDialog, setShowingSignInDialog] = useState(false);
 	useEffect(() => {
 		if (state.initialized) return;
 		let mounted = true;
@@ -45,6 +57,10 @@ export default function FirebaseAppContextProvider({ children }) {
 			onAuthStateChanged(auth, user => {
 				// state needs to be given a new reference to auth here
 				// or the currently logged in user it will be out of sync
+				console.log("auth state changed:", {
+					auth,
+					user,
+				});
 				setState(state => ({
 					...state,
 					auth,
@@ -76,36 +92,63 @@ export default function FirebaseAppContextProvider({ children }) {
 		handleAnonymousLogin();
 	}, [state]);
 
+	console.log({
+		state,
+	});
 	return (
 		<Context.Provider
 			value={{
 				app: state.app,
 				auth: state.auth,
 				analytics: state.analytics,
-				login: ({
+				username:
+					state.auth?.currentUser?.displayName ||
+					state.auth?.currentUser?.email ||
+					null,
+				signInWithEmailAndPassword: ({
 					email,
 					password,
 					onSuccess = () => {},
 					onError = () => {},
 				} = {}) => {
 					if (!state.auth) return;
-					state.auth
-						.signInWithEmailAndPassword(email, password)
+					signInWithEmailAndPassword(state.auth, email, password)
 						.then(onSuccess)
 						.catch(onError);
 				},
-				loginWithGoogle: ({
+				signInWithGoogle: ({
 					onSuccess = () => {},
 					onError = () => {},
 				} = {}) => {
 					if (!state.auth) return;
 					const provider = new GoogleAuthProvider();
 					/* popup seems to work better on mobile than using redirect */
-					signInWithPopup(state.auth, provider);
+					signInWithPopup(state.auth, provider)
+						.then(onSuccess)
+						.catch(onError);
 				},
-				logout: () => {
+				signOut: () => {
 					if (!state.auth) return;
 					state.auth.signOut();
+				},
+				showingSignInDialog,
+				setShowingSignInDialog: value => {
+					if (setShowingSignInDialog === !!value) return;
+					setShowingSignInDialog(!!value);
+				},
+				createAccount: async ({
+					email,
+					password,
+					onSuccess = () => {},
+					onError = () => {},
+				} = {}) => {
+					if (!state.auth) return;
+
+					createUserWithEmailAndPassword(state.auth, email, password)
+						.then(({ user }) => {
+							onSuccess();
+						})
+						.catch(onError);
 				},
 			}}
 		>
