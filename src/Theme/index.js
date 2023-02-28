@@ -51,18 +51,52 @@ const AppThemeContext = createContext({
 });
 export const useDarkMode = () => useContext(AppThemeContext);
 
+const useRecallTheme = () => {
+	const getDeviceTheme = () => {
+		if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+			return "dark";
+		}
+		if (window.matchMedia("(prefers-color-scheme: light)").matches) {
+			return "light";
+		}
+		return null;
+	};
+	const storeSelectedTheme = theme => {
+		localStorage.setItem("theme", theme);
+	};
+	const recallStoredTheme = () => {
+		return localStorage.getItem("theme");
+	};
+	const [theme, setTheme] = useState(
+		recallStoredTheme() || getDeviceTheme() || "light"
+	);
+
+	const handleSetTheme = theme => {
+		setTheme(theme);
+		storeSelectedTheme(theme);
+	};
+
+	const toggleDarkMode = () => {
+		const newTheme = theme === "light" ? "dark" : "light";
+		handleSetTheme(newTheme);
+	};
+	return {
+		theme,
+		toggleDarkMode,
+		setDarkMode: handleSetTheme,
+	};
+};
+
 export default function ThemeContextProvider({ children }) {
 	useCSSProps();
-	const [theme, setTheme] = useState("light");
+	const { theme, toggleDarkMode, setDarkMode } = useRecallTheme();
+
 	return (
 		<AppThemeContext.Provider
 			value={{
 				mode: theme,
-				toggleDarkMode: () => {
-					setTheme(theme => {
-						return theme === "light" ? "dark" : "light";
-					});
-				},
+				toggleDarkMode,
+				setDarkMode,
 			}}
 		>
 			<Provider
