@@ -1,3 +1,8 @@
+import { Typography } from "@mui/material";
 export default function PageLanding() {
-	return <div>---404 Page---</div>;
+	return (
+		<div>
+			<Typography>---404 Page---</Typography>
+		</div>
+	);
 }

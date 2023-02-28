@@ -1,3 +1,8 @@
+import { Typography } from "@mui/material";
 export default function PageAbout() {
-	return <div>---About Page---</div>;
+	return (
+		<div>
+			<Typography>---About Page---</Typography>
+		</div>
+	);
 }
