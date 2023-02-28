@@ -92,12 +92,43 @@ export default function SignInDialog() {
 					required
 				/>
 				<FormControl>
-					<Button type="submit" name="sign-in-btn">
-						Log In
+					<Button
+						sx={{
+							backgroundColor: "primary.main",
+
+							"&:hover": {
+								backgroundColor: "primary.dark",
+							},
+						}}
+						type="submit"
+						name="sign-in-btn"
+					>
+						<Typography
+							sx={{
+								color: "primary.contrastText",
+							}}
+						>
+							Sign In
+						</Typography>
 					</Button>
 					<Divider />
-					<Button type="submit" name="create-act-btn">
-						Create Account
+					<Button
+						sx={{
+							backgroundColor: "primary.main",
+							"&:hover": {
+								backgroundColor: "primary.dark",
+							},
+						}}
+						type="submit"
+						name="create-act-btn"
+					>
+						<Typography
+							sx={{
+								color: "primary.contrastText",
+							}}
+						>
+							Create Account
+						</Typography>
 					</Button>
 				</FormControl>
 			</Stack>
@@ -107,8 +138,21 @@ export default function SignInDialog() {
 		<Dialog
 			open={showingSignInDialog}
 			onClose={() => setShowingSignInDialog(false)}
+			sx={{
+				"& .MuiDialog-paper": {
+					width: "100%",
+					maxWidth: "500px",
+				},
+				backdropFilter: "blur(10px)",
+				transition: "all 0.3s ease-in-out",
+			}}
 		>
-			<DialogTitle>
+			<DialogTitle
+				sx={{
+					backgroundColor: "primary.main",
+					color: "primary.contrastText",
+				}}
+			>
 				Sign In To {process.env.REACT_APP_SITE_NAME}
 			</DialogTitle>
 			<DialogContent dividers>
@@ -125,9 +169,23 @@ export default function SignInDialog() {
 				<GoogleIcon />
 			</DialogContent>
 
-			<DialogActions>
+			<DialogActions
+				sx={{
+					backgroundColor: "primary.main",
+				}}
+			>
 				<Button onClick={() => setShowingSignInDialog(false)}>
-					Cancel
+					<Typography
+						sx={{
+							color: "primary.contrastText",
+							// on hover
+							"&:hover": {
+								color: "action.selected",
+							},
+						}}
+					>
+						Cancel
+					</Typography>
 				</Button>
 			</DialogActions>
 		</Dialog>
