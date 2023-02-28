@@ -3,6 +3,7 @@ import AuthContext from "./Firebase";
 import QueryClientContextProvider from "./Query";
 import ThemeContext from "./Theme";
 import Layout from "./Layout";
+import NotificationsContext from "./Notifications";
 import RouterContext, { Pages } from "./Router";
 import { SnackbarProvider } from "notistack";
 import "./style.css";
@@ -15,11 +16,13 @@ export default function App() {
 					{/* Query Client must be a child of auth context or fetch will run twice */}
 					<QueryClientContextProvider>
 						<ThemeContext>
-							<RouterContext>
-								<Layout>
-									<Pages />
-								</Layout>
-							</RouterContext>
+							<NotificationsContext>
+								<RouterContext>
+									<Layout>
+										<Pages />
+									</Layout>
+								</RouterContext>
+							</NotificationsContext>
 						</ThemeContext>
 					</QueryClientContextProvider>
 				</AuthContext>

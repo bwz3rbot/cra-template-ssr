@@ -10,19 +10,18 @@ import ElipsesIcon from "@mui/icons-material/MoreVert";
 import SettingsIcon from "@mui/icons-material/Settings";
 import HideIcon from "@mui/icons-material/VisibilityOff";
 
-import { NOTIFICATIONS } from "../dummydata";
+import { useNotifications } from "../../../Notifications";
 const PREVIEW_IMAGE_DIMENSIONS = {
 	width: 100,
 	height: 50,
 };
 
 export default function NotificationsMenu({ anchorEl, onClose = () => {} }) {
+	const { notifications, hideNotification } = useNotifications();
 	const [contextMenuState, setContextMenuState] = useState({
 		anchorEl: null,
 		notification: null,
 	});
-
-	const [notifications, setNotifications] = useState(NOTIFICATIONS);
 
 	return (
 		<>
@@ -45,11 +44,7 @@ export default function NotificationsMenu({ anchorEl, onClose = () => {} }) {
 						backgroundColor: "transparent",
 					}}
 					onClick={() => {
-						setNotifications(
-							notifications.filter(
-								n => n.id !== contextMenuState.notification.id
-							)
-						);
+						hideNotification(contextMenuState.notification.id);
 						setContextMenuState({
 							anchorEl: null,
 							notification: null,
@@ -67,7 +62,7 @@ export default function NotificationsMenu({ anchorEl, onClose = () => {} }) {
 						<Typography>Hide this notification</Typography>
 					</ListItemIcon>
 				</MenuItem>
-			</Menu>{" "}
+			</Menu>
 			<Menu anchorEl={anchorEl} onClose={onClose}>
 				<MenuItem
 					dense

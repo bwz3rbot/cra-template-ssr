@@ -1,28 +1,10 @@
 import { useState } from "react";
 import { IconButton } from "@mui/material";
-import NotificationsNoneRoundedIcon from "@mui/icons-material/NotificationsNoneRounded";
-import NotificationsActiveRoundedIcon from "@mui/icons-material/NotificationsActiveRounded";
-import NotificationsOffRoundedIcon from "@mui/icons-material/NotificationsOffRounded";
 import NotificationsList from "./List";
-import "./style.css";
-
-const states = {
-	none: { name: "none", Icon: NotificationsNoneRoundedIcon },
-	active: {
-		name: "active",
-		Icon: NotificationsActiveRoundedIcon,
-	},
-	off: { name: "off", Icon: NotificationsOffRoundedIcon },
-};
-
+import { useNotifications } from "../../Notifications";
 export default function NotificationsWidget() {
+	const { WidgetIcon: NotificationsBell } = useNotifications();
 	const [menuAnchorEl, setMenuAnchorEl] = useState(null);
-	const [state, setState] = useState("active");
-	const handleSetStateNone = () => setState("none");
-	const handleSetStateOff = () => setState("off");
-	const handleSetStateActive = () => setState("active");
-
-	const NotificationsIcon = states[state].Icon;
 
 	return (
 		<>
@@ -36,9 +18,7 @@ export default function NotificationsWidget() {
 					setMenuAnchorEl(null);
 				}}
 			>
-				<NotificationsIcon
-					className={`${state === "active" ? "wiggle" : "none"}`}
-				/>
+				<NotificationsBell />
 			</IconButton>
 			<NotificationsList
 				anchorEl={menuAnchorEl}
