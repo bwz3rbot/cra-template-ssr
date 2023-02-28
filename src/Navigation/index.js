@@ -168,9 +168,7 @@ export const NavigationBar = () => {
 					</Toolbar>
 				</AppBar>
 			</Box>
-			<Drawer anchor="top" open={open} onClose={toggleDrawer}>
-				<NavDrawer onClose={toggleDrawer} />
-			</Drawer>
+			<NavDrawer onClose={toggleDrawer} open={open} />
 		</nav>
 	);
 };
