@@ -51,7 +51,7 @@ export default function AccountMenu({ anchorEl, onClose = () => {} }) {
 						</MenuItem>
 					)}
 
-					{!auth?.currentUser.isAnonymous && (
+					{!auth?.currentUser?.isAnonymous && (
 						<>
 							<Divider />
 

@@ -17,7 +17,7 @@ const states = {
 
 export default function NotificationsWidget() {
 	const [menuAnchorEl, setMenuAnchorEl] = useState(null);
-	const [state, setState] = useState("none");
+	const [state, setState] = useState("active");
 	const handleSetStateNone = () => setState("none");
 	const handleSetStateOff = () => setState("off");
 	const handleSetStateActive = () => setState("active");

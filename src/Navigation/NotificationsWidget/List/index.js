@@ -24,11 +24,11 @@ export default function NotificationsMenu({ anchorEl, onClose = () => {} }) {
 
 	const [notifications, setNotifications] = useState(NOTIFICATIONS);
 
-	const ContextMenu = () => {
-		return (
+	return (
+		<>
 			<Menu
 				anchorEl={contextMenuState.anchorEl}
-				onClose={() => {
+				onClose={e => {
 					setContextMenuState({
 						anchorEl: null,
 						notification: null,
@@ -67,12 +67,7 @@ export default function NotificationsMenu({ anchorEl, onClose = () => {} }) {
 						<Typography>Hide this notification</Typography>
 					</ListItemIcon>
 				</MenuItem>
-			</Menu>
-		);
-	};
-	return (
-		<>
-			<ContextMenu />
+			</Menu>{" "}
 			<Menu anchorEl={anchorEl} onClose={onClose}>
 				<MenuItem
 					dense
