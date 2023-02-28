@@ -14,7 +14,6 @@ import SignInDialog from "../SignInDialog";
 export default function AccountMenu({ anchorEl, onClose = () => {} }) {
 	const { signOut, auth, setShowingSignInDialog, username } =
 		useFirebaseContext();
-
 	return (
 		<>
 			<SignInDialog />
@@ -52,22 +51,26 @@ export default function AccountMenu({ anchorEl, onClose = () => {} }) {
 						</MenuItem>
 					)}
 
-					<Divider />
+					{!auth?.currentUser.isAnonymous && (
+						<>
+							<Divider />
 
-					<Link to="/settings">
-						<MenuItem>
-							<ListItemIcon>
-								<SettingsIcon fontSize="small" />
-							</ListItemIcon>
-							Settings
-						</MenuItem>
-					</Link>
-					<MenuItem onClick={signOut}>
-						<ListItemIcon>
-							<SignOutIcon fontSize="small" />
-						</ListItemIcon>
-						Sign Out
-					</MenuItem>
+							<Link to="/settings">
+								<MenuItem>
+									<ListItemIcon>
+										<SettingsIcon fontSize="small" />
+									</ListItemIcon>
+									Settings
+								</MenuItem>
+							</Link>
+							<MenuItem onClick={signOut}>
+								<ListItemIcon>
+									<SignOutIcon fontSize="small" />
+								</ListItemIcon>
+								Sign Out
+							</MenuItem>
+						</>
+					)}
 				</div>
 			</Menu>
 		</>

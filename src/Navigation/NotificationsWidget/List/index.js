@@ -1,80 +1,19 @@
-import { Fragment } from "react";
-import Avatar from "@mui/material/Avatar";
+import { Fragment, useState } from "react";
+import { Link } from "react-router-dom";
 
-import { Typography, Grid, IconButton } from "@mui/material";
-import ElipsesIcon from "@mui/icons-material/MoreVert";
-
-import SettingsIcon from "@mui/icons-material/Settings";
-
-import HideIcon from "@mui/icons-material/VisibilityOff";
+import { Typography, Grid, IconButton, Avatar } from "@mui/material";
 
 import Menu, { Divider, ListItemIcon, MenuItem } from "../../../Component/Menu";
-import { useState } from "react";
 
-const NOTIFICATIONS = [
-	{
-		id: 1,
-		subject: "New user registered",
-		body: "John Doe has registered",
-		type: "info",
-		timestamp: "2021-08-01T12:00:00.000Z",
-	},
-	{
-		id: 2,
-		subject: "New user registered",
-		body: "John Doe has registered",
-		type: "warning",
-		timestamp: "2021-08-01T12:00:00.000Z",
-	},
-	{
-		id: 3,
-		subject: "New user registered",
-		body: "John Doe has registered",
-		type: "error",
-		timestamp: "2021-08-01T12:00:00.000Z",
-	},
-	{
-		id: 4,
-		subject: "Upload successful",
-		body: "File uploaded successfully. Click to view. Other stuff goes here. Just testing to make the text really really long.",
-		type: "info",
-	},
-	{
-		id: 5,
-		subject: "Upload successful",
+import { calculateDateSinceTimestamp } from "../../../util/calculateDateSinceTimestamp";
+import ElipsesIcon from "@mui/icons-material/MoreVert";
+import SettingsIcon from "@mui/icons-material/Settings";
+import HideIcon from "@mui/icons-material/VisibilityOff";
 
-		body: "File uploaded successfully. Click to view. Other stuff goes here. Just testing to make the text really really long.",
-		type: "warning",
-	},
-	{
-		id: 6,
-		subject: "Upload successful",
-		body: "File uploaded successfully. Click to view. Other stuff goes here. Just testing to make the text really really long.",
-
-		type: "error",
-	},
-	{
-		id: 7,
-		subject: "Upload successful",
-		body: "File uploaded successfully. Click to view. Other stuff goes here. Just testing to make the text really really long.",
-		type: "info",
-	},
-];
-
-const calculateDateSinceTimestamp = timestamp => {
-	const date = new Date(timestamp);
-	const now = new Date();
-	const diff = now.getTime() - date.getTime();
-	const diffDays = Math.floor(diff / (1000 * 3600 * 24));
-	const diffHours = Math.floor(diff / (1000 * 3600));
-
-	if (diffDays > 0) {
-		return `${diffDays} day${diffDays > 1 ? "s" : ""} ago`;
-	} else if (diffHours > 0) {
-		return `${diffHours} hour${diffHours > 1 ? "s" : ""} ago`;
-	} else {
-		return "just now";
-	}
+import { NOTIFICATIONS } from "../dummydata";
+const PREVIEW_IMAGE_DIMENSIONS = {
+	width: 100,
+	height: 50,
 };
 
 export default function NotificationsMenu({ anchorEl, onClose = () => {} }) {
@@ -150,9 +89,16 @@ export default function NotificationsMenu({ anchorEl, onClose = () => {} }) {
 							flexGrow: 1,
 						}}
 					>
-						<Typography>Notifications</Typography>
+						<Typography
+							sx={{
+								fontWeight: "bold",
+								color: "text.primary",
+							}}
+						>
+							Notifications
+						</Typography>
 					</ListItemIcon>
-					<IconButton>
+					<IconButton component={Link} to="/settings">
 						<SettingsIcon />
 					</IconButton>
 				</MenuItem>
@@ -171,7 +117,7 @@ export default function NotificationsMenu({ anchorEl, onClose = () => {} }) {
 							body,
 							type,
 							timestamp,
-							src = `https://picsum.photos/100/50`,
+							src = `https://picsum.photos/seed/${id}/${PREVIEW_IMAGE_DIMENSIONS.width}/${PREVIEW_IMAGE_DIMENSIONS.height}`,
 						} = notification;
 						return (
 							<Fragment key={id}>
@@ -233,8 +179,8 @@ export default function NotificationsMenu({ anchorEl, onClose = () => {} }) {
 											src={src}
 											alt="random"
 											style={{
-												maxWidth: "100px",
-												height: "50px",
+												maxWidth: `${PREVIEW_IMAGE_DIMENSIONS.width}px`,
+												height: `${PREVIEW_IMAGE_DIMENSIONS.height}px`,
 											}}
 											referrerPolicy="no-referrer"
 										/>

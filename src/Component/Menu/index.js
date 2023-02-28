@@ -1,4 +1,7 @@
+import { useEffect } from "react";
 import { Menu as MuiMenu } from "@mui/material";
+import { useLocation } from "react-router-dom";
+
 export { MenuItem, ListItemIcon, Divider } from "@mui/material";
 
 export default function Menu({
@@ -6,6 +9,10 @@ export default function Menu({
 	onClose = () => {},
 	children = [<></>],
 }) {
+	const location = useLocation();
+	useEffect(() => {
+		if (anchorEl) onClose();
+	}, [location]);
 	return (
 		<MuiMenu
 			anchorEl={anchorEl}

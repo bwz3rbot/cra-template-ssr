@@ -34,9 +34,6 @@ export default function SignInDialog() {
 				spacing={2}
 				onSubmit={e => {
 					e.preventDefault();
-
-					console.log(e.target.email.value);
-
 					const handleCreateAccount = () => {
 						createAccount({
 							email: e.target.email.value,
