@@ -2,8 +2,9 @@ import { createContext, useContext, useState, useEffect } from "react";
 import NotificationsNoneRoundedIcon from "@mui/icons-material/NotificationsNoneRounded";
 import NotificationsActiveRoundedIcon from "@mui/icons-material/NotificationsActiveRounded";
 import NotificationsOffRoundedIcon from "@mui/icons-material/NotificationsOffRounded";
-import "./style.css";
 import { NOTIFICATIONS } from "./dummydata";
+
+import "./style.css";
 
 const states = {
 	none: { name: "none", Icon: NotificationsNoneRoundedIcon },
