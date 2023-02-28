@@ -6,9 +6,6 @@ export { DarkModeSwitch } from "./DarkModeSwitch";
 const lightModeTheme = createTheme({
 	palette: {
 		mode: "light",
-		action:{
-			
-		}
 
 		primary: {
 			main: "#556cd6",
