@@ -1,6 +1,4 @@
 import Avatar from "@mui/material/Avatar";
-
-import Menu, { Divider, ListItemIcon, MenuItem } from "../../../Component/Menu";
 import { Link } from "react-router-dom";
 
 import SignInIcon from "@mui/icons-material/Login";
@@ -9,7 +7,7 @@ import SettingsIcon from "@mui/icons-material/Settings";
 import SignOutIcon from "@mui/icons-material/Logout";
 import { useFirebaseContext } from "../../../Firebase";
 
-import SignInDialog from "../SignInDialog";
+import Menu, { Divider, ListItemIcon, MenuItem } from "../../../Component/Menu";
 
 export default function AccountMenu({ anchorEl, onClose = () => {} }) {
 	const { signOut, auth, setShowingSignInDialog, username } =
@@ -17,7 +15,6 @@ export default function AccountMenu({ anchorEl, onClose = () => {} }) {
 
 	return (
 		<>
-			<SignInDialog />
 			<Menu anchorEl={anchorEl} onClose={onClose}>
 				<div>
 					{auth?.currentUser?.isAnonymous ? (
