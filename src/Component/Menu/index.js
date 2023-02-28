@@ -12,7 +12,6 @@ export default function Menu({
 			id="account-menu"
 			open={!!anchorEl}
 			onClose={onClose}
-			onClick={onClose}
 			PaperProps={{
 				elevation: 0,
 				sx: {
@@ -20,6 +19,7 @@ export default function Menu({
 					filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
 					minWidth: 220,
 					mt: 1.5,
+
 					"& .MuiAvatar-root": {
 						width: 32,
 						height: 32,

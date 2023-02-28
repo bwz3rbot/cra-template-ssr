@@ -57,10 +57,7 @@ export default function FirebaseAppContextProvider({ children }) {
 			onAuthStateChanged(auth, user => {
 				// state needs to be given a new reference to auth here
 				// or the currently logged in user it will be out of sync
-				console.log("auth state changed:", {
-					auth,
-					user,
-				});
+
 				setState(state => ({
 					...state,
 					auth,
@@ -92,9 +89,6 @@ export default function FirebaseAppContextProvider({ children }) {
 		handleAnonymousLogin();
 	}, [state]);
 
-	console.log({
-		state,
-	});
 	return (
 		<Context.Provider
 			value={{
