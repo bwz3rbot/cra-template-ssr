@@ -6,7 +6,6 @@ import SignInIcon from "@mui/icons-material/Login";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import SettingsIcon from "@mui/icons-material/Settings";
 import SignOutIcon from "@mui/icons-material/Logout";
-
 import { useFirebaseContext } from "../../../Firebase";
 
 import SignInDialog from "../SignInDialog";
@@ -29,6 +28,7 @@ export default function AccountMenu({ anchorEl, onClose = () => {} }) {
 					sx: {
 						overflow: "visible",
 						filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
+						minWidth: 220,
 						mt: 1.5,
 						"& .MuiAvatar-root": {
 							width: 32,
@@ -78,6 +78,9 @@ export default function AccountMenu({ anchorEl, onClose = () => {} }) {
 							<Avatar
 								src={auth?.currentUser?.photoURL}
 								alt={username || "Anonymous"}
+								imgProps={{
+									referrerPolicy: "no-referrer",
+								}}
 							/>
 							{username}
 						</MenuItem>

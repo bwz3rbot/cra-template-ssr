@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useLocation, Link } from "react-router-dom";
+import NotificationsWidget from "./NotificationsWidget";
 
 import {
 	Box,
@@ -152,6 +153,7 @@ export const NavigationBar = () => {
 									);
 								})}
 						</div>
+						<NotificationsWidget />
 						<AccountWidget />
 					</Toolbar>
 				</AppBar>
