@@ -1,7 +1,7 @@
 import { createTheme, ThemeProvider as Provider } from "@mui/material/styles";
 import { red } from "@mui/material/colors";
 import { createContext, useContext, useState } from "react";
-import useCSSProps from "../useCSSProps";
+import useCSSProps from "./useCSSProps";
 export { DarkModeSwitch } from "./DarkModeSwitch";
 const lightModeTheme = createTheme({
 	palette: {
