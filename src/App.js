@@ -1,6 +1,7 @@
 import HelmetContext from "./Helmet";
 import AuthContext from "./Firebase";
-import QueryClientContextProvider from "./Query";
+
+import ApolloClientContextProvider from "./Apollo";
 import ThemeContext from "./Theme";
 import Layout from "./Layout";
 import NotificationsContext from "./Notifications";
@@ -14,7 +15,7 @@ export default function App() {
 			<SnackbarProvider>
 				<AuthContext>
 					{/* Query Client must be a child of auth context or fetch will run twice */}
-					<QueryClientContextProvider>
+					<ApolloClientContextProvider>
 						<ThemeContext>
 							<NotificationsContext>
 								<RouterContext>
@@ -24,7 +25,7 @@ export default function App() {
 								</RouterContext>
 							</NotificationsContext>
 						</ThemeContext>
-					</QueryClientContextProvider>
+					</ApolloClientContextProvider>
 				</AuthContext>
 			</SnackbarProvider>
 		</HelmetContext>
