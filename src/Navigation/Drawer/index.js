@@ -21,33 +21,43 @@ export const NavDrawer = ({ onClose: toggleDrawer }) => (
 		onKeyDown={toggleDrawer}
 	>
 		<List>
-			{LinkSection.map(({ name, links }, i) => (
-				<Box key={name}>
-					<ListItem disablePadding>
-						<ListItemText
-							style={{
-								fontWeight: "bold",
-								paddingLeft: "4px",
-							}}
-							primary={name}
-						/>
-					</ListItem>
-					{links.map(({ to, text, Icon }, index) => (
-						<ListItem key={index} disablePadding>
-							<ListItemButton component={Link} to={to}>
-								<ListItemIcon>
-									<Icon />
-								</ListItemIcon>
-								<ListItemText primary={text} />
-							</ListItemButton>
+			{LinkSection.filter(section => section.showInTopNav).map(
+				({ name, links }, i) => (
+					<Box key={name}>
+						<ListItem disablePadding>
+							<ListItemText
+								style={{
+									fontWeight: "bold",
+									paddingLeft: "4px",
+								}}
+								primary={name}
+							/>
 						</ListItem>
-					))}
-					{
-						// only add a divider if there is another section
-						i < LinkSection.length - 1 && <Divider />
-					}
-				</Box>
-			))}
+						{links.map(({ to, text, Icon }, index) => (
+							<ListItem key={index} disablePadding>
+								<ListItemButton
+									component={Link}
+									to={to}
+									target={
+										to.startsWith("http")
+											? "_blank"
+											: "_self"
+									}
+								>
+									<ListItemIcon>
+										<Icon />
+									</ListItemIcon>
+									<ListItemText primary={text} />
+								</ListItemButton>
+							</ListItem>
+						))}
+						{
+							// only add a divider if there is another section
+							i < LinkSection.length - 1 && <Divider />
+						}
+					</Box>
+				)
+			)}
 		</List>
 	</Box>
 );

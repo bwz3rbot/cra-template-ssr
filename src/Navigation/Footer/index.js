@@ -74,10 +74,8 @@ export const Footer = () => {
 						<Grid
 							key={index}
 							item
-							xs={12}
-							sm={6}
+							xs={6}
 							md={4}
-							xl={2}
 							sx={{
 								display: "flex",
 								flexDirection: "column",
@@ -111,6 +109,11 @@ export const Footer = () => {
 										<Typography
 											component={Link}
 											to={to}
+											target={
+												to.includes("http")
+													? "_blank"
+													: "_self"
+											}
 											sx={{
 												textDecoration: "none",
 												color: "secondary.contrastText",

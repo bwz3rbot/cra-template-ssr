@@ -132,7 +132,10 @@ export const NavigationBar = () => {
 							}}
 						>
 							{isMedium &&
-								LinkSection.map(({ name, links }, i) => {
+								LinkSection.filter(
+									// only show main nav sections in top nav, the rest are only shown in footer
+									section => section.showInTopNav
+								).map(({ name, links }, i) => {
 									return (
 										<Box key={i}>
 											{links.map(
@@ -143,6 +146,13 @@ export const NavigationBar = () => {
 															color="inherit"
 															component={Link}
 															to={to}
+															target={
+																to.startsWith(
+																	"http"
+																)
+																	? "_blank"
+																	: "_self"
+															}
 														>
 															{text}
 														</Button>

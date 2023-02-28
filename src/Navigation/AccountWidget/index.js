@@ -8,7 +8,10 @@ export default function AccountWidget() {
 	const location = useLocation();
 	const [menuAnchorEl, setMenuAnchorEl] = useState(null);
 
-	const setAnchorEl = e => setMenuAnchorEl(e.currentTarget);
+	const handleSetAnchorEl = e => {
+		if (!menuAnchorEl) return setMenuAnchorEl(e.currentTarget);
+		setMenuAnchorEl(null);
+	};
 
 	useEffect(() => {
 		if (menuAnchorEl) setMenuAnchorEl(null);
@@ -16,7 +19,7 @@ export default function AccountWidget() {
 
 	return (
 		<>
-			<IconButton onClick={setAnchorEl}>
+			<IconButton onClick={handleSetAnchorEl}>
 				<Avatar
 					src={auth?.currentUser?.photoURL}
 					alt={username || "Anonymous"}
