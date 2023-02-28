@@ -6,11 +6,12 @@ import {
 	signInAnonymously,
 	signInWithPopup,
 	signInWithEmailAndPassword,
-	createUserWithEmailAndPassword,
 	setPersistence,
 	browserSessionPersistence,
 	GoogleAuthProvider,
+	EmailAuthProvider,
 	onAuthStateChanged,
+	linkWithCredential,
 } from "firebase/auth";
 
 import { createContext, useContext, useEffect, useState } from "react";
@@ -21,12 +22,12 @@ const Context = createContext({
 	auth: null,
 	analytics: null,
 	username: null,
-	signInWithGoogle: ({ onSuccess = () => {}, onFailure = () => {} }) => {},
+	signInWithGoogle: ({ onSuccess = () => {}, onError = () => {} }) => {},
 	signInWithEmailAndPassword: ({
 		email,
 		password,
 		onSuccess = () => {},
-		onFailure = () => {},
+		onError = () => {},
 	}) => {},
 	signOut: () => {},
 	showingSignInDialog: false,
@@ -35,7 +36,7 @@ const Context = createContext({
 		email,
 		password,
 		onSuccess = () => {},
-		onFailure = () => {},
+		onError = () => {},
 	}) => {},
 });
 
@@ -57,7 +58,6 @@ export default function FirebaseAppContextProvider({ children }) {
 			onAuthStateChanged(auth, user => {
 				// state needs to be given a new reference to auth here
 				// or the currently logged in user it will be out of sync
-
 				setState(state => ({
 					...state,
 					auth,
@@ -116,6 +116,7 @@ export default function FirebaseAppContextProvider({ children }) {
 				} = {}) => {
 					if (!state.auth) return;
 					const provider = new GoogleAuthProvider();
+
 					/* popup seems to work better on mobile than using redirect */
 					signInWithPopup(state.auth, provider)
 						.then(onSuccess)
@@ -136,13 +137,24 @@ export default function FirebaseAppContextProvider({ children }) {
 					onSuccess = () => {},
 					onError = () => {},
 				} = {}) => {
-					if (!state.auth) return;
+					// This funciton takes the current anonymous user and links it
+					// to the desired email and password credentials.
+					// This causes auth state to update and onAuthStateChanged fire -
+					// causing the app to re-render with a new user context
 
-					createUserWithEmailAndPassword(state.auth, email, password)
-						.then(({ user }) => {
-							onSuccess();
-						})
-						.catch(onError);
+					if (!state.auth) return;
+					try {
+						const currentUser = state.auth.currentUser;
+						const Credential = EmailAuthProvider.credential(
+							email,
+							password
+						);
+						await linkWithCredential(currentUser, Credential);
+						onSuccess();
+					} catch (err) {
+						onError(err);
+						return;
+					}
 				},
 			}}
 		>
