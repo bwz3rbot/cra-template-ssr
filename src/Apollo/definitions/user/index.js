@@ -5,7 +5,7 @@ export const getUser = gql`
 			id
 			name
 			email
-			age
+			avatar
 		}
 	}
 `;

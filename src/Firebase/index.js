@@ -58,13 +58,10 @@ export default function FirebaseAppContextProvider({ children }) {
 		const asyncEffect = async () => {
 			const app = initializeApp(FIREBASE_CONFIG);
 			const auth = getAuth(app);
-			onAuthStateChanged(auth, async user => {
+			onAuthStateChanged(auth, user => {
 				// state needs to be given a new reference to auth here
 				// or the currently logged in user it will be out of sync
-				console.log("auth state changed", {
-					user,
-					auth,
-				});
+
 				setState(state => ({
 					...state,
 					auth,
