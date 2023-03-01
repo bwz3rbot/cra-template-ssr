@@ -1,6 +1,6 @@
 import { Fragment } from "react";
 import { Grid, Typography, Divider } from "@mui/material";
-import RoundLogo from "../../Logo/round.png";
+import RoundLogo from "../../assets/logo/round-56x56.png";
 import { LinkSection } from "../Links";
 import { Link } from "react-router-dom";
 import { DarkModeSwitch } from "../../Theme";

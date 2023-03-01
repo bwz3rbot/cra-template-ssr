@@ -16,8 +16,9 @@ import MenuIcon from "@mui/icons-material/Menu";
 import { LinkSection } from "./Links";
 import { NavDrawer } from "./Drawer";
 
-import WideLogo from "../Logo/wide.png";
-import RoundLogo from "../Logo/round.png";
+import RoundLogo from "../assets/logo/round-56x56.png";
+import WideLogo from "../assets/logo/wide-56x112.png";
+
 import AccountWidget from "./AccountWidget";
 
 export { Footer } from "./Footer";
@@ -81,8 +82,10 @@ export const NavigationBar = () => {
 												process.env.REACT_APP_SITE_NAME
 											}
 											style={{
-												width: "100%",
-												height: "100%",
+												height: `calc(var(--nav-height) - 8px)`,
+												maxHeight: `var(--nav-height)`,
+												width: "auto",
+												margin: "auto",
 											}}
 										/>
 									</Link>
@@ -105,7 +108,9 @@ export const NavigationBar = () => {
 						) : (
 							<div
 								style={{
-									height: iconDimensions,
+									maxWidth: `calc(var(--nav-height) * 2)`,
+									maxHeight: `var(--nav-height)`,
+									height: "auto",
 									display: isMedium ? "block" : "none",
 									marginRight: isMedium ? "8px" : "0px",
 								}}
