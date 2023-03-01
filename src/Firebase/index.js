@@ -22,6 +22,7 @@ const Context = createContext({
 	auth: null,
 	analytics: null,
 	username: null,
+	idToken: null,
 	signInWithGoogle: ({ onSuccess = () => {}, onError = () => {} }) => {},
 	signInWithEmailAndPassword: ({
 		email,
@@ -46,18 +47,24 @@ export default function FirebaseAppContextProvider({ children }) {
 		auth: null,
 		analytics: null,
 		initialized: false,
+		idToken: null,
 	});
 
 	const [showingSignInDialog, setShowingSignInDialog] = useState(false);
 	useEffect(() => {
+		// this effect will run once on mount and initialize the firebase app
 		if (state.initialized) return;
 		let mounted = true;
 		const asyncEffect = async () => {
 			const app = initializeApp(FIREBASE_CONFIG);
 			const auth = getAuth(app);
-			onAuthStateChanged(auth, user => {
+			onAuthStateChanged(auth, async user => {
 				// state needs to be given a new reference to auth here
 				// or the currently logged in user it will be out of sync
+				console.log("auth state changed", {
+					user,
+					auth,
+				});
 				setState(state => ({
 					...state,
 					auth,
@@ -84,9 +91,27 @@ export default function FirebaseAppContextProvider({ children }) {
 		signInAnonymously(state.auth);
 	};
 	useEffect(() => {
+		// this effect will run whenever the app is initialized and there is no currentUser
 		if (!state.initialized) return;
 		if (state.auth.currentUser) return;
 		handleAnonymousLogin();
+	}, [state]);
+
+	useEffect(() => {
+		// this effect is required to pass idToken to apollo client
+		// it will run whenever a new user logs in or out
+		// getIdToken function is asynchronous, so it must be done in an effect
+		let mounted = true;
+		if (!state.auth) return;
+		const asyncEffect = async () => {
+			if (!state.auth.currentUser && state.idToken) {
+				mounted && setState(state => ({ ...state, idToken: null }));
+			} else if (state.auth.currentUser && !state.idToken) {
+				const idToken = await state.auth.currentUser?.getIdToken();
+				mounted && setState(state => ({ ...state, idToken }));
+			}
+		};
+		asyncEffect();
 	}, [state]);
 
 	return (
@@ -99,6 +124,7 @@ export default function FirebaseAppContextProvider({ children }) {
 					state.auth?.currentUser?.displayName ||
 					state.auth?.currentUser?.email ||
 					null,
+				idToken: state.idToken,
 				signInWithEmailAndPassword: ({
 					email,
 					password,
@@ -122,9 +148,12 @@ export default function FirebaseAppContextProvider({ children }) {
 						.then(onSuccess)
 						.catch(onError);
 				},
-				signOut: () => {
+				signOut: async () => {
 					if (!state.auth) return;
-					state.auth.signOut();
+					console.log("signing out");
+					await state.auth.signOut().catch(err => {
+						console.error(err);
+					});
 				},
 				showingSignInDialog,
 				setShowingSignInDialog: value => {
