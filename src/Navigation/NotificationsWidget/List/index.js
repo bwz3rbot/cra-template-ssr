@@ -17,7 +17,8 @@ const PREVIEW_IMAGE_DIMENSIONS = {
 };
 
 export default function NotificationsMenu({ anchorEl, onClose = () => {} }) {
-	const { notifications, hideNotification } = useNotifications();
+	const { notifications, hideNotification, acknowledgeNotification } =
+		useNotifications();
 	const [contextMenuState, setContextMenuState] = useState({
 		anchorEl: null,
 		notification: null,
@@ -106,21 +107,52 @@ export default function NotificationsMenu({ anchorEl, onClose = () => {} }) {
 							subject,
 							body,
 							type,
-							timestamp,
+
 							src = `https://picsum.photos/seed/${id}/${PREVIEW_IMAGE_DIMENSIONS.width}/${PREVIEW_IMAGE_DIMENSIONS.height}`,
+							createdAt,
+							acknowledgedAt,
 						} = notification;
 						return (
 							<Fragment key={id}>
-								<MenuItem disableRipple>
-									<ListItemIcon>
-										<Avatar
-											sx={{
-												backgroundColor: `${type}.main`,
-											}}
-										>
-											!
-										</Avatar>
-									</ListItemIcon>
+								<MenuItem
+									disableRipple
+									onClick={e => {
+										acknowledgeNotification(id);
+									}}
+								>
+									<div
+										style={{
+											position: "relative",
+											display: "flex",
+											justifyContent: "center",
+											alignItems: "center",
+											width: "fit-content",
+										}}
+									>
+										{!acknowledgedAt && (
+											<Typography
+												sx={{
+													color: "info.main",
+													fontSize: "1.5rem",
+													position: "absolute",
+													// in the middle left
+
+													left: "-40%",
+												}}
+											>
+												•
+											</Typography>
+										)}
+										<ListItemIcon>
+											<Avatar
+												sx={{
+													backgroundColor: `${type.toLowerCase()}.main`, // "error.main", "success.main", "info.main", "warning.main", "primary.main", "secondary.main"
+												}}
+											>
+												!
+											</Avatar>
+										</ListItemIcon>
+									</div>
 									<Grid
 										container
 										sx={{
@@ -155,7 +187,7 @@ export default function NotificationsMenu({ anchorEl, onClose = () => {} }) {
 											}}
 										>
 											{calculateDateSinceTimestamp(
-												timestamp
+												createdAt
 											)}
 										</Typography>
 									</Grid>

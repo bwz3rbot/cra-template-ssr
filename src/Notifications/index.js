@@ -17,6 +17,7 @@ const states = {
 const Context = createContext({
 	notifications: NOTIFICATIONS,
 	hideNotification: id => {},
+	acknowledgeNotification: id => {},
 	clearNotifications: () => {},
 
 	WidgetIcon: states.none.Icon,
@@ -24,6 +25,7 @@ const Context = createContext({
 
 export const useNotifications = () => useContext(Context);
 export default function NotificationsContextProvider({ children }) {
+	// TODO: useQuery and fetch notifications from API
 	const [notifications, setNotifications] = useState(NOTIFICATIONS);
 	const [state, setState] = useState("active");
 	const WidgetIcon = states[state].Icon;
@@ -36,14 +38,31 @@ export default function NotificationsContextProvider({ children }) {
 		return "none";
 	};
 
+	const subscribeToNotifications = () => {
+		// TODO: useSubscription to subscribe to notifications
+	};
+
 	return (
 		<Context.Provider
 			value={{
 				notifications,
-				hideNotification: id => {
+				hideNotification: async id => {
+					// TODO: call API to hide notification
 					setNotifications(notifications.filter(n => n.id !== id));
 				},
-				clearNotifications: () => setNotifications([]),
+				acknowledgeNotification: id => {
+					// TODO: call API to acknowledge notification
+					setNotifications(
+						(notifications || []).map(n => {
+							if (n.id === id) n.acknowledgedAt = true;
+							return n;
+						})
+					);
+				},
+				clearNotifications: async () => {
+					// TODO: call API to clear all notifications
+					setNotifications([]);
+				},
 				WidgetIcon: () => <WidgetIcon className={getClassName()} />,
 			}}
 		>

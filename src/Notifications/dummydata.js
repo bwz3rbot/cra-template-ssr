@@ -4,27 +4,32 @@ export const NOTIFICATIONS = [
 		subject: "New user registered",
 		body: "John Doe has registered",
 		type: "info",
-		timestamp: "2021-08-01T12:00:00.000Z",
+		createdAt: "2021-08-01T12:00:00.000Z",
+		acknowledgedAt: null,
 	},
 	{
 		id: 2,
 		subject: "New user registered",
 		body: "John Doe has registered",
 		type: "warning",
-		timestamp: "2021-08-01T12:00:00.000Z",
+		createdAt: "2021-08-01T12:00:00.000Z",
+		acknowledgedAt: null,
 	},
 	{
 		id: 3,
 		subject: "New user registered",
 		body: "John Doe has registered",
 		type: "error",
-		timestamp: "2021-08-01T12:00:00.000Z",
+		createdAt: "2021-08-01T12:00:00.000Z",
+		acknowledgedAt: null,
 	},
 	{
 		id: 4,
 		subject: "Upload successful",
 		body: "File uploaded successfully. Click to view. Other stuff goes here. Just testing to make the text really really long.",
 		type: "info",
+		createdAt: "2021-08-01T12:00:00.000Z",
+		acknowledgedAt: null,
 	},
 	{
 		id: 5,
@@ -32,6 +37,8 @@ export const NOTIFICATIONS = [
 
 		body: "File uploaded successfully. Click to view. Other stuff goes here. Just testing to make the text really really long.",
 		type: "warning",
+		createdAt: "2021-08-01T12:00:00.000Z",
+		acknowledgedAt: null,
 	},
 	{
 		id: 6,
@@ -39,11 +46,15 @@ export const NOTIFICATIONS = [
 		body: "File uploaded successfully. Click to view. Other stuff goes here. Just testing to make the text really really long.",
 
 		type: "error",
+		createdAt: "2021-08-01T12:00:00.000Z",
+		acknowledgedAt: null,
 	},
 	{
 		id: 7,
 		subject: "Upload successful",
 		body: "File uploaded successfully. Click to view. Other stuff goes here. Just testing to make the text really really long.",
 		type: "info",
+		createdAt: "2021-08-01T12:00:00.000Z",
+		acknowledgedAt: null,
 	},
 ];
