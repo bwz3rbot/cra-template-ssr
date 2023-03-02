@@ -1,31 +1,58 @@
-import { NavigationBar, Footer } from "../Navigation";
-import { Grid } from "@mui/material";
-export default function Layout({ children }) {
+import { PropTypes } from "prop-types";
+import { createContext, useContext } from "react";
+import { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
+import { LayoutSPA } from "./SPA";
+import { LayoutDefault } from "./Standard";
+
+const Context = createContext({
+	variant: "default",
+	setVariant: () => {},
+});
+
+export const useLayoutVariant = ({ variant }) => {
+	const { setVariant, variant: defaultVariant } = useContext(Context);
+	useEffect(() => {
+		if (variant !== defaultVariant) setVariant(variant);
+	}, [variant]);
+
+	return {
+		setVariant,
+		variant,
+		defaultVariant,
+	};
+};
+const LayoutProvider = ({ children, variant = "default" }) => {
+	const [layoutVariant, setLayoutVariant] = useState(variant);
+
+	const location = useLocation();
+	useEffect(() => {
+		console.log("location has changed. setting variant to", variant);
+		setLayoutVariant(variant);
+	}, [location]);
+
+	const layouts = {
+		default: LayoutDefault,
+		SPA: LayoutSPA,
+	};
+	const Layout = layouts[layoutVariant];
 	return (
-		<>
-			<NavigationBar />
-			<Grid
-				container
-				sx={{
-					width: "100vw",
-					height: "var(--body-height)",
-					overflowY: "scroll",
-					backgroundColor: "background.default",
-					color: "text.primary",
-				}}
-			>
-				<Grid
-					item
-					xs={12}
-					sx={{
-						minHeight: "40vh",
-						paddingX: "1rem",
-					}}
-				>
-					{children}
-				</Grid>
-				<Footer />
-			</Grid>
-		</>
+		<Context.Provider
+			value={{
+				variant: "default",
+				setVariant: variant => {
+					setLayoutVariant(variant);
+				},
+			}}
+		>
+			<Layout>{children}</Layout>
+		</Context.Provider>
 	);
-}
+};
+
+LayoutProvider.propTypes = {
+	children: PropTypes.node.isRequired,
+	variant: PropTypes.oneOf(["default", "SPA"]),
+};
+
+export default LayoutProvider;
