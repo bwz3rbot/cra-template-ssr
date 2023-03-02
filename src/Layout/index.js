@@ -1,6 +1,5 @@
 import { PropTypes } from "prop-types";
-import { createContext, useContext } from "react";
-import { useState, useEffect } from "react";
+import { createContext, useContext, useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { LayoutSPA } from "./SPA";
 import { LayoutDefault } from "./Standard";
@@ -22,7 +21,11 @@ export const useLayoutVariant = ({ variant }) => {
 		defaultVariant,
 	};
 };
-const LayoutProvider = ({ children, variant = "default" }) => {
+useLayoutVariant.propTypes = {
+	variant: PropTypes.oneOf(["default", "SPA"]),
+};
+
+export default function LayoutProvider({ children, variant = "default" }) {
 	const [layoutVariant, setLayoutVariant] = useState(variant);
 
 	const location = useLocation();
@@ -48,11 +51,9 @@ const LayoutProvider = ({ children, variant = "default" }) => {
 			<Layout>{children}</Layout>
 		</Context.Provider>
 	);
-};
+}
 
 LayoutProvider.propTypes = {
 	children: PropTypes.node.isRequired,
 	variant: PropTypes.oneOf(["default", "SPA"]),
 };
-
-export default LayoutProvider;
