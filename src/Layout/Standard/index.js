@@ -20,7 +20,9 @@ export const LayoutDefault = ({ children }) => {
 					xs={12}
 					sx={{
 						minHeight: "40vh",
-						paddingX: "1rem",
+						width: "100vw",
+						paddingX: ".4rem",
+						paddingTop: ".2rem",
 					}}
 				>
 					{children}

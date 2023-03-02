@@ -19,7 +19,9 @@ export const LayoutSPA = ({ children }) => {
 					xs={12}
 					sx={{
 						height: "var(--body-height)",
-						border: "1px solid red",
+						width: "100vw",
+						padding: ".4rem",
+						paddingTop: ".2rem",
 					}}
 				>
 					{children}
