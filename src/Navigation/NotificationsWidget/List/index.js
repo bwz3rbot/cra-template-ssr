@@ -166,7 +166,7 @@ export default function NotificationsMenu({ anchorEl, onClose = () => {} }) {
 
 										<div
 											style={{
-												maxWidth: "400px",
+												maxWidth: "300px",
 											}}
 										>
 											<Typography
