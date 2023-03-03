@@ -51,6 +51,12 @@ const LogoWrapper = () => {
 export const Footer = () => {
 	return (
 		<Grid
+			/*
+			https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Roles/contentinfo_role
+			 contentinfo role defines the footer element for SEO and accessibility purposes.
+			 */
+			component="footer"
+			role={"contentinfo"}
 			container
 			sx={{
 				minHeight: "var(--footer-min-height)",
@@ -63,6 +69,8 @@ export const Footer = () => {
 		>
 			<Grid
 				container
+				component={"nav"}
+				role={"navigation"}
 				sx={{
 					display: "flex",
 					justifyContent: "flex-start",

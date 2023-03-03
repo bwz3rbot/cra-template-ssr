@@ -1,5 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
+import { pick } from "lodash";
 
 import {
 	getAuth,
@@ -21,8 +22,11 @@ const Context = createContext({
 	app: null,
 	auth: null,
 	analytics: null,
+	user: null,
+	isAuthenticated: false,
 	username: null,
 	idToken: null,
+
 	signInWithGoogle: ({ onSuccess = () => {}, onError = () => {} }) => {},
 	signInWithEmailAndPassword: ({
 		email,
@@ -117,6 +121,8 @@ export default function FirebaseAppContextProvider({ children }) {
 				app: state.app,
 				auth: state.auth,
 				analytics: state.analytics,
+				user: state?.auth?.currentUser,
+				isAuthenticated: !!state.idToken,
 				username:
 					state.auth?.currentUser?.displayName ||
 					state.auth?.currentUser?.email ||
@@ -147,7 +153,7 @@ export default function FirebaseAppContextProvider({ children }) {
 				},
 				signOut: async () => {
 					if (!state.auth) return;
-					console.log("signing out");
+					setState(state => ({ ...state, idToken: null }));
 					await state.auth.signOut().catch(err => {
 						console.error(err);
 					});
@@ -191,4 +197,23 @@ export default function FirebaseAppContextProvider({ children }) {
 
 export const useFirebaseContext = () => {
 	return useContext(Context);
+};
+
+export const useAuthContext = () => {
+	// return only the required auth related values from useFirebaseContext in one line
+	return pick(useFirebaseContext(), [
+		"user",
+		"isAuthenticated",
+		"username",
+		"idToken",
+
+		"setShowingSignInDialog",
+		"showingSignInDialog",
+
+		"createAccount",
+
+		"signInWithEmailAndPassword",
+		"signInWithGoogle",
+		"signOut",
+	]);
 };

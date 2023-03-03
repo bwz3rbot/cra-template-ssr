@@ -1,4 +1,4 @@
-import { useFirebaseContext } from "../../../Firebase";
+import { useAuthContext } from "../../../Firebase";
 
 import { useState } from "react";
 
@@ -36,7 +36,7 @@ const states = {
 };
 
 export const GoogleIcon = () => {
-	const { signInWithGoogle, setShowingSignInDialog } = useFirebaseContext();
+	const { signInWithGoogle, setShowingSignInDialog } = useAuthContext();
 	const theme = useTheme();
 	const isLg = useMediaQuery(theme => theme.breakpoints.up("lg"));
 

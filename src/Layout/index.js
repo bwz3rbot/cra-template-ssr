@@ -1,8 +1,14 @@
 import { PropTypes } from "prop-types";
-import { createContext, useContext, useState, useEffect } from "react";
+import {
+	createContext,
+	useContext,
+	useState,
+	useEffect,
+	useLayoutEffect,
+} from "react";
 import { useLocation } from "react-router-dom";
-import { LayoutSPA } from "./SPA";
-import { LayoutDefault } from "./Standard";
+import LayoutSPA from "./SPA";
+import LayoutStandard from "./Standard";
 
 const Context = createContext({
 	variant: "default",
@@ -11,7 +17,7 @@ const Context = createContext({
 
 export const useLayoutVariant = ({ variant }) => {
 	const { setVariant, variant: defaultVariant } = useContext(Context);
-	useEffect(() => {
+	useLayoutEffect(() => {
 		if (variant !== defaultVariant) setVariant(variant);
 	}, [variant]);
 
@@ -25,24 +31,24 @@ useLayoutVariant.propTypes = {
 	variant: PropTypes.oneOf(["default", "SPA"]),
 };
 
-export default function LayoutProvider({ children, variant = "default" }) {
+export default function LayoutProvider({ children, variant = "standard" }) {
 	const [layoutVariant, setLayoutVariant] = useState(variant);
 
 	const location = useLocation();
 	useEffect(() => {
-		console.log("location has changed. setting variant to", variant);
 		setLayoutVariant(variant);
 	}, [location]);
 
 	const layouts = {
-		default: LayoutDefault,
+		standard: LayoutStandard,
 		SPA: LayoutSPA,
 	};
 	const Layout = layouts[layoutVariant];
+
 	return (
 		<Context.Provider
 			value={{
-				variant: "default",
+				variant: "standard",
 				setVariant: variant => {
 					setLayoutVariant(variant);
 				},
@@ -55,5 +61,5 @@ export default function LayoutProvider({ children, variant = "default" }) {
 
 LayoutProvider.propTypes = {
 	children: PropTypes.node.isRequired,
-	variant: PropTypes.oneOf(["default", "SPA"]),
+	variant: PropTypes.oneOf(["standard", "SPA"]),
 };

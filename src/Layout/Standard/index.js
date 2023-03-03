@@ -1,7 +1,7 @@
 import { NavigationBar } from "../../Navigation";
 import { Grid } from "@mui/material";
 import { Footer } from "../../Navigation/Footer";
-export const LayoutDefault = ({ children }) => {
+export default function LayoutStandard({ children }) {
 	return (
 		<>
 			<NavigationBar />
@@ -16,6 +16,10 @@ export const LayoutDefault = ({ children }) => {
 				}}
 			>
 				<Grid
+					// must be main for accessibility and SEO
+					// some browsers don't support the main component and otheres don't support the role attribute
+					component={"main"}
+					role="main"
 					item
 					xs={12}
 					sx={{
@@ -31,4 +35,4 @@ export const LayoutDefault = ({ children }) => {
 			</Grid>
 		</>
 	);
-};
+}

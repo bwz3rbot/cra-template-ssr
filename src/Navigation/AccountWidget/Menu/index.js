@@ -1,60 +1,68 @@
-import Avatar from "@mui/material/Avatar";
-
-import Menu, { Divider, ListItemIcon, MenuItem } from "../../../Component/Menu";
 import { Link } from "react-router-dom";
+import Avatar from "@mui/material/Avatar";
 
 import SignInIcon from "@mui/icons-material/Login";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import SettingsIcon from "@mui/icons-material/Settings";
 import SignOutIcon from "@mui/icons-material/Logout";
-import { useFirebaseContext } from "../../../Firebase";
+import Menu, { Divider, ListItemIcon, MenuItem } from "../../../Component/Menu";
+
+import { useAuthContext } from "../../../Firebase";
 
 import SignInDialog from "../SignInDialog";
 
 export default function AccountMenu({ anchorEl, onClose = () => {} }) {
-	const { signOut, auth, setShowingSignInDialog, username } =
-		useFirebaseContext();
+	const { signOut, user, setShowingSignInDialog, username, isAuthenticated } =
+		useAuthContext();
+
 	return (
 		<>
 			<SignInDialog />
-			<Menu anchorEl={anchorEl} onClose={onClose}>
+			<Menu
+				key={isAuthenticated.toString()}
+				anchorEl={anchorEl}
+				onClose={onClose}
+			>
 				<div>
-					{auth?.currentUser?.isAnonymous ? (
-						<>
-							<MenuItem
-								onClick={() => setShowingSignInDialog(true)}
-							>
-								<ListItemIcon>
-									<SignInIcon fontSize="small" />
-								</ListItemIcon>
-								Sign In
-							</MenuItem>
-							<MenuItem
-								onClick={() => setShowingSignInDialog(true)}
-							>
-								<ListItemIcon>
-									<PersonAddIcon fontSize="small" />
-								</ListItemIcon>
-								Create Account
-							</MenuItem>
-						</>
-					) : (
-						<MenuItem>
-							<Avatar
-								src={auth?.currentUser?.photoURL}
-								alt={username || "Anonymous"}
-								imgProps={{
-									referrerPolicy: "no-referrer",
-								}}
-							/>
-							{username}
-						</MenuItem>
-					)}
+					<div>
+						{user?.isAnonymous ? (
+							<>
+								<MenuItem
+									onClick={() => setShowingSignInDialog(true)}
+								>
+									<ListItemIcon>
+										<SignInIcon fontSize="small" />
+									</ListItemIcon>
+									Sign In
+								</MenuItem>
+								<MenuItem
+									onClick={() => setShowingSignInDialog(true)}
+								>
+									<ListItemIcon>
+										<PersonAddIcon fontSize="small" />
+									</ListItemIcon>
+									Create Account
+								</MenuItem>
+							</>
+						) : (
+							<>
+								<MenuItem>
+									<Avatar
+										src={user?.photoURL}
+										alt={username || "Anonymous"}
+										imgProps={{
+											referrerPolicy: "no-referrer",
+										}}
+									/>
+									{username}
+								</MenuItem>
+								<Divider />
+							</>
+						)}
+					</div>
 
-					{!auth?.currentUser?.isAnonymous && (
+					{!user?.isAnonymous && (
 						<>
-							<Divider />
-
 							<Link to="/settings">
 								<MenuItem>
 									<ListItemIcon>

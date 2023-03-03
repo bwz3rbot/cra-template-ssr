@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import {
 	Divider,
 	Dialog,
@@ -6,7 +5,6 @@ import {
 	DialogContent,
 	DialogActions,
 	Button,
-	IconButton,
 	Typography,
 	TextField,
 	FormControl,
@@ -14,7 +12,7 @@ import {
 } from "@mui/material";
 import { useSnackbar } from "notistack";
 
-import { useFirebaseContext } from "../../../Firebase";
+import { useAuthContext } from "../../../Firebase";
 import { GoogleIcon } from "../GoogleIcon";
 
 export default function SignInDialog() {
@@ -23,8 +21,7 @@ export default function SignInDialog() {
 		setShowingSignInDialog,
 		signInWithEmailAndPassword,
 		createAccount,
-		username,
-	} = useFirebaseContext();
+	} = useAuthContext();
 
 	const LoginForm = () => {
 		const { enqueueSnackbar } = useSnackbar();

@@ -16,14 +16,13 @@ export default function Menu({
 	return (
 		<MuiMenu
 			anchorEl={anchorEl}
-			id="account-menu"
 			open={!!anchorEl}
 			onClose={onClose}
 			PaperProps={{
 				elevation: 0,
 
 				sx: {
-					borderRadius: '2%',
+					borderRadius: "2%",
 					overflow: "visible",
 					filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
 					minWidth: 220,

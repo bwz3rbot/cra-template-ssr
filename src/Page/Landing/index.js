@@ -1,13 +1,9 @@
 import { Typography } from "@mui/material";
 import TestComponent from "../../Component/Test";
-import { useFirebaseContext } from "../../Firebase";
-import { useLayoutVariant } from "../../Layout";
+import { useAuthContext } from "../../Firebase";
 
 export default function PageLanding() {
-	const { idToken } = useFirebaseContext();
-	useLayoutVariant({
-		variant: "SPA",
-	});
+	const { idToken } = useAuthContext();
 
 	return (
 		<div>

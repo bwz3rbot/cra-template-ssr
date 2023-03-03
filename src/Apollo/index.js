@@ -1,5 +1,5 @@
 import { useContext, createContext } from "react";
-import { useFirebaseContext } from "../Firebase";
+import { useAuthContext } from "../Firebase";
 import {
 	ApolloClient,
 	InMemoryCache,
@@ -20,7 +20,7 @@ const Context = createContext({
 	useApolloClient,
 });
 export default function ApolloAppContextProvider({ children }) {
-	const { idToken } = useFirebaseContext();
+	const { idToken } = useAuthContext();
 	const client = new ApolloClient({
 		uri: process.env.REACT_APP_GQL_ENDPOINT,
 		cache: new InMemoryCache(),

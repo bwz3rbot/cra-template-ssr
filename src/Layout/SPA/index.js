@@ -1,6 +1,7 @@
 import { NavigationBar } from "../../Navigation";
 import { Grid } from "@mui/material";
-export const LayoutSPA = ({ children }) => {
+
+export default function LayoutSPA({ children }) {
 	return (
 		<>
 			<NavigationBar />
@@ -15,6 +16,10 @@ export const LayoutSPA = ({ children }) => {
 				}}
 			>
 				<Grid
+					// must be main for accessibility and SEO
+					// some browsers don't support the main component and otheres don't support the role attribute
+					component={"main"}
+					role="main"
 					item
 					xs={12}
 					sx={{
@@ -29,4 +34,4 @@ export const LayoutSPA = ({ children }) => {
 			</Grid>
 		</>
 	);
-};
+}
