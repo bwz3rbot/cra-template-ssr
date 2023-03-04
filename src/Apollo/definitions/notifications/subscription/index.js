@@ -3,9 +3,9 @@ export const notifications = gql`
 	subscription Notifications {
 		notifications {
 			body
-			createdAt
+			created_at
 			id
-			acknowledgedAt
+			acknowledged_at
 			subject
 			type
 		}

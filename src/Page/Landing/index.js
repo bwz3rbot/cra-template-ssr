@@ -5,6 +5,8 @@ import SubscribeComponent from "../../Component/Subscribe";
 import { useAuthContext } from "../../Firebase";
 import { useLayoutVariant } from "../../Layout";
 
+import UploadWidget from "../../Component/Upload";
+
 export default function PageLanding() {
 	useLayoutVariant({
 		variant: "standard",
@@ -14,8 +16,7 @@ export default function PageLanding() {
 	return (
 		<div>
 			<Typography>---Landing Page---</Typography>
-			{idToken && <QueryComponent />}
-			{idToken && <SubscribeComponent />}
+			<UploadWidget />
 		</div>
 	);
 }

@@ -4,7 +4,10 @@ const definitions = {
 		query: require("./notifications/query"),
 		subscription: require("./notifications/subscription"),
 	},
-	media: { query: require("./media/query") },
+	file: {
+		query: require("./file/query"),
+		mutation: require("./file/mutation"),
+	},
 };
 
 export default definitions;

@@ -13,6 +13,7 @@ import {
 import { split, HttpLink } from "@apollo/client";
 import { getMainDefinition } from "@apollo/client/utilities";
 import { GraphQLWsLink } from "@apollo/client/link/subscriptions";
+
 import { createClient } from "graphql-ws";
 
 import definitions from "./definitions";
@@ -31,6 +32,7 @@ const apolloClientFactory = idToken => {
 		uri: process.env.REACT_APP_API_ENDPOINT,
 		headers: {
 			authorization: idToken ? `Bearer ${idToken}` : "",
+			workspace_id: "default",
 		},
 	});
 
@@ -39,6 +41,7 @@ const apolloClientFactory = idToken => {
 			url: process.env.REACT_APP_SUBSCRIPTION_ENDPOINT,
 			connectionParams: {
 				authorization: idToken ? `Bearer ${idToken}` : "",
+				workspace_id: "default",
 			},
 		})
 	);
@@ -56,8 +59,10 @@ const apolloClientFactory = idToken => {
 	const client = new ApolloClient({
 		link: splitLink,
 		cache: new InMemoryCache(),
+		credentials: "include",
 		headers: {
 			authorization: idToken ? `Bearer ${idToken}` : "",
+			workspace_id: "default",
 		},
 	});
 	return client;
