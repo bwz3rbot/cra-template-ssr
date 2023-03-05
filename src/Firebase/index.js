@@ -22,7 +22,6 @@ const Context = createContext({
 	auth: null,
 	analytics: null,
 	user: null,
-	isAuthenticated: false,
 	username: null,
 
 	signInWithGoogle: ({ onSuccess = () => {}, onError = () => {} }) => {},
@@ -93,23 +92,6 @@ export default function FirebaseAppContextProvider({ children }) {
 		handleAnonymousLogin();
 	}, [state]);
 
-	// useEffect(() => {
-	// 	// this effect is required to pass idToken to apollo client
-	// 	// it will run whenever a new user logs in or out
-	// 	// getIdToken function is asynchronous, so it must be done in an effect
-	// 	let mounted = true;
-	// 	if (!state.auth) return;
-	// 	const asyncEffect = async () => {
-	// 		if (!state.auth.currentUser && state.idToken) {
-	// 			mounted && setState(state => ({ ...state, idToken: null }));
-	// 		} else if (state.auth.currentUser && !state.idToken) {
-	// 			const idToken = await state.auth.currentUser?.getIdToken();
-	// 			mounted && setState(state => ({ ...state, idToken }));
-	// 		}
-	// 	};
-	// 	asyncEffect();
-	// }, [state]);
-
 	useEffect(() => {
 		// this effect is required to pass idToken to apollo client
 		// it will run whenever a new user logs in or out
@@ -134,10 +116,6 @@ export default function FirebaseAppContextProvider({ children }) {
 		};
 		asyncEffect();
 	}, [state?.auth?.currentUser]);
-
-	useEffect(() => {
-		console.log("User: ", state.user);
-	}, [state.user]);
 
 	return (
 		<Context.Provider
@@ -219,13 +197,13 @@ export const useAuthContext = () => {
 	// return only the required auth related values from useFirebaseContext in one line
 	return pick(useFirebaseContext(), [
 		"user",
-		"isAuthenticated",
 		"username",
-
-		"createAccount",
 
 		"signInWithEmailAndPassword",
 		"signInWithGoogle",
+
+		"createAccount",
+
 		"signOut",
 	]);
 };

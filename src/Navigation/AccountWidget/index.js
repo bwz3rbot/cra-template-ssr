@@ -17,10 +17,6 @@ export default function AccountWidget() {
 		if (menuAnchorEl) setMenuAnchorEl(null);
 	}, [location]);
 
-	console.log("Rendering Account Widget: ", {
-		username,
-	});
-
 	return (
 		<>
 			<IconButton onClick={handleSetAnchorEl}>
