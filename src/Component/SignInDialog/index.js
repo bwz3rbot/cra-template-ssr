@@ -12,8 +12,8 @@ import {
 } from "@mui/material";
 import { useSnackbar } from "notistack";
 
-import { useAuthContext } from "../../../Firebase";
-import { GoogleIcon } from "../GoogleIcon";
+import { useAuthContext } from "../../Firebase";
+import { GoogleIcon } from "../../Navigation/AccountWidget/GoogleIcon";
 
 export default function SignInDialog() {
 	const {
