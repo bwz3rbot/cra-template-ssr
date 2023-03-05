@@ -19,6 +19,7 @@ import { createClient } from "graphql-ws";
 import definitions from "./definitions";
 
 const Context = createContext({
+	user: null,
 	definitions,
 	useQuery,
 	useLazyQuery,
@@ -27,12 +28,12 @@ const Context = createContext({
 	useApolloClient,
 });
 
-const apolloClientFactory = idToken => {
+const apolloClientFactory = (idToken, workspace_id = "default") => {
 	const httpLink = new HttpLink({
 		uri: process.env.REACT_APP_API_ENDPOINT,
 		headers: {
 			authorization: idToken ? `Bearer ${idToken}` : "",
-			workspace_id: "default",
+			workspace_id,
 		},
 	});
 
@@ -41,7 +42,7 @@ const apolloClientFactory = idToken => {
 			url: process.env.REACT_APP_SUBSCRIPTION_ENDPOINT,
 			connectionParams: {
 				authorization: idToken ? `Bearer ${idToken}` : "",
-				workspace_id: "default",
+				workspace_id,
 			},
 		})
 	);
@@ -62,7 +63,7 @@ const apolloClientFactory = idToken => {
 		credentials: "include",
 		headers: {
 			authorization: idToken ? `Bearer ${idToken}` : "",
-			workspace_id: "default",
+			workspace_id,
 		},
 	});
 	return client;
@@ -70,8 +71,9 @@ const apolloClientFactory = idToken => {
 export default function ApolloAppContextProvider({ children }) {
 	const { idToken, isAuthenticated } = useAuthContext();
 	const [state, setState] = useState({
-		client: apolloClientFactory("initializing"),
-		state: "loading",
+		client: apolloClientFactory(""),
+		status: "loading",
+		user: null,
 	});
 
 	useEffect(() => {
@@ -83,7 +85,7 @@ export default function ApolloAppContextProvider({ children }) {
 				console.log("setting client to the state");
 				setState({
 					client: newClient,
-					state: "ready",
+					status: "ready",
 				});
 			}
 		}
@@ -92,9 +94,32 @@ export default function ApolloAppContextProvider({ children }) {
 		};
 	}, [isAuthenticated]);
 
+	useEffect(() => {
+		let mounted = true;
+		if (state.status === "ready") {
+			state.client
+				.query({
+					query: definitions.user.query.getUser,
+				})
+
+				.then(({ data }) => {
+					if (mounted) {
+						setState({
+							...state,
+							user: data.user,
+						});
+					}
+				});
+		}
+		return () => {
+			mounted = false;
+		};
+	}, [state.client]);
+
 	return (
 		<Context.Provider
 			value={{
+				user: state.user,
 				definitions,
 				useQuery,
 				useLazyQuery,
@@ -103,7 +128,9 @@ export default function ApolloAppContextProvider({ children }) {
 				useApolloClient,
 			}}
 		>
-			<ApolloProvider client={state.client}>{children}</ApolloProvider>
+			<ApolloProvider client={state.client}>
+				{state.status === "ready" && children}
+			</ApolloProvider>
 		</Context.Provider>
 	);
 }
