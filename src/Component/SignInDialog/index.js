@@ -13,7 +13,8 @@ import {
 import { useSnackbar } from "notistack";
 
 import { useAuthContext } from "../../Firebase";
-import { GoogleIcon } from "../../Navigation/AccountWidget/GoogleIcon";
+import { SignInWithGoogleIconButton } from "../../Navigation/AccountWidget/GoogleIcon";
+import { useNavigate } from "react-router-dom";
 
 export default function SignInDialog() {
 	const {
@@ -22,6 +23,13 @@ export default function SignInDialog() {
 		signInWithEmailAndPassword,
 		createAccount,
 	} = useAuthContext();
+
+	const navigate = useNavigate();
+
+	const handleSuccess = () => {
+		setShowingSignInDialog(false);
+		navigate("/home");
+	};
 
 	const LoginForm = () => {
 		const { enqueueSnackbar } = useSnackbar();
@@ -40,9 +48,7 @@ export default function SignInDialog() {
 									variant: "error",
 								});
 							},
-							onSuccess: () => {
-								setShowingSignInDialog(false);
-							},
+							onSuccess: handleSuccess,
 						});
 					};
 					const handleSignIn = () => {
@@ -54,9 +60,7 @@ export default function SignInDialog() {
 									variant: "error",
 								});
 							},
-							onSuccess: () => {
-								setShowingSignInDialog(false);
-							},
+							onSuccess: handleSuccess,
 						});
 					};
 
@@ -128,6 +132,7 @@ export default function SignInDialog() {
 			</Stack>
 		);
 	};
+
 	return (
 		<Dialog
 			open={showingSignInDialog}
@@ -160,7 +165,7 @@ export default function SignInDialog() {
 					alignItems: "center",
 				}}
 			>
-				<GoogleIcon />
+				<SignInWithGoogleIconButton onSuccess={handleSuccess} />
 			</DialogContent>
 
 			<DialogActions

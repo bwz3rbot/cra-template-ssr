@@ -35,7 +35,9 @@ const states = {
 	},
 };
 
-export const GoogleIcon = () => {
+export const SignInWithGoogleIconButton = ({
+	onSuccess: onSignInSuccess = () => {},
+}) => {
 	const { signInWithGoogle, setShowingSignInDialog } = useAuthContext();
 	const theme = useTheme();
 	const isLg = useMediaQuery(theme => theme.breakpoints.up("lg"));
@@ -62,7 +64,10 @@ export const GoogleIcon = () => {
 			}}
 			onClick={() =>
 				signInWithGoogle({
-					onSuccess: () => setShowingSignInDialog(false),
+					onSuccess: () => {
+						setShowingSignInDialog(false);
+						onSignInSuccess();
+					},
 				})
 			}
 		>
