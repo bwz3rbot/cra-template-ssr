@@ -9,15 +9,12 @@ import Menu, { Divider, ListItemIcon, MenuItem } from "../../../Component/Menu";
 
 import { useAuthContext } from "../../../Firebase";
 
-import SignInDialog from "../SignInDialog";
-
 export default function AccountMenu({ anchorEl, onClose = () => {} }) {
 	const { signOut, user, setShowingSignInDialog, username, isAuthenticated } =
 		useAuthContext();
 
 	return (
 		<>
-			<SignInDialog />
 			<Menu
 				key={isAuthenticated.toString()}
 				anchorEl={anchorEl}

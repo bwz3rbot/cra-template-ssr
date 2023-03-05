@@ -7,6 +7,7 @@ import Layout from "./Layout";
 import NotificationsContext from "./Notifications";
 import RouterContext, { Pages } from "./Router";
 import { SnackbarProvider } from "notistack";
+import SignInDialog from "./Component/SignInDialog";
 import "./style.css";
 
 export default function App() {
@@ -14,13 +15,13 @@ export default function App() {
 		<HelmetContext>
 			<SnackbarProvider>
 				<AuthContext>
-					{/* Query Client must be a child of auth context or fetch will run twice */}
 					<ApolloClientContextProvider>
 						<UploadyContext>
 							<ThemeContext>
 								<NotificationsContext>
 									<RouterContext>
 										<Layout>
+											<SignInDialog />
 											<Pages />
 										</Layout>
 									</RouterContext>
