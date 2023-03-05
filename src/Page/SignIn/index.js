@@ -12,20 +12,11 @@ export default function PageSignIn() {
 	useLayoutVariant({
 		variant: "standard",
 	});
-	const { showingSignInDialog, setShowingSignInDialog, idToken, user } =
-		useAuthContext();
+	const { user } = useAuthContext();
 
 	useEffect(() => {
-		// on page load, shows the sign-in dialog if the user is not authenticated
-		console.log("loaded signin page.", {
-			user,
-		});
 		const isAnonymousUser = !!user?.isAnonymous;
-
-		if (!isAnonymousUser) {
-			console.log("user is not anonymous, navigating to /home");
-			navigate("/home");
-		}
+		if (!isAnonymousUser) navigate("/home");
 	}, [user]);
 
 	return (

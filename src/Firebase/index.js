@@ -111,7 +111,6 @@ export default function FirebaseAppContextProvider({ children }) {
 	// }, [state]);
 
 	useEffect(() => {
-		console.log("Current User: ", state?.auth?.currentUser);
 		// this effect is required to pass idToken to apollo client
 		// it will run whenever a new user logs in or out
 		// getIdToken function is asynchronous, so it must be done in an effect

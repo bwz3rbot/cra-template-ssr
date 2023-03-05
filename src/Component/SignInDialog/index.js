@@ -27,10 +27,7 @@ export default function SignInDialog({ open = false }) {
 	const navigate = useNavigate();
 
 	const handleSuccess = () => {
-		console.log("handling signInSuccess...");
-		console.log("showingSignInDialog: ", false);
 		setShowingSignInDialog(false);
-		console.log('navigating to "/home"');
 		navigate("/home");
 	};
 
