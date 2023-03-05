@@ -17,7 +17,7 @@ export default function PageSignIn() {
 
 	useEffect(() => {
 		// on page load, shows the sign-in dialog if the user is not authenticated
-		console.log("loaded sign-in page.", {
+		console.log("loaded signin page.", {
 			user,
 		});
 		const isAnonymousUser = !!user?.isAnonymous;
