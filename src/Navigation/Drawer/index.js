@@ -60,6 +60,21 @@ export const NavDrawer = ({ onClose: toggleDrawer, open }) => {
 								// only add a divider if there is another section
 								i < LinkSection.length - 1 && <Divider />
 							}
+							{!user ||
+								(user.isAnonymous && (
+									<>
+										<ListItem disablePadding>
+											<ListItemButton
+												component={Link}
+												to={"/sign-in"}
+											>
+												<ListItemText
+													primary={"Sign in"}
+												/>
+											</ListItemButton>
+										</ListItem>
+									</>
+								))}
 						</Box>
 					))}
 				</List>
