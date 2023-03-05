@@ -7,7 +7,6 @@ import Layout from "./Layout";
 import NotificationsContext from "./Notifications";
 import RouterContext, { Pages } from "./Router";
 import { SnackbarProvider } from "notistack";
-import SignInDialog from "./Component/SignInDialog";
 import "./style.css";
 
 export default function App() {
@@ -21,7 +20,6 @@ export default function App() {
 								<NotificationsContext>
 									<RouterContext>
 										<Layout>
-											<SignInDialog />
 											<Pages />
 										</Layout>
 									</RouterContext>

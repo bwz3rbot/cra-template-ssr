@@ -24,7 +24,6 @@ const Context = createContext({
 	user: null,
 	isAuthenticated: false,
 	username: null,
-	idToken: null,
 
 	signInWithGoogle: ({ onSuccess = () => {}, onError = () => {} }) => {},
 	signInWithEmailAndPassword: ({
@@ -50,7 +49,7 @@ export default function FirebaseAppContextProvider({ children }) {
 		auth: null,
 		analytics: null,
 		initialized: false,
-		idToken: null,
+		user: null,
 	});
 
 	const [showingSignInDialog, setShowingSignInDialog] = useState(false);
@@ -97,22 +96,52 @@ export default function FirebaseAppContextProvider({ children }) {
 		handleAnonymousLogin();
 	}, [state]);
 
+	// useEffect(() => {
+	// 	// this effect is required to pass idToken to apollo client
+	// 	// it will run whenever a new user logs in or out
+	// 	// getIdToken function is asynchronous, so it must be done in an effect
+	// 	let mounted = true;
+	// 	if (!state.auth) return;
+	// 	const asyncEffect = async () => {
+	// 		if (!state.auth.currentUser && state.idToken) {
+	// 			mounted && setState(state => ({ ...state, idToken: null }));
+	// 		} else if (state.auth.currentUser && !state.idToken) {
+	// 			const idToken = await state.auth.currentUser?.getIdToken();
+	// 			mounted && setState(state => ({ ...state, idToken }));
+	// 		}
+	// 	};
+	// 	asyncEffect();
+	// }, [state]);
+
 	useEffect(() => {
+		console.log("Current User: ", state?.auth?.currentUser);
 		// this effect is required to pass idToken to apollo client
 		// it will run whenever a new user logs in or out
 		// getIdToken function is asynchronous, so it must be done in an effect
 		let mounted = true;
 		if (!state.auth) return;
+		if (!state?.auth?.currentUser) {
+			return;
+		}
 		const asyncEffect = async () => {
-			if (!state.auth.currentUser && state.idToken) {
-				mounted && setState(state => ({ ...state, idToken: null }));
-			} else if (state.auth.currentUser && !state.idToken) {
+			if (state.auth.currentUser && !state.idToken) {
 				const idToken = await state.auth.currentUser?.getIdToken();
-				mounted && setState(state => ({ ...state, idToken }));
+				mounted &&
+					setState(state => ({
+						...state,
+						user: {
+							...state.auth.currentUser,
+							idToken,
+						},
+					}));
 			}
 		};
 		asyncEffect();
-	}, [state]);
+	}, [state?.auth?.currentUser]);
+
+	useEffect(() => {
+		console.log("User: ", state.user);
+	}, [state.user]);
 
 	return (
 		<Context.Provider
@@ -120,13 +149,12 @@ export default function FirebaseAppContextProvider({ children }) {
 				app: state.app,
 				auth: state.auth,
 				analytics: state.analytics,
-				user: state?.auth?.currentUser,
+				user: state.user,
 				isAuthenticated: !!state.idToken,
 				username:
 					state.auth?.currentUser?.displayName ||
 					state.auth?.currentUser?.email ||
 					null,
-				idToken: state.idToken,
 				signInWithEmailAndPassword: ({
 					email,
 					password,
@@ -204,8 +232,6 @@ export const useAuthContext = () => {
 		"user",
 		"isAuthenticated",
 		"username",
-		"idToken",
-
 		"setShowingSignInDialog",
 		"showingSignInDialog",
 

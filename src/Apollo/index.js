@@ -69,7 +69,7 @@ const apolloClientFactory = (idToken, workspace_id = "default") => {
 	return client;
 };
 export default function ApolloAppContextProvider({ children }) {
-	const { idToken, isAuthenticated, user } = useAuthContext();
+	const { isAuthenticated, user } = useAuthContext();
 	const [state, setState] = useState({
 		client: apolloClientFactory(""),
 		status: "loading",
@@ -78,8 +78,8 @@ export default function ApolloAppContextProvider({ children }) {
 
 	useEffect(() => {
 		let mounted = true;
-		if (idToken) {
-			const newClient = apolloClientFactory(idToken);
+		if (user?.idToken) {
+			const newClient = apolloClientFactory(user.idToken);
 			if (mounted) {
 				setState({
 					client: newClient,
@@ -94,8 +94,8 @@ export default function ApolloAppContextProvider({ children }) {
 
 	useEffect(() => {
 		let mounted = true;
-		if (idToken) {
-			const newClient = apolloClientFactory(idToken);
+		if (user?.idToken) {
+			const newClient = apolloClientFactory(user.idToken);
 			if (mounted) {
 				setState({
 					client: newClient,

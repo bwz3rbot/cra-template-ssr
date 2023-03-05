@@ -7,11 +7,17 @@ import SettingsIcon from "@mui/icons-material/Settings";
 import SignOutIcon from "@mui/icons-material/Logout";
 import Menu, { Divider, ListItemIcon, MenuItem } from "../../../Component/Menu";
 
+import { useNavigate } from "react-router-dom";
+
 import { useAuthContext } from "../../../Firebase";
 
 export default function AccountMenu({ anchorEl, onClose = () => {} }) {
-	const { signOut, user, setShowingSignInDialog, username, isAuthenticated } =
-		useAuthContext();
+	const { signOut, user, username, isAuthenticated } = useAuthContext();
+
+	const navigate = useNavigate();
+	const setShowingSignInDialog = () => {
+		navigate("/sign-in");
+	};
 
 	return (
 		<>

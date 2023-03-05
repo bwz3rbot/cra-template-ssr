@@ -16,7 +16,7 @@ import { useAuthContext } from "../../Firebase";
 import { SignInWithGoogleIconButton } from "../../Navigation/AccountWidget/GoogleIcon";
 import { useNavigate } from "react-router-dom";
 
-export default function SignInDialog() {
+export default function SignInDialog({ open = false }) {
 	const {
 		showingSignInDialog,
 		setShowingSignInDialog,
@@ -27,7 +27,10 @@ export default function SignInDialog() {
 	const navigate = useNavigate();
 
 	const handleSuccess = () => {
+		console.log("handling signInSuccess...");
+		console.log("showingSignInDialog: ", false);
 		setShowingSignInDialog(false);
+		console.log('navigating to "/home"');
 		navigate("/home");
 	};
 
@@ -135,7 +138,7 @@ export default function SignInDialog() {
 
 	return (
 		<Dialog
-			open={showingSignInDialog}
+			open={open || showingSignInDialog}
 			onClose={() => setShowingSignInDialog(false)}
 			sx={{
 				"& .MuiDialog-paper": {
