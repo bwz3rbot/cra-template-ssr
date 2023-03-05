@@ -16,7 +16,7 @@ export default function PageLanding() {
 	return (
 		<>
 			<Grid container>
-				<Grid item xs={6}>
+				<Grid item xs={12} sm={8} md={6}>
 					{isAuthenticated && <User />}
 				</Grid>
 			</Grid>

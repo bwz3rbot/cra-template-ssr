@@ -8,9 +8,11 @@ import {
 	Typography,
 } from "@mui/material";
 import { useAuthContext } from "../../Firebase";
+import { useRequester } from "../../Apollo";
 
 export default function User() {
 	const { user } = useAuthContext();
+	const { user: appUser } = useRequester();
 
 	return (
 		<>
@@ -56,9 +58,21 @@ export default function User() {
 								{user?.email}
 							</Typography>
 						</Grid>
-						<Grid item md={6} xs={12}>
+						<Grid item xs={12}>
 							<Typography color="textSecondary" variant="body1">
-								{user?.uid}
+								Firebase ID:{user?.uid}
+							</Typography>
+							<Typography color="textSecondary" variant="body1">
+								User ID:{appUser?.id}
+							</Typography>
+							<Typography color="textSecondary" variant="body1">
+								User ID and FirebaseUID match?{" "}
+								{user?.uid === appUser?.id ? "Yes" : "No"}
+							</Typography>
+							{/* TODO: debug why Firebase ID and
+							UID don't match when signing out until the page is refreshed */}
+							<Typography color="textSecondary" variant="body1">
+								Workspace ID:{appUser?.workspace.id}
 							</Typography>
 						</Grid>
 					</Grid>
