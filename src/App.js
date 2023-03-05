@@ -1,6 +1,6 @@
 import HelmetContext from "./Helmet";
 import AuthContext from "./Firebase";
-
+import UploadyContext from "./Upload";
 import ApolloClientContextProvider from "./Apollo";
 import ThemeContext from "./Theme";
 import Layout from "./Layout";
@@ -16,15 +16,17 @@ export default function App() {
 				<AuthContext>
 					{/* Query Client must be a child of auth context or fetch will run twice */}
 					<ApolloClientContextProvider>
-						<ThemeContext>
-							<NotificationsContext>
-								<RouterContext>
-									<Layout>
-										<Pages />
-									</Layout>
-								</RouterContext>
-							</NotificationsContext>
-						</ThemeContext>
+						<UploadyContext>
+							<ThemeContext>
+								<NotificationsContext>
+									<RouterContext>
+										<Layout>
+											<Pages />
+										</Layout>
+									</RouterContext>
+								</NotificationsContext>
+							</ThemeContext>
+						</UploadyContext>
 					</ApolloClientContextProvider>
 				</AuthContext>
 			</SnackbarProvider>
