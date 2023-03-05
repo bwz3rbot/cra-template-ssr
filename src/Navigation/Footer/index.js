@@ -1,7 +1,8 @@
 import { Fragment } from "react";
 import { Grid, Typography, Divider } from "@mui/material";
 import RoundLogo from "../../assets/logo/round-56x56.png";
-import { LinkSection } from "../Links";
+import { LinkSection, getAllowedLinks } from "../Links";
+import { useAuthContext } from "../../Firebase";
 import { Link } from "react-router-dom";
 import { DarkModeSwitch } from "../../Theme";
 
@@ -49,6 +50,7 @@ const LogoWrapper = () => {
 	);
 };
 export const Footer = () => {
+	const { user } = useAuthContext();
 	return (
 		<Grid
 			/*
@@ -77,7 +79,10 @@ export const Footer = () => {
 					paddingTop: "1rem",
 				}}
 			>
-				{LinkSection.map((section, index) => {
+				{getAllowedLinks({
+					user,
+					isTopNav: false,
+				}).map((section, index) => {
 					return (
 						<Grid
 							key={index}

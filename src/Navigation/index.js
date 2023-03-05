@@ -12,7 +12,7 @@ import {
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 
-import { LinkSection } from "./Links";
+import { LinkSection, getAllowedLinks } from "./Links";
 import { NavDrawer } from "./Drawer";
 
 import RoundLogo from "../assets/logo/round-56x56.png";
@@ -22,9 +22,12 @@ import AccountWidget from "./AccountWidget";
 
 import { NotificationsWidget } from "../Notifications";
 
+import { useAuthContext } from "../Firebase";
+
 export { Footer } from "./Footer";
 
 export const NavigationBar = () => {
+	const { user } = useAuthContext();
 	const isMedium = useMediaQuery(theme => theme.breakpoints.up("md"));
 	const [open, setOpen] = useState(false);
 	const toggleDrawer = () => setOpen(open => !open);
@@ -137,10 +140,10 @@ export const NavigationBar = () => {
 							}}
 						>
 							{isMedium &&
-								LinkSection.filter(
-									// only show main nav sections in top nav, the rest are only shown in footer
-									section => section.showInTopNav
-								).map(({ name, links }, i) => {
+								getAllowedLinks({
+									isTopNav: true,
+									user,
+								}).map(({ name, links }, i) => {
 									return (
 										<Box key={i}>
 											{links.map(

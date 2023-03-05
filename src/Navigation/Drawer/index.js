@@ -9,8 +9,10 @@ import {
 	Drawer,
 } from "@mui/material";
 import { Link } from "react-router-dom";
-import { LinkSection } from "../Links";
+import { LinkSection, getAllowedLinks } from "../Links";
+import { useAuthContext } from "../../Firebase";
 export const NavDrawer = ({ onClose: toggleDrawer, open }) => {
+	const { user } = useAuthContext();
 	return (
 		<Drawer anchor="top" open={open} onClose={toggleDrawer}>
 			<Box
@@ -22,43 +24,44 @@ export const NavDrawer = ({ onClose: toggleDrawer, open }) => {
 				role="navigation"
 			>
 				<List>
-					{LinkSection.filter(section => section.showInTopNav).map(
-						({ name, links }, i) => (
-							<Box key={name}>
-								<ListItem disablePadding>
-									<ListItemText
-										style={{
-											fontWeight: "bold",
-											paddingLeft: "4px",
-										}}
-										primary={name}
-									/>
+					{getAllowedLinks({
+						isTopNav: false,
+						user,
+					}).map(({ name, links }, i) => (
+						<Box key={name}>
+							<ListItem disablePadding>
+								<ListItemText
+									style={{
+										fontWeight: "bold",
+										paddingLeft: "4px",
+									}}
+									primary={name}
+								/>
+							</ListItem>
+							{links.map(({ to, text, Icon }, index) => (
+								<ListItem key={index} disablePadding>
+									<ListItemButton
+										component={Link}
+										to={to}
+										target={
+											to.startsWith("http")
+												? "_blank"
+												: "_self"
+										}
+									>
+										<ListItemIcon>
+											<Icon />
+										</ListItemIcon>
+										<ListItemText primary={text} />
+									</ListItemButton>
 								</ListItem>
-								{links.map(({ to, text, Icon }, index) => (
-									<ListItem key={index} disablePadding>
-										<ListItemButton
-											component={Link}
-											to={to}
-											target={
-												to.startsWith("http")
-													? "_blank"
-													: "_self"
-											}
-										>
-											<ListItemIcon>
-												<Icon />
-											</ListItemIcon>
-											<ListItemText primary={text} />
-										</ListItemButton>
-									</ListItem>
-								))}
-								{
-									// only add a divider if there is another section
-									i < LinkSection.length - 1 && <Divider />
-								}
-							</Box>
-						)
-					)}
+							))}
+							{
+								// only add a divider if there is another section
+								i < LinkSection.length - 1 && <Divider />
+							}
+						</Box>
+					))}
 				</List>
 			</Box>
 		</Drawer>

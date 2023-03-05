@@ -9,8 +9,9 @@ export const LinkSection = [
 	{
 		name: "Navigation",
 		showInTopNav: true,
+		showAnonymous: false,
 		links: [
-			{ to: "/", text: "Home", Icon: HomeIcon },
+			{ to: "/home", text: "Home", Icon: HomeIcon },
 			{
 				to: "/settings",
 				text: "Settings",
@@ -20,6 +21,8 @@ export const LinkSection = [
 	},
 	{
 		name: "Company",
+		showInTopNav: false,
+		showAnonymous: true,
 		links: [
 			{ to: "/about", text: "About", Icon: AboutIcon },
 			{ to: "/contact", text: "Contact", Icon: ContactIcon },
@@ -27,6 +30,8 @@ export const LinkSection = [
 	},
 	{
 		name: "Legal",
+		showInTopNav: false,
+		showAnonymous: true,
 
 		links: [
 			{
@@ -43,6 +48,8 @@ export const LinkSection = [
 	},
 	{
 		name: "Social",
+		showInTopNav: false,
+		showAnonymous: true,
 		links: [
 			{
 				to: "https://twitter.com/bangobotto",
@@ -96,3 +103,17 @@ export const LinkSection = [
 		],
 	},
 ];
+
+export const getAllowedLinks = ({ user, isTopNav }) => {
+	let linkSection = [...LinkSection];
+
+	const userIsAnonymous = !user || user?.isAnonymous;
+
+	if (userIsAnonymous) {
+		linkSection = LinkSection.filter(({ showAnonymous }) => showAnonymous);
+	}
+	if (isTopNav) {
+		linkSection = linkSection.filter(({ showInTopNav }) => showInTopNav);
+	}
+	return linkSection;
+};
