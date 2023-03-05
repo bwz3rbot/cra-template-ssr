@@ -3,6 +3,7 @@ const definitions = {
 	notifications: {
 		query: require("./notifications/query"),
 		subscription: require("./notifications/subscription"),
+		mutation: require("./notifications/mutation"),
 	},
 	file: {
 		query: require("./file/query"),

@@ -40,7 +40,7 @@ export default function NotificationsMenu({ anchorEl, onClose = () => {} }) {
 					disableRipple
 					selected={false}
 					style={{
-						minWidth: "300px",
+						minWidth: "500px",
 						maxWidth: "100%",
 						backgroundColor: "transparent",
 					}}
@@ -70,7 +70,7 @@ export default function NotificationsMenu({ anchorEl, onClose = () => {} }) {
 					disableRipple
 					selected={false}
 					style={{
-						minWidth: "300px",
+						minWidth: "450px",
 						maxWidth: "100%",
 						backgroundColor: "transparent",
 					}}
@@ -109,8 +109,8 @@ export default function NotificationsMenu({ anchorEl, onClose = () => {} }) {
 							type,
 
 							src = `https://picsum.photos/seed/${id}/${PREVIEW_IMAGE_DIMENSIONS.width}/${PREVIEW_IMAGE_DIMENSIONS.height}`,
-							createdAt,
-							acknowledgedAt,
+							created_at,
+							acknowledged_at,
 						} = notification;
 						return (
 							<Fragment key={id}>
@@ -129,7 +129,7 @@ export default function NotificationsMenu({ anchorEl, onClose = () => {} }) {
 											width: "fit-content",
 										}}
 									>
-										{!acknowledgedAt && (
+										{!acknowledged_at && (
 											<Typography
 												sx={{
 													color: "info.main",
@@ -187,7 +187,7 @@ export default function NotificationsMenu({ anchorEl, onClose = () => {} }) {
 											}}
 										>
 											{calculateDateSinceTimestamp(
-												createdAt
+												created_at
 											)}
 										</Typography>
 									</Grid>

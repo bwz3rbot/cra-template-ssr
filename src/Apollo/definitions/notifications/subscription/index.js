@@ -8,6 +8,7 @@ export const notifications = gql`
 			acknowledged_at
 			subject
 			type
+			hidden
 		}
 	}
 `;

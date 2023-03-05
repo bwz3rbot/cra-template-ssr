@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { useLocation, Link } from "react-router-dom";
-import NotificationsWidget from "./NotificationsWidget";
 
 import {
 	Box,
@@ -20,6 +19,8 @@ import RoundLogo from "../assets/logo/round-56x56.png";
 import WideLogo from "../assets/logo/wide-56x112.png";
 
 import AccountWidget from "./AccountWidget";
+
+import { NotificationsWidget } from "../Notifications";
 
 export { Footer } from "./Footer";
 

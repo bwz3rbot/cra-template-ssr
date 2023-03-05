@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { IconButton } from "@mui/material";
 import NotificationsList from "./List";
-import { useNotifications } from "../../Notifications";
-export default function NotificationsWidget() {
+import { useNotifications } from "..";
+export const NotificationsWidget = () => {
 	const { WidgetIcon: NotificationsBell } = useNotifications();
 	const [menuAnchorEl, setMenuAnchorEl] = useState(null);
 
@@ -26,4 +26,4 @@ export default function NotificationsWidget() {
 			/>
 		</>
 	);
-}
+};
