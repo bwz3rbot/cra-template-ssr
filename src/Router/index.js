@@ -24,7 +24,7 @@ const Restrict = ({ children, allowAnonymous }) => {
 	}
 
 	// handle unauthenticated user
-	return <Navigate to="/sign-in" />;
+	return <Navigate to="/signin" />;
 };
 
 export default function RouterContextProvider({ children }) {
@@ -41,7 +41,7 @@ export const Pages = () => {
 	return (
 		<Routes>
 			<Route path="/" element={<PageLanding />} />
-			<Route path="/sign-in" element={<PageSignIn />} />
+			<Route path="/signin" element={<PageSignIn />} />
 			<Route
 				path="/home"
 				element={

@@ -33,8 +33,6 @@ const Context = createContext({
 		onError = () => {},
 	}) => {},
 	signOut: () => {},
-	showingSignInDialog: false,
-	setShowingSignInDialog: () => {},
 	createAccount: ({
 		email,
 		password,
@@ -52,7 +50,6 @@ export default function FirebaseAppContextProvider({ children }) {
 		user: null,
 	});
 
-	const [showingSignInDialog, setShowingSignInDialog] = useState(false);
 	useEffect(() => {
 		// this effect will run once on mount and initialize the firebase app
 		if (state.initialized) return;
@@ -185,11 +182,7 @@ export default function FirebaseAppContextProvider({ children }) {
 						console.error(err);
 					});
 				},
-				showingSignInDialog,
-				setShowingSignInDialog: value => {
-					if (setShowingSignInDialog === !!value) return;
-					setShowingSignInDialog(!!value);
-				},
+
 				createAccount: async ({
 					email,
 					password,
@@ -232,8 +225,6 @@ export const useAuthContext = () => {
 		"user",
 		"isAuthenticated",
 		"username",
-		"setShowingSignInDialog",
-		"showingSignInDialog",
 
 		"createAccount",
 

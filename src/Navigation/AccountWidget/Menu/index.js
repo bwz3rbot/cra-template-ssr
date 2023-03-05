@@ -16,7 +16,7 @@ export default function AccountMenu({ anchorEl, onClose = () => {} }) {
 
 	const navigate = useNavigate();
 	const setShowingSignInDialog = () => {
-		navigate("/sign-in");
+		navigate("/signin");
 	};
 
 	return (
