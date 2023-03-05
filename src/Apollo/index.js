@@ -69,19 +69,19 @@ const apolloClientFactory = (idToken, workspace_id = "default") => {
 	return client;
 };
 export default function ApolloAppContextProvider({ children }) {
-	const { isAuthenticated, user } = useAuthContext();
-	const [state, setState] = useState({
-		client: apolloClientFactory(""),
+	const { user: appUser } = useAuthContext();
+	const [clientState, setClientState] = useState({
+		client: apolloClientFactory(appUser?.idToken || ""),
 		status: "loading",
 		user: null,
 	});
 
 	useEffect(() => {
 		let mounted = true;
-		if (user?.idToken) {
-			const newClient = apolloClientFactory(user.idToken);
+		if (appUser?.idToken) {
+			const newClient = apolloClientFactory(appUser.idToken);
 			if (mounted) {
-				setState({
+				setClientState({
 					client: newClient,
 					status: "ready",
 				});
@@ -90,50 +90,34 @@ export default function ApolloAppContextProvider({ children }) {
 		return () => {
 			mounted = false;
 		};
-	}, [isAuthenticated]);
+	}, [appUser]);
 
 	useEffect(() => {
 		let mounted = true;
-		if (user?.idToken) {
-			const newClient = apolloClientFactory(user.idToken);
-			if (mounted) {
-				setState({
-					client: newClient,
-					status: "ready",
-				});
-			}
-		}
+		if (!appUser) return;
+		if (clientState.status !== "ready") return;
+		const asyncEffect = async () => {
+			const { data } = await clientState.client.query({
+				query: definitions.user.query.getUser,
+			});
+
+			if (!mounted) return;
+			setClientState({
+				...clientState,
+				user: data.user,
+			});
+		};
+		asyncEffect();
+
 		return () => {
 			mounted = false;
 		};
-	}, [user]);
-
-	useEffect(() => {
-		let mounted = true;
-		if (state.status === "ready") {
-			state.client
-				.query({
-					query: definitions.user.query.getUser,
-				})
-
-				.then(({ data }) => {
-					if (mounted) {
-						setState({
-							...state,
-							user: data.user,
-						});
-					}
-				});
-		}
-		return () => {
-			mounted = false;
-		};
-	}, [state.client]);
+	}, [clientState.status, appUser]);
 
 	return (
 		<Context.Provider
 			value={{
-				user: state.user,
+				user: clientState.user,
 				definitions,
 				useQuery,
 				useLazyQuery,
@@ -142,8 +126,8 @@ export default function ApolloAppContextProvider({ children }) {
 				useApolloClient,
 			}}
 		>
-			<ApolloProvider client={state.client}>
-				{state.status === "ready" && children}
+			<ApolloProvider client={clientState.client}>
+				{clientState?.status === "ready" && children}
 			</ApolloProvider>
 		</Context.Provider>
 	);
