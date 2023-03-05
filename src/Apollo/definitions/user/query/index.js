@@ -6,6 +6,21 @@ export const getUser = gql`
 			name
 			email
 			avatar
+			workspace {
+				id
+				name
+				avatar
+				owner {
+					id
+					name
+					email
+					avatar
+				}
+				members {
+					id
+					name
+				}
+			}
 		}
 	}
 `;

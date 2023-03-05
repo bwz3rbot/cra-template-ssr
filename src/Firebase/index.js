@@ -17,7 +17,6 @@ import {
 
 import { createContext, useContext, useEffect, useState } from "react";
 import { FIREBASE_CONFIG } from "./config";
-
 const Context = createContext({
 	app: null,
 	auth: null,
@@ -190,7 +189,7 @@ export default function FirebaseAppContextProvider({ children }) {
 				},
 			}}
 		>
-			{state.initialized && children}
+			{state.initialized && <>{children}</>}
 		</Context.Provider>
 	);
 }
