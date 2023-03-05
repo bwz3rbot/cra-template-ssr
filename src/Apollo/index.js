@@ -79,10 +79,8 @@ export default function ApolloAppContextProvider({ children }) {
 	useEffect(() => {
 		let mounted = true;
 		if (idToken) {
-			console.log("creating new client");
 			const newClient = apolloClientFactory(idToken);
 			if (mounted) {
-				console.log("setting client to the state");
 				setState({
 					client: newClient,
 					status: "ready",
@@ -97,10 +95,8 @@ export default function ApolloAppContextProvider({ children }) {
 	useEffect(() => {
 		let mounted = true;
 		if (idToken) {
-			console.log("creating new client");
 			const newClient = apolloClientFactory(idToken);
 			if (mounted) {
-				console.log("setting client to the state");
 				setState({
 					client: newClient,
 					status: "ready",
@@ -115,7 +111,6 @@ export default function ApolloAppContextProvider({ children }) {
 	useEffect(() => {
 		let mounted = true;
 		if (state.status === "ready") {
-			console.log("getting user");
 			state.client
 				.query({
 					query: definitions.user.query.getUser,

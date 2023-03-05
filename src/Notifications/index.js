@@ -55,7 +55,6 @@ export default function NotificationsContextProvider({ children }) {
 	const [initialized, setInitialized] = useState(false);
 	useSubscription(definitions.notifications.subscription.notifications, {
 		onError: error => {
-			console.log("notifications subscription error:", { error });
 			enqueueSnackbar("Error fetching notifications", {
 				variant: "error",
 				autoHideDuration: 5000,
@@ -83,18 +82,12 @@ export default function NotificationsContextProvider({ children }) {
 		definitions.notifications.mutation.acknowledge,
 		{
 			onError: error => {
-				console.log("acknowledgeNotification mutation error:", {
-					error,
-				});
 				enqueueSnackbar("Error acknowledging notification", {
 					variant: "error",
 					autoHideDuration: 5000,
 				});
 			},
 			onCompleted: data => {
-				console.log("acknowledgeNotification mutation completed:", {
-					data,
-				});
 				enqueueSnackbar("Notification acknowledged", {
 					variant: "success",
 					autoHideDuration: 5000,
@@ -104,16 +97,12 @@ export default function NotificationsContextProvider({ children }) {
 	);
 	const [hide] = useMutation(definitions.notifications.mutation.hide, {
 		onError: error => {
-			console.log("acknowledgeNotification mutation error:", { error });
 			enqueueSnackbar("Error acknowledging notification", {
 				variant: "error",
 				autoHideDuration: 5000,
 			});
 		},
 		onCompleted: data => {
-			console.log("acknowledgeNotification mutation completed:", {
-				data,
-			});
 			enqueueSnackbar("Notification acknowledged", {
 				variant: "success",
 				autoHideDuration: 5000,
