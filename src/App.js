@@ -9,7 +9,7 @@ import RouterContext, { Pages } from "./Router";
 import { SnackbarProvider } from "notistack";
 import "./style.css";
 
-export default function App({ children }) {
+export default function App() {
 	return (
 		<HelmetContext>
 			<SnackbarProvider>
@@ -19,7 +19,9 @@ export default function App({ children }) {
 							<ThemeContext>
 								<NotificationsContext>
 									<RouterContext>
-										<Layout>{children}</Layout>
+										<Layout>
+											<Pages />
+										</Layout>
 									</RouterContext>
 								</NotificationsContext>
 							</ThemeContext>
