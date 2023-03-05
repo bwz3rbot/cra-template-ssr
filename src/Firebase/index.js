@@ -146,11 +146,8 @@ export default function FirebaseAppContextProvider({ children }) {
 				auth: state.auth,
 				analytics: state.analytics,
 				user: state.user,
-				isAuthenticated: !!state.idToken,
-				username:
-					state.auth?.currentUser?.displayName ||
-					state.auth?.currentUser?.email ||
-					null,
+				isAnonymous: state.user?.isAnonymous,
+				username: state.user?.displayName || state.user?.email || null,
 				signInWithEmailAndPassword: ({
 					email,
 					password,

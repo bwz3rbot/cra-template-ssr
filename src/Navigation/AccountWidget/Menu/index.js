@@ -12,7 +12,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuthContext } from "../../../Firebase";
 
 export default function AccountMenu({ anchorEl, onClose = () => {} }) {
-	const { signOut, user, username, isAuthenticated } = useAuthContext();
+	const { signOut, user, username } = useAuthContext();
 
 	const navigate = useNavigate();
 	const setShowingSignInDialog = () => {
@@ -21,11 +21,7 @@ export default function AccountMenu({ anchorEl, onClose = () => {} }) {
 
 	return (
 		<>
-			<Menu
-				key={isAuthenticated.toString()}
-				anchorEl={anchorEl}
-				onClose={onClose}
-			>
+			<Menu key={user.id} anchorEl={anchorEl} onClose={onClose}>
 				<div>
 					<div>
 						{user?.isAnonymous ? (

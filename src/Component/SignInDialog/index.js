@@ -17,17 +17,11 @@ import { SignInWithGoogleIconButton } from "../../Navigation/AccountWidget/Googl
 import { useNavigate } from "react-router-dom";
 
 export default function SignInDialog({ open = false }) {
-	const {
-		showingSignInDialog,
-		setShowingSignInDialog,
-		signInWithEmailAndPassword,
-		createAccount,
-	} = useAuthContext();
+	const { signInWithEmailAndPassword, createAccount } = useAuthContext();
 
 	const navigate = useNavigate();
 
 	const handleSuccess = () => {
-		setShowingSignInDialog(false);
 		navigate("/home");
 	};
 
@@ -135,8 +129,8 @@ export default function SignInDialog({ open = false }) {
 
 	return (
 		<Dialog
-			open={open || showingSignInDialog}
-			onClose={() => setShowingSignInDialog(false)}
+			open={open}
+			// onClose={() => setShowingSignInDialog(false)}
 			sx={{
 				"& .MuiDialog-paper": {
 					width: "100%",
@@ -173,19 +167,7 @@ export default function SignInDialog({ open = false }) {
 					backgroundColor: "primary.main",
 				}}
 			>
-				<Button onClick={() => setShowingSignInDialog(false)}>
-					<Typography
-						sx={{
-							color: "primary.contrastText",
-							// on hover
-							"&:hover": {
-								color: "action.selected",
-							},
-						}}
-					>
-						Cancel
-					</Typography>
-				</Button>
+				{/* Empty dialog actions for nice thicc bottom border effect */}
 			</DialogActions>
 		</Dialog>
 	);
