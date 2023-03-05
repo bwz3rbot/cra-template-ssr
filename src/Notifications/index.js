@@ -2,8 +2,8 @@ import { createContext, useContext, useState, useEffect } from "react";
 import NotificationsNoneRoundedIcon from "@mui/icons-material/NotificationsNoneRounded";
 import NotificationsActiveRoundedIcon from "@mui/icons-material/NotificationsActiveRounded";
 import NotificationsOffRoundedIcon from "@mui/icons-material/NotificationsOffRounded";
+import { Typography } from "@mui/material";
 import { useRequester } from "../Apollo";
-import { NOTIFICATIONS } from "./dummydata";
 import { useSnackbar } from "notistack";
 
 import "./style.css";
@@ -19,21 +19,40 @@ const states = {
 	off: { name: "off", Icon: NotificationsOffRoundedIcon },
 };
 const Context = createContext({
-	notifications: NOTIFICATIONS,
+	notifications: [],
 	hideNotification: id => {},
 	acknowledgeNotification: id => {},
 	clearNotifications: () => {},
 
 	WidgetIcon: states.none.Icon,
 });
-
+const dedupe = arr =>
+	arr.filter((v, i) => arr.findIndex(t => t.id === v.id) === i);
+const getClassName = state => {
+	if (state === "active") return "wiggle";
+	return "none";
+};
 export const useNotifications = () => useContext(Context);
 export default function NotificationsContextProvider({ children }) {
+	/* Notifications State */
+	const [notifications, setNotifications] = useState([]);
+	const handleSetNotifications = notifications => {
+		setNotifications(dedupe(notifications));
+	};
+
+	/* Widget Icon Wiggle State */
+	const [iconState, setIconState] = useState("active");
+	const Icon = states[iconState].Icon;
+	const WidgetIcon = () => <Icon className={getClassName(iconState)} />;
+	useEffect(() => {
+		setIconState(notifications.length ? "active" : "none");
+	}, [notifications]);
+
+	/* Subscribe To Notifications */
 	const { enqueueSnackbar } = useSnackbar();
 	const { definitions, useSubscription, useMutation } = useRequester();
 
-	// TODO: useQuery and fetch notifications from API
-	const [notifications, setNotifications] = useState(NOTIFICATIONS);
+	const [initialized, setInitialized] = useState(false);
 	useSubscription(definitions.notifications.subscription.notifications, {
 		onError: error => {
 			console.log("notifications subscription error:", { error });
@@ -43,12 +62,20 @@ export default function NotificationsContextProvider({ children }) {
 			});
 		},
 		onData: ({ data }) => {
-			console.log("notifications subscription data:", { data });
-			setNotifications(data.data.notifications);
+			const newNotifications = [...notifications];
+			newNotifications.unshift(...data.data.notifications);
+			if (newNotifications.length > 25) newNotifications.length = 25;
+			handleSetNotifications(newNotifications);
 			const count = data.data.notifications.length;
-			enqueueSnackbar(`New notification${count === 1 ? "" : "s"}`, {
-				autoHideDuration: 5000,
-			});
+
+			// only show snackbar after first render
+			let hasBeenInitialized = initialized;
+			setInitialized(true);
+			if (count === 0) return;
+			if (hasBeenInitialized)
+				enqueueSnackbar(<Typography>New notification</Typography>, {
+					autoHideDuration: 5000,
+				});
 		},
 	});
 
@@ -94,28 +121,17 @@ export default function NotificationsContextProvider({ children }) {
 		},
 	});
 
-	const [state, setState] = useState("active");
-	const WidgetIcon = states[state].Icon;
-	useEffect(() => {
-		setState(notifications.length ? "active" : "none");
-	}, [notifications]);
-
-	const getClassName = () => {
-		if (state === "active") return "wiggle";
-		return "none";
-	};
-
 	const handleUpdateNotificationsList = notification => {
 		const index = notifications.findIndex(n => n.id === notification.id);
 		const newNotifications = [...notifications];
 		newNotifications[index] = notification;
-		setNotifications(newNotifications);
+		handleSetNotifications(newNotifications);
 	};
 
 	const handleRemoveIndexFromNotificationsList = index => {
 		const newNotifications = [...notifications];
 		newNotifications.splice(index, 1);
-		setNotifications(newNotifications);
+		handleSetNotifications(newNotifications);
 	};
 
 	return (
@@ -136,12 +152,6 @@ export default function NotificationsContextProvider({ children }) {
 							);
 						},
 						onError: error => {
-							console.log(
-								"acknowledgeNotification mutation error:",
-								{
-									error,
-								}
-							);
 							enqueueSnackbar(
 								"Error acknowledging notification",
 								{
@@ -166,12 +176,6 @@ export default function NotificationsContextProvider({ children }) {
 							);
 						},
 						onError: error => {
-							console.log(
-								"acknowledgeNotification mutation error:",
-								{
-									error,
-								}
-							);
 							enqueueSnackbar(
 								"Error acknowledging notification",
 								{
@@ -184,9 +188,9 @@ export default function NotificationsContextProvider({ children }) {
 				},
 				clearNotifications: async () => {
 					// TODO: call API to clear all notifications
-					setNotifications([]);
+					handleSetNotifications([]);
 				},
-				WidgetIcon: () => <WidgetIcon className={getClassName()} />,
+				WidgetIcon,
 			}}
 		>
 			{children}
