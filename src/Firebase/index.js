@@ -83,15 +83,13 @@ export default function FirebaseAppContextProvider({ children }) {
 		};
 	}, [state]);
 
-	const handleAnonymousLogin = async () => {
-		if (!state.auth) return;
-		signInAnonymously(state.auth);
-	};
 	useEffect(() => {
-		// this effect will run whenever the app is initialized and there is no currentUser
+		// this effect will run once the app has been initialized and will create an anonymous session
+		// if the user creates a new account it will be merged with the anonymous session,
+		// allowing them to retain their user id and any data they have created under the anonymous session
 		if (!state.initialized) return;
 		if (state.auth.currentUser) return;
-		handleAnonymousLogin();
+		signInAnonymously(state.auth);
 	}, [state]);
 
 	useEffect(() => {
