@@ -1,9 +1,9 @@
 import { Fab } from "@mui/material";
 import UploadIcon from "@mui/icons-material/CloudUpload";
-import { useUploady } from "@rpldy/uploady";
+import { useUploadType } from "../../Upload";
 
 export default function UploadWidget() {
-	const { showFileUpload } = useUploady();
+	const { uploadAssetType } = useUploadType();
 	return (
 		<>
 			<Fab
@@ -16,7 +16,9 @@ export default function UploadWidget() {
 					// backgroundColor: "#19857b",
 					backgroundColor: "primary.main",
 				}}
-				onClick={showFileUpload}
+				onClick={() => {
+					uploadAssetType("VIDEO");
+				}}
 			>
 				<UploadIcon
 					sx={{

@@ -1,6 +1,6 @@
 import { useRequester } from "../../Apollo";
 import { useRequestPreSend } from "@rpldy/uploady";
-export const HookProvider = ({ children }) => {
+export default function RequestPresend({ assetType }) {
 	const { definitions, useMutation } = useRequester();
 	const [createUpload] = useMutation(definitions.file.mutation.uploadFile);
 	useRequestPreSend(async ({ items }, { options }) => {
@@ -10,7 +10,7 @@ export const HookProvider = ({ children }) => {
 			createUpload({
 				variables: {
 					input: {
-						assetType: "IMAGE",
+						assetType,
 						file: {
 							name: file.name,
 							size: file.size,
@@ -45,5 +45,5 @@ export const HookProvider = ({ children }) => {
 			},
 		};
 	});
-	return <>{children}</>;
-};
+	return <></>;
+}
