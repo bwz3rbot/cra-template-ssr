@@ -16,18 +16,12 @@ import { useAuthContext } from "../../Firebase";
 import { SignInWithGoogleIconButton } from "../../Navigation/AccountWidget/GoogleIcon";
 import { useNavigate } from "react-router-dom";
 
-export default function SignInDialog({ open = false }) {
-	const {
-		showingSignInDialog,
-		setShowingSignInDialog,
-		signInWithEmailAndPassword,
-		createAccount,
-	} = useAuthContext();
+export default function SignInDialog() {
+	const { signInWithEmailAndPassword, createAccount } = useAuthContext();
 
 	const navigate = useNavigate();
 
 	const handleSuccess = () => {
-		setShowingSignInDialog(false);
 		navigate("/home");
 	};
 
@@ -135,8 +129,7 @@ export default function SignInDialog({ open = false }) {
 
 	return (
 		<Dialog
-			open={open || showingSignInDialog}
-			onClose={() => setShowingSignInDialog(false)}
+			open
 			sx={{
 				"& .MuiDialog-paper": {
 					width: "100%",
@@ -171,21 +164,10 @@ export default function SignInDialog({ open = false }) {
 			<DialogActions
 				sx={{
 					backgroundColor: "primary.main",
+					height: "1rem",
 				}}
 			>
-				<Button onClick={() => setShowingSignInDialog(false)}>
-					<Typography
-						sx={{
-							color: "primary.contrastText",
-							// on hover
-							"&:hover": {
-								color: "action.selected",
-							},
-						}}
-					>
-						Cancel
-					</Typography>
-				</Button>
+				{/* Empty bottom bar to fill out the component */}
 			</DialogActions>
 		</Dialog>
 	);
