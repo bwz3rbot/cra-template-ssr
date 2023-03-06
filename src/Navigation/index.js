@@ -12,7 +12,7 @@ import {
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 
-import { getAllowedLinks } from "./Links";
+import { getAllowedLinks } from "../Router/Links";
 import { NavDrawer } from "./Drawer";
 
 import RoundLogo from "../assets/logo/round-56x56.png";

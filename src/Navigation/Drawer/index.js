@@ -9,7 +9,7 @@ import {
 	Drawer,
 } from "@mui/material";
 import { Link } from "react-router-dom";
-import { LinkSection, getAllowedLinks } from "../Links";
+import { LinkSection, getAllowedLinks } from "../../Router/Links";
 import { useAuthContext } from "../../Firebase";
 export const NavDrawer = ({ onClose: toggleDrawer, open }) => {
 	const { user } = useAuthContext();
