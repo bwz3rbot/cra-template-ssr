@@ -122,6 +122,28 @@ export default function FirebaseAppContextProvider({ children }) {
 	const isAuthenticated = Boolean(!!state?.user?.idToken);
 	const isAnonymous = state?.user?.isAnonymous || false;
 
+	useEffect(() => {
+		// refresh the token every 55 minutes
+		let mounted = true;
+		if (!state.user) return;
+		const timeInterval = 55 * 60 * 1000; // 55 minutes
+		const interval = setInterval(async () => {
+			const newToken = await state?.auth?.currentUser?.getIdToken(true);
+			mounted &&
+				setState(state => ({
+					...state,
+					user: {
+						...state.user,
+						idToken: newToken,
+					},
+				}));
+		}, timeInterval);
+		return () => {
+			mounted = false;
+			clearInterval(interval);
+		};
+	}, [state?.user?.idToken]);
+
 	return (
 		<Context.Provider
 			value={{
