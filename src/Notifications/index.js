@@ -52,7 +52,6 @@ export default function NotificationsContextProvider({ children }) {
 	const { enqueueSnackbar } = useSnackbar();
 	const { definitions, useSubscription, useMutation } = useRequester();
 
-	const [initialized, setInitialized] = useState(false);
 	useSubscription(definitions.notifications.subscription.notifications, {
 		onError: error => {
 			enqueueSnackbar("Error fetching notifications", {
@@ -67,14 +66,15 @@ export default function NotificationsContextProvider({ children }) {
 			handleSetNotifications(newNotifications);
 			const count = data.data.notifications.length;
 
-			// only show snackbar after first render
-			let hasBeenInitialized = initialized;
-			setInitialized(true);
 			if (count === 0) return;
-			if (hasBeenInitialized)
-				enqueueSnackbar(<Typography>New notification</Typography>, {
+			enqueueSnackbar(
+				<Typography>
+					New notification{`${count > 1 ? "s" : ""}`}
+				</Typography>,
+				{
 					autoHideDuration: 5000,
-				});
+				}
+			);
 		},
 	});
 

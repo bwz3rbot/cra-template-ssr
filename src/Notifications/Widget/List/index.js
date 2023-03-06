@@ -101,6 +101,25 @@ export default function NotificationsMenu({ anchorEl, onClose = () => {} }) {
 						overflowX: "hidden",
 					}}
 				>
+					{notifications.length === 0 && (
+						<>
+							<MenuItem disableRipple>
+								<Grid
+									container
+									sx={{
+										flexDirection: "column",
+										justifyContent: "center",
+										paddingRight: "1rem",
+										flexGrow: 1,
+									}}
+								>
+									<Typography>
+										You're all caught up!
+									</Typography>
+								</Grid>
+							</MenuItem>
+						</>
+					)}
 					{notifications.map(notification => {
 						const {
 							id,
