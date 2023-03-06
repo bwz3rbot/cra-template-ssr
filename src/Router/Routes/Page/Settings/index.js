@@ -1,7 +1,7 @@
 import { Typography } from "@mui/material";
 import { Grid } from "@mui/material";
 
-import { useLayoutVariant } from "../../Layout";
+import { useLayoutVariant } from "../../../../Layout";
 export default function PageSettings() {
 	useLayoutVariant({
 		variant: "SPA",

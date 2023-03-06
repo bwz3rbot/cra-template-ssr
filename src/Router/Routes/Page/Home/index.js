@@ -1,8 +1,8 @@
-import User from "../../Component/User";
+import User from "../../../../Component/User";
 
-import { useLayoutVariant } from "../../Layout";
+import { useLayoutVariant } from "../../../../Layout";
 
-import UploadWidget from "../../Component/Upload";
+import UploadWidget from "../../../../Component/Upload";
 
 import { Grid } from "@mui/material";
 

@@ -1,8 +1,8 @@
-import { useAuthContext } from "../../Firebase";
-import { useLayoutVariant } from "../../Layout";
+import { useAuthContext } from "../../../../Firebase";
+import { useLayoutVariant } from "../../../../Layout";
 import { Grid } from "@mui/material";
 
-import SignInDialog from "../../Component/SignInDialog";
+import SignInDialog from "./../../../../Component/SignInDialog";
 import { useNavigate } from "react-router-dom";
 
 import { useEffect } from "react";

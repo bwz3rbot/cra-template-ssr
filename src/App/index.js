@@ -1,12 +1,18 @@
-import HelmetContext from "./Helmet";
-import AuthContext from "./Firebase";
-import UploadyContext from "./Upload";
-import ApolloClientContextProvider from "./Apollo";
-import ThemeContext from "./Theme";
-import Layout from "./Layout";
-import NotificationsContext from "./Notifications";
-import RouterContext, { Pages } from "./Router";
+import HelmetContext from "../Helmet";
+import AuthContext from "../Firebase";
+import ApolloClientContextProvider from "../Apollo";
+
 import { SnackbarProvider } from "notistack";
+import NotificationsContext from "../Notifications";
+
+import UploadyContext from "../Upload";
+
+import ThemeContext from "../Theme";
+
+import RouterContext from "../Router";
+import { Routes } from "../Router/Routes";
+import Layout from "../Layout";
+
 import "./style.css";
 
 export default function App() {
@@ -20,7 +26,7 @@ export default function App() {
 								<NotificationsContext>
 									<RouterContext>
 										<Layout>
-											<Pages />
+											<Routes />
 										</Layout>
 									</RouterContext>
 								</NotificationsContext>
