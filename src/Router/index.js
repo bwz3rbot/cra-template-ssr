@@ -6,26 +6,9 @@ import {
 	PageLanding,
 	PageSettings,
 } from "../Page";
-import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
+import { BrowserRouter, useRoutes } from "react-router-dom";
 
-import { useAuthContext } from "../Firebase";
-
-const Restrict = ({ children, allowAnonymous }) => {
-	const { user } = useAuthContext();
-
-	// handle anonymous user
-	if (user?.isAnonymous && allowAnonymous) {
-		return <>{children}</>;
-	}
-
-	// handle authenticated user
-	if (user && !user.isAnonymous) {
-		return <>{children}</>;
-	}
-
-	// handle unauthenticated user
-	return <Navigate to="/signin" />;
-};
+import { Restrict } from "./Restrict";
 
 export default function RouterContextProvider({ children }) {
 	return (
@@ -37,29 +20,40 @@ export default function RouterContextProvider({ children }) {
 		</BrowserRouter>
 	);
 }
-export const Pages = () => {
-	return (
-		<Routes>
-			<Route path="/" element={<PageLanding />} />
-			<Route path="/signin" element={<PageSignIn />} />
-			<Route
-				path="/home"
-				element={
-					<Restrict>
-						<PageHome />
-					</Restrict>
-				}
-			/>
-			<Route path="/about" element={<PageAbout />} />
-			<Route
-				path="/settings"
-				element={
-					<Restrict>
-						<PageSettings />
-					</Restrict>
-				}
-			/>
-			<Route path="*" element={<Page404 />} />
-		</Routes>
-	);
+export const useRouter = () => {
+	const element = useRoutes([
+		{
+			path: "/",
+			element: <PageLanding />,
+		},
+		{
+			path: "/signin",
+			element: <PageSignIn />,
+		},
+		{
+			path: "/home",
+			element: (
+				<Restrict>
+					<PageHome />
+				</Restrict>
+			),
+		},
+		{
+			path: "/about",
+			element: <PageAbout />,
+		},
+		{
+			path: "/settings",
+			element: (
+				<Restrict>
+					<PageSettings />
+				</Restrict>
+			),
+		},
+		{
+			path: "*",
+			element: <Page404 />,
+		},
+	]);
+	return element;
 };
