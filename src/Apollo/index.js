@@ -78,41 +78,27 @@ export default function ApolloAppContextProvider({ children }) {
 
 	useEffect(() => {
 		let mounted = true;
-		if (appUser?.idToken) {
+		if (!appUser?.idToken) return;
+		// creates a new apollo client when new firebase auth context is available
+		const asyncEffect = async () => {
 			const newClient = apolloClientFactory(appUser.idToken);
+			const { data } = await newClient.query({
+				query: definitions.user.query.getUser,
+			});
+
 			if (mounted) {
 				setClientState({
 					client: newClient,
 					status: "ready",
+					user: data.user,
 				});
 			}
-		}
+		};
+		asyncEffect();
 		return () => {
 			mounted = false;
 		};
 	}, [appUser]);
-
-	useEffect(() => {
-		let mounted = true;
-		if (!appUser) return;
-		if (clientState.status !== "ready") return;
-		const asyncEffect = async () => {
-			const { data } = await clientState.client.query({
-				query: definitions.user.query.getUser,
-			});
-
-			if (!mounted) return;
-			setClientState({
-				...clientState,
-				user: data.user,
-			});
-		};
-		asyncEffect();
-
-		return () => {
-			mounted = false;
-		};
-	}, [clientState.status, appUser]);
 
 	return (
 		<Context.Provider
@@ -126,7 +112,11 @@ export default function ApolloAppContextProvider({ children }) {
 				useApolloClient,
 			}}
 		>
-			<ApolloProvider client={clientState.client}>
+			<ApolloProvider
+				// ensure context re-renders when user changes
+				key={clientState?.user?.id}
+				client={clientState.client}
+			>
 				{clientState?.status === "ready" && children}
 			</ApolloProvider>
 		</Context.Provider>
