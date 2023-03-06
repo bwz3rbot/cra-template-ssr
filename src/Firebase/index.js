@@ -23,6 +23,7 @@ const Context = createContext({
 	analytics: null,
 	user: null,
 	isAuthenticated: false,
+	isAnonymous: false,
 	username: null,
 
 	signInWithGoogle: ({ onSuccess = () => {}, onError = () => {} }) => {},
@@ -118,6 +119,9 @@ export default function FirebaseAppContextProvider({ children }) {
 		asyncEffect();
 	}, [state?.auth?.currentUser]);
 
+	const isAuthenticated = Boolean(!!state?.user?.idToken);
+	const isAnonymous = state?.user?.isAnonymous || false;
+
 	return (
 		<Context.Provider
 			value={{
@@ -125,7 +129,8 @@ export default function FirebaseAppContextProvider({ children }) {
 				auth: state.auth,
 				analytics: state.analytics,
 				user: state.user,
-				isAuthenticated: !!state.idToken,
+				isAuthenticated,
+				isAnonymous,
 				username:
 					state.auth?.currentUser?.displayName ||
 					state.auth?.currentUser?.email ||
@@ -201,9 +206,9 @@ export const useAuthContext = () => {
 	// return only the required auth related values from useFirebaseContext in one line
 	return pick(useFirebaseContext(), [
 		"user",
-		"isAuthenticated",
 		"username",
-
+		"isAuthenticated",
+		"isAnonymous",
 		"createAccount",
 
 		"signInWithEmailAndPassword",
