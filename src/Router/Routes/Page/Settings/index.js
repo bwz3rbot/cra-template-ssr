@@ -1,31 +1,15 @@
-import { Typography } from "@mui/material";
-import { Grid } from "@mui/material";
-
 import { useLayoutVariant } from "../../../../Layout";
+import { Grid, Typography } from "@mui/material";
+import { Link } from "react-router-dom";
 export default function PageSettings() {
 	useLayoutVariant({
 		variant: "SPA",
 	});
-	const Test = () => {
-		return (
-			<Grid
-				item
-				xs={12}
-				sx={{
-					border: "1px solid black",
-				}}
-			>
-				<Typography>---Settings Page---</Typography>
-			</Grid>
-		);
-	};
+
 	return (
-		<>
-			{Array(100)
-				.fill(0)
-				.map((_, i) => (
-					<Test key={i} />
-				))}
-		</>
+		<Grid>
+			<Typography variant="h5">Settings Page</Typography>
+			<Link to="/billing">Go to Billing</Link>
+		</Grid>
 	);
 }

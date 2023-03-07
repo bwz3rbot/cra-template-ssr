@@ -9,6 +9,10 @@ const definitions = {
 		query: require("./file/query"),
 		mutation: require("./file/mutation"),
 	},
+	stripe: {
+		query: require("./stripe/query"),
+		mutation: require("./stripe/mutation"),
+	},
 };
 
 export default definitions;

@@ -9,6 +9,7 @@ const PageHome = lazy(() => import("./Page/Home"));
 const PageAbout = lazy(() => import("./Page/About"));
 const PageLanding = lazy(() => import("./Page/Landing"));
 const PageSettings = lazy(() => import("./Page/Settings"));
+const PageBilling = lazy(() => import("./Page/Billing"));
 
 export const Routes = () => {
 	return (
@@ -53,6 +54,16 @@ export const Routes = () => {
 					<Suspend>
 						<Restrict>
 							<PageSettings />
+						</Restrict>
+					</Suspend>
+				}
+			/>
+			<Route
+				path="/billing"
+				element={
+					<Suspend>
+						<Restrict>
+							<PageBilling />
 						</Restrict>
 					</Suspend>
 				}
