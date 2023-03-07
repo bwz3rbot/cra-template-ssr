@@ -49,7 +49,7 @@ export default function NotificationsContextProvider({ children }) {
 	}, [notifications]);
 
 	/* Subscribe To Notifications */
-	const { enqueueSnackbar } = useSnackbar();
+	const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 	const { definitions, useSubscription, useMutation } = useRequester();
 
 	useSubscription(definitions.notifications.subscription.notifications, {
@@ -57,6 +57,9 @@ export default function NotificationsContextProvider({ children }) {
 			enqueueSnackbar("Error fetching notifications", {
 				variant: "error",
 				autoHideDuration: 5000,
+				onClick: () => {
+					closeSnackbar();
+				},
 			});
 		},
 		onData: ({ data }) => {

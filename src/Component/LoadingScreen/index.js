@@ -1,11 +1,15 @@
 import "./styles.css";
 export default function LoadingScreen({ children, loading }) {
+	let className;
+	if (loading === undefined) {
+		className = "loadingScreen";
+	} else {
+		className = `loadingScreen ${loading ? "" : "loadingScreen--hidden"}`;
+	}
 	return (
 		<>
 			<div
-				className={`loadingScreen ${
-					!loading ? "loadingScreen--hidden" : ""
-				}`}
+				className={className}
 				st={{
 					backgroundColor: "background.default",
 				}}
