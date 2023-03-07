@@ -30,7 +30,9 @@ export const NavigationBar = () => {
 	const { user } = useAuthContext();
 	const isMedium = useMediaQuery(theme => theme.breakpoints.up("md"));
 	const [open, setOpen] = useState(false);
-	const toggleDrawer = () => setOpen(open => !open);
+	const toggleDrawer = () => {
+		setOpen(open => !open);
+	};
 	const location = useLocation();
 
 	useEffect(() => {
