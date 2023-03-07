@@ -13,6 +13,8 @@ import {
 	EmailAuthProvider,
 	onAuthStateChanged,
 	linkWithCredential,
+	sendEmailVerification,
+	sendPasswordResetEmail,
 } from "firebase/auth";
 
 import LoadingScreen from "../Component/LoadingScreen";
@@ -27,7 +29,8 @@ const Context = createContext({
 	isAuthenticated: false,
 	isAnonymous: false,
 	username: null,
-
+	sendEmailVerification: () => {},
+	sendPasswordResetEmail: () => {},
 	signInWithGoogle: ({ onSuccess = () => {}, onError = () => {} }) => {},
 	signInWithEmailAndPassword: ({
 		email,
@@ -144,6 +147,10 @@ export default function FirebaseAppContextProvider({ children }) {
 		};
 	}, [state?.user?.idToken]);
 
+	console.log({
+		state,
+	});
+
 	return (
 		<Context.Provider
 			value={{
@@ -187,7 +194,27 @@ export default function FirebaseAppContextProvider({ children }) {
 						console.error(err);
 					});
 				},
-
+				sendEmailVerification: ({
+					onSuccess = () => {},
+					onError = () => {},
+				} = {}) => {
+					if (!state.auth) return;
+					sendEmailVerification(state.auth.currentUser)
+						.then(onSuccess)
+						.catch(onError);
+				},
+				sendPasswordResetEmail: ({
+					onSuccess = () => {},
+					onError = () => {},
+				} = {}) => {
+					if (!state.auth) return;
+					sendPasswordResetEmail(
+						state.auth,
+						state.auth.currentUser.email
+					)
+						.then(onSuccess)
+						.catch(onError);
+				},
 				createAccount: async ({
 					email,
 					password,
@@ -232,7 +259,8 @@ export const useAuthContext = () => {
 		"isAuthenticated",
 		"isAnonymous",
 		"createAccount",
-
+		"sendEmailVerification",
+		"sendPasswordResetEmail",
 		"signInWithEmailAndPassword",
 		"signInWithGoogle",
 		"signOut",

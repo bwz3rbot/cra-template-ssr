@@ -3,10 +3,17 @@ import { Grid, Typography, Tabs, Tab } from "@mui/material";
 import { Link } from "react-router-dom";
 
 import AccountTab from "./Tab/Account";
-import ProfileTab from "./Tab/Profile";
+import WorkspaceTab from "./Tab/Workspace";
 import NotificationsTab from "./Tab/Notifications";
 import PrivacyTab from "./Tab/Privacy";
-const tabs = ["account", "profile", "notifications", "privacy"];
+import SubscriptionTab from "./Tab/Subscription";
+const tabs = [
+	"account",
+	"workspace",
+	"notifications",
+	"privacy",
+	"subscription",
+];
 
 const getTabValue = (tabs, params) => {
 	let tabValue = tabs.findIndex(tab => {
@@ -22,7 +29,17 @@ export default function PageSettings() {
 	return (
 		<Grid>
 			<Typography variant="h5">Settings Page</Typography>
-			<Tabs variant="scrollable" value={tabValue}>
+			<Tabs
+				sx={{
+					// selected tab text color
+					paddingBottom: 1,
+					"& .MuiTabs-indicator": {
+						backgroundColor: "divider",
+					},
+				}}
+				variant="scrollable"
+				value={tabValue}
+			>
 				{tabs.map((tab, i) => {
 					return (
 						<Tab
@@ -38,9 +55,10 @@ export default function PageSettings() {
 			{
 				{
 					account: <AccountTab />,
-					profile: <ProfileTab />,
+					workspace: <WorkspaceTab />,
 					notifications: <NotificationsTab />,
 					privacy: <PrivacyTab />,
+					subscription: <SubscriptionTab />,
 				}[params?.tab?.toLowerCase() || "account"]
 			}
 		</Grid>

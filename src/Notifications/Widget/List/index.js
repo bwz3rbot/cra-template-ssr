@@ -89,7 +89,7 @@ export default function NotificationsMenu({ anchorEl, onClose = () => {} }) {
 							Notifications
 						</Typography>
 					</ListItemIcon>
-					<IconButton component={Link} to="/settings">
+					<IconButton component={Link} to="/settings/notifications">
 						<SettingsIcon />
 					</IconButton>
 				</MenuItem>
