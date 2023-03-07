@@ -82,6 +82,10 @@ export default function ApolloAppContextProvider({ children }) {
 		if (!appUser?.idToken) return;
 		// creates a new apollo client when new firebase auth context is available
 		const asyncEffect = async () => {
+			setClientState({
+				...clientState,
+				status: "loading",
+			});
 			const newClient = apolloClientFactory(appUser.idToken);
 			const { data } = await newClient.query({
 				query: definitions.user.query.getUser,
@@ -118,7 +122,14 @@ export default function ApolloAppContextProvider({ children }) {
 				key={clientState?.user?.id}
 				client={clientState.client}
 			>
-				{clientState?.status !== "ready" ? <LoadingScreen /> : children}
+				<LoadingScreen
+					loading={
+						// only render children when loading is false
+						clientState?.status !== "ready"
+					}
+				>
+					{children}
+				</LoadingScreen>
 			</ApolloProvider>
 		</Context.Provider>
 	);
