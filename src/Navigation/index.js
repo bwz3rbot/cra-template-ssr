@@ -27,7 +27,7 @@ import depthEffect from "../Theme/sx/depth-effect";
 export { Footer } from "./Footer";
 
 export const NavigationBar = () => {
-	const { user } = useAuthContext();
+	const { user, isAnonymous } = useAuthContext();
 	const isMedium = useMediaQuery(theme => theme.breakpoints.up("md"));
 	const [open, setOpen] = useState(false);
 	const toggleDrawer = () => {
@@ -175,7 +175,7 @@ export const NavigationBar = () => {
 									);
 								})}
 						</div>
-						<NotificationsWidget />
+						{!isAnonymous && <NotificationsWidget />}
 						<AccountWidget />
 					</Toolbar>
 				</AppBar>

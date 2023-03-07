@@ -233,7 +233,19 @@ export default function FirebaseAppContextProvider({ children }) {
 							email,
 							password
 						);
+
 						await linkWithCredential(currentUser, Credential);
+						await signInWithEmailAndPassword(
+							state.auth,
+							email,
+							password
+						);
+						// this is a weird bug where the user is signed in but the auth state is not updated
+						// likely need to re-implement onAuthStateChanged as a proper callback
+						setState(state => ({
+							...state,
+						}));
+
 						onSuccess();
 					} catch (err) {
 						onError(err);
