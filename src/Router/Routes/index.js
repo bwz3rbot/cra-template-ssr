@@ -49,7 +49,8 @@ export const Routes = () => {
 				}
 			/>
 			<Route
-				path="/settings"
+				path={"/settings/:tab?"}
+				exact={false}
 				element={
 					<Suspend>
 						<Restrict>
