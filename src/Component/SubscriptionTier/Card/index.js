@@ -8,6 +8,7 @@ import {
 import { useMemo } from "react";
 import { useRequester } from "../../../Apollo";
 import { useSnackbar } from "notistack";
+import depthEffect from "../../../Theme/sx/depth-effect";
 
 const parseAmountToDollars = ({ amount, currency }) => {
 	return (amount / 100).toLocaleString(
@@ -40,6 +41,7 @@ export default function SubscriptionTierCard({
 	);
 
 	const image = useMemo(randomImage, []);
+
 	return (
 		<Card
 			sx={{
@@ -47,6 +49,7 @@ export default function SubscriptionTierCard({
 				display: "flex",
 				flexDirection: "column",
 				justifyContent: "space-between",
+				...depthEffect(),
 			}}
 		>
 			<CardMedia

@@ -7,6 +7,7 @@ import {
 	TableRow,
 	Paper,
 } from "@mui/material";
+import depthEffect from "../../../Theme/sx/depth-effect";
 
 // describes all the available features and which plans are allowed to use them
 export default function FeaturesList() {
@@ -33,6 +34,7 @@ export default function FeaturesList() {
 			component={Paper}
 			sx={{
 				maxWidth: "100%",
+				...depthEffect(),
 			}}
 		>
 			<Table aria-label="simple table">

@@ -2,6 +2,8 @@ import { useEffect } from "react";
 import { Menu as MuiMenu } from "@mui/material";
 import { useLocation } from "react-router-dom";
 
+import depthEffect from "../../Theme/sx/depth-effect";
+
 export { MenuItem, ListItemIcon, Divider } from "@mui/material";
 
 export default function Menu({
@@ -27,6 +29,7 @@ export default function Menu({
 					filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
 					minWidth: 220,
 					mt: 1.5,
+					...depthEffect(),
 
 					"& .MuiAvatar-root": {
 						width: 32,

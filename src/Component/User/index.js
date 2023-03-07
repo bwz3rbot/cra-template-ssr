@@ -10,13 +10,19 @@ import {
 import { useAuthContext } from "../../Firebase";
 import { useRequester } from "../../Apollo";
 
+import depthEffect from "../../Theme/sx/depth-effect";
+
 export default function User() {
 	const { user } = useAuthContext();
 	const { user: appUser } = useRequester();
 
 	return (
 		<>
-			<Card>
+			<Card
+				sx={{
+					...depthEffect(),
+				}}
+			>
 				<CardHeader
 					avatar={
 						<Avatar
@@ -69,8 +75,6 @@ export default function User() {
 								User ID and FirebaseUID match?{" "}
 								{user?.uid === appUser?.id ? "Yes" : "No"}
 							</Typography>
-							{/* TODO: debug why Firebase ID and
-							UID don't match when signing out until the page is refreshed */}
 							<Typography color="textSecondary" variant="body1">
 								Workspace ID:{appUser?.workspace.id}
 							</Typography>

@@ -23,7 +23,7 @@ import AccountWidget from "./AccountWidget";
 import { NotificationsWidget } from "../Notifications";
 
 import { useAuthContext } from "../Firebase";
-
+import depthEffect from "../Theme/sx/depth-effect";
 export { Footer } from "./Footer";
 
 export const NavigationBar = () => {
@@ -68,6 +68,8 @@ export const NavigationBar = () => {
 					position="sticky"
 					sx={{
 						backgroundColor: "primary.main",
+						...depthEffect(),
+						borderWidth: "0px 0px 1px 0px",
 					}}
 				>
 					<Toolbar variant="dense">

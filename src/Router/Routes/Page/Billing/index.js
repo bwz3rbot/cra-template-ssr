@@ -1,11 +1,10 @@
 import { useRequester } from "../../../../Apollo";
 import SubscriptionTierCard from "../../../../Component/SubscriptionTier/Card";
 import FeaturesList from "../../../../Component/SubscriptionTier/Features";
-import { Grid, Typography, useMediaQuery } from "@mui/material";
+import { Grid } from "@mui/material";
 
 export default function BillingPage() {
 	const { definitions, useQuery } = useRequester();
-	const md = useMediaQuery(theme => theme.breakpoints.up("md"));
 
 	const { data } = useQuery(definitions.stripe.query.listSubscriptionPlans, {
 		onError: error => {
@@ -39,12 +38,12 @@ export default function BillingPage() {
 						<Grid
 							key={i}
 							item
-							xs={4}
+							xs={5}
 							md={3}
 							sx={{
 								display: "flex",
 								justifyContent: "center",
-								margin: md ? 2 : 1,
+								margin: "2px",
 							}}
 						>
 							<SubscriptionTierCard key={i} plan={plan} />
