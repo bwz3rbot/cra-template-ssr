@@ -65,7 +65,7 @@ export default function SubscriptionTierCard({
 						amount,
 						currency,
 					})}
-					{interval}
+					/{interval}
 				</Typography>
 			</CardContent>
 			<CardActionArea
