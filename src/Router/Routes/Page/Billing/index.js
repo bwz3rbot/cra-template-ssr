@@ -6,12 +6,7 @@ import { Grid, Typography, useMediaQuery } from "@mui/material";
 export default function BillingPage() {
 	const { definitions, useQuery } = useRequester();
 	const md = useMediaQuery(theme => theme.breakpoints.up("md"));
-	// breakpoint at 600px
-	const xs = useMediaQuery(theme => theme.breakpoints.up("xs"));
-	console.log({
-		md,
-		xs,
-	});
+
 	const { data } = useQuery(definitions.stripe.query.listSubscriptionPlans, {
 		onError: error => {
 			console.log(error);
@@ -24,7 +19,7 @@ export default function BillingPage() {
 			sx={{
 				// padding: 2,
 				display: "flex",
-				flexDirection: "row",
+				flexDirection: "column",
 				overflowX: "hidden",
 				marginY: 6,
 			}}
@@ -64,6 +59,8 @@ export default function BillingPage() {
 					display: "flex",
 					justifyContent: "center",
 					marginY: 6,
+					maxWidth: "700px",
+					alignSelf: "center",
 				}}
 			>
 				<Grid item xs={12} md={10}>
