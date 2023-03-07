@@ -1,9 +1,10 @@
 import { useRequester } from "../../../../Apollo";
 import SubscriptionTierCard from "../../../../Component/SubscriptionTier/Card";
 import FeaturesList from "../../../../Component/SubscriptionTier/Features";
-import { Grid } from "@mui/material";
+import { Grid, useMediaQuery } from "@mui/material";
 
 export default function BillingPage() {
+	const md = useMediaQuery(theme => theme.breakpoints.up("md"));
 	const { definitions, useQuery } = useRequester();
 
 	const { data } = useQuery(definitions.stripe.query.listSubscriptionPlans, {
@@ -16,7 +17,6 @@ export default function BillingPage() {
 		<Grid
 			container
 			sx={{
-				// padding: 2,
 				display: "flex",
 				flexDirection: "column",
 				overflowX: "hidden",
@@ -40,12 +40,13 @@ export default function BillingPage() {
 							<Grid
 								key={i}
 								item
-								xs={5}
+								xs={6}
 								md={3}
 								sx={{
 									display: "flex",
 									justifyContent: "center",
-									margin: "2px",
+									margin: md ? "4px" : "0px",
+									marginY: "3px",
 								}}
 							>
 								<SubscriptionTierCard key={i} plan={plan} />
