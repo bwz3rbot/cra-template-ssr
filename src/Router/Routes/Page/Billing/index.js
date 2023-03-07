@@ -33,23 +33,25 @@ export default function BillingPage() {
 					flexWrap: "wrap",
 				}}
 			>
-				{data?.stripe_listSubscriptionsPlans?.map((plan, i) => {
-					return (
-						<Grid
-							key={i}
-							item
-							xs={5}
-							md={3}
-							sx={{
-								display: "flex",
-								justifyContent: "center",
-								margin: "2px",
-							}}
-						>
-							<SubscriptionTierCard key={i} plan={plan} />
-						</Grid>
-					);
-				})}
+				{Array.from(data?.stripe_listSubscriptionsPlans || [])
+					.sort((a, b) => a.amount - b.amount)
+					.map((plan, i) => {
+						return (
+							<Grid
+								key={i}
+								item
+								xs={5}
+								md={3}
+								sx={{
+									display: "flex",
+									justifyContent: "center",
+									margin: "2px",
+								}}
+							>
+								<SubscriptionTierCard key={i} plan={plan} />
+							</Grid>
+						);
+					})}
 			</Grid>
 
 			<Grid
