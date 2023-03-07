@@ -1,10 +1,12 @@
 import { Fragment } from "react";
-import { Grid, Typography, Divider } from "@mui/material";
+import { Grid, Typography, Divider, Box } from "@mui/material";
 import RoundLogo from "../../assets/logo/round-56x56.png";
 import { LinkSection, getAllowedLinks } from "../Links";
 import { useAuthContext } from "../../Firebase";
 import { Link } from "react-router-dom";
 import { DarkModeSwitch } from "../../Theme";
+import depthEffect from "../../Theme/sx/depth-effect";
+import "./styles.css";
 
 const LogoWrapper = () => {
 	return (
@@ -27,11 +29,19 @@ const LogoWrapper = () => {
 					padding: 0,
 				}}
 			>
-				<img
-					style={{
+				<Box
+					className="logo"
+					component="img"
+					sx={{
 						width: "65px",
 						height: "65px",
 						marginBottom: ".5rem",
+						borderRadius: "50%",
+						...depthEffect(8),
+						"&:hover": {
+							transform: "scale(1.05)",
+							...depthEffect(12),
+						},
 					}}
 					src={RoundLogo}
 					alt="Round Logo"

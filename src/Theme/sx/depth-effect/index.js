@@ -1,7 +1,7 @@
-export default function depthEffect() {
+export default function depthEffect(level = 4) {
 	return {
 		border: "1px solid",
 		borderColor: "divider",
-		boxShadow: 4,
+		boxShadow: level,
 	};
 }
