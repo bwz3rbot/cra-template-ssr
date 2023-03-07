@@ -1,15 +1,24 @@
 import { useRequester } from "../../../../Apollo";
 import SubscriptionTierCard from "../../../../Component/SubscriptionTier/Card";
 import FeaturesList from "../../../../Component/SubscriptionTier/Features";
+import { useSnackbar } from "notistack";
 import { Grid, useMediaQuery } from "@mui/material";
 
 export default function BillingPage() {
+	const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 	const md = useMediaQuery(theme => theme.breakpoints.up("md"));
 	const { definitions, useQuery } = useRequester();
 
 	const { data } = useQuery(definitions.stripe.query.listSubscriptionPlans, {
 		onError: error => {
-			console.log(error);
+			enqueueSnackbar("Error fetching subscription plans", {
+				variant: "error",
+				autoHideDuration: 5000,
+
+				onClick: () => {
+					closeSnackbar();
+				},
+			});
 		},
 	});
 
