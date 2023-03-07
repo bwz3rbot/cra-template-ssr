@@ -13,6 +13,7 @@ import {
 import { split, HttpLink } from "@apollo/client";
 import { getMainDefinition } from "@apollo/client/utilities";
 import { GraphQLWsLink } from "@apollo/client/link/subscriptions";
+import LoadingScreen from "../Component/LoadingScreen";
 
 import { createClient } from "graphql-ws";
 
@@ -117,7 +118,7 @@ export default function ApolloAppContextProvider({ children }) {
 				key={clientState?.user?.id}
 				client={clientState.client}
 			>
-				{clientState?.status === "ready" && children}
+				{clientState?.status !== "ready" ? <LoadingScreen /> : children}
 			</ApolloProvider>
 		</Context.Provider>
 	);

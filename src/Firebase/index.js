@@ -15,6 +15,8 @@ import {
 	linkWithCredential,
 } from "firebase/auth";
 
+import LoadingScreen from "../Component/LoadingScreen";
+
 import { createContext, useContext, useEffect, useState } from "react";
 import { FIREBASE_CONFIG } from "./config";
 const Context = createContext({
@@ -213,7 +215,7 @@ export default function FirebaseAppContextProvider({ children }) {
 				},
 			}}
 		>
-			{state.initialized && <>{children}</>}
+			{!state.initialized ? <LoadingScreen /> : <>{children}</>}
 		</Context.Provider>
 	);
 }
