@@ -26,7 +26,6 @@ export default function LayoutSPA({ children }) {
 						height: "var(--body-height)",
 						width: "100vw",
 						padding: ".4rem",
-						paddingTop: ".2rem",
 					}}
 				>
 					{children}

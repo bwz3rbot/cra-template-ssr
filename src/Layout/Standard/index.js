@@ -25,8 +25,7 @@ export default function LayoutStandard({ children }) {
 					sx={{
 						minHeight: "40vh",
 						width: "100vw",
-						paddingX: ".4rem",
-						paddingTop: ".2rem",
+						padding: ".4rem",
 					}}
 				>
 					{children}
