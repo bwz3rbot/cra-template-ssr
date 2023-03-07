@@ -9,7 +9,7 @@ const PageHome = lazy(() => import("./Page/Home"));
 const PageAbout = lazy(() => import("./Page/About"));
 const PageLanding = lazy(() => import("./Page/Landing"));
 const PageSettings = lazy(() => import("./Page/Settings"));
-const PageBilling = lazy(() => import("./Page/Billing"));
+const PageSubscribe = lazy(() => import("./Page/Subscribe"));
 
 export const Routes = () => {
 	return (
@@ -59,11 +59,11 @@ export const Routes = () => {
 				}
 			/>
 			<Route
-				path="/billing"
+				path="/subscribe"
 				element={
 					<Suspend>
 						<Restrict>
-							<PageBilling />
+							<PageSubscribe />
 						</Restrict>
 					</Suspend>
 				}

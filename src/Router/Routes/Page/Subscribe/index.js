@@ -4,7 +4,7 @@ import FeaturesList from "../../../../Component/SubscriptionTier/Features";
 import { useSnackbar } from "notistack";
 import { Grid, useMediaQuery } from "@mui/material";
 
-export default function BillingPage() {
+export default function SubscribePage() {
 	const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 	const md = useMediaQuery(theme => theme.breakpoints.up("md"));
 	const { definitions, useQuery } = useRequester();

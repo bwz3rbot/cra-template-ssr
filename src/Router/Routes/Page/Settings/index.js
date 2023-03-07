@@ -9,7 +9,7 @@ export default function PageSettings() {
 	return (
 		<Grid>
 			<Typography variant="h5">Settings Page</Typography>
-			<Link to="/billing">Go to Billing</Link>
+			<Link to="/subscribe">Go to Subscribe</Link>
 		</Grid>
 	);
 }
