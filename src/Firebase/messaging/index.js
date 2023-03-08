@@ -26,7 +26,6 @@ export const useMessaging = () => {
 	};
 	const requestPermission = async messaging => {
 		if (!messaging) return;
-		console.log("requesting permission");
 		return messaging.requestPermission();
 	};
 
@@ -69,15 +68,12 @@ export const useMessaging = () => {
 				...user,
 				token,
 			});
-		console.log("current user vapid token:");
-		console.log(token);
 		mounted && setMessaging(gcm);
 	};
 
 	useEffect(() => {
-		console.log("handling messaging", { app, messaging });
-		if (!app) return console.log("no app - returning");
-		if (user === currentUser) return console.log("same user - returning");
+		if (!app) return;
+		if (user === currentUser) return;
 
 		const asyncEffect = async () => {
 			await handleConfigureMessaging();

@@ -27,9 +27,6 @@ const randomImage = () => {
 	return `https://source.unsplash.com/random/${IMG_WIDTH}x${IMG_HEIGHT}?sig=${random}`;
 };
 export default function SubscriptionTierCard({ plan, isSubscribed = false }) {
-	console.log({
-		plan,
-	});
 	const { id, nickname, amount, currency, interval } = plan;
 	const { enqueueSnackbar } = useSnackbar();
 	const { definitions, useMutation } = useRequester();
