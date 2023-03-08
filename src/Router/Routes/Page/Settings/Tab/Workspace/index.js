@@ -50,20 +50,18 @@ export default function SettingsPageWorkspaceTab() {
 								}}
 							/>
 						))}
-						{[...members, ...members, ...members].map(
-							(member, i) => {
-								return (
-									<Member
-										key={i}
-										user={member}
-										workspace={workspace}
-										role={{
-											name: "Member",
-										}}
-									/>
-								);
-							}
-						)}
+						{[...members, ...members].map((member, i) => {
+							return (
+								<Member
+									key={i}
+									user={member}
+									workspace={workspace}
+									role={{
+										name: "Member",
+									}}
+								/>
+							);
+						})}
 					</>
 				</Grid>
 			</Grid>

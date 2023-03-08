@@ -41,33 +41,23 @@ const RoleIcon = {
 };
 
 export default function Member({ workspace, user, role }) {
-	console.log({
-		user,
-		role,
-	});
 	const Actions = [
-		{
-			label: "Remove",
-			onClick: () => {},
-			Icon: PersonRemoveIcon,
-		},
 		{
 			label: "Assign Role",
 			onClick: () => {},
 			Icon: AssignmentIndOutlinedIcon,
+		},
+		{
+			label: "Remove",
+			onClick: () => {},
+			Icon: PersonRemoveIcon,
 		},
 	];
 	const BottomSection = () => {
 		return (
 			<>
 				<Divider />
-				<CardContent
-					sx={{
-						display: "flex",
-						justifyContent: "space-between",
-						flexDirection: "column",
-					}}
-				></CardContent>
+
 				<CardActions
 					sx={{
 						display: "flex",
@@ -135,10 +125,10 @@ export default function Member({ workspace, user, role }) {
 								{RoleIcon[role.name.toLowerCase()]}
 								{role.name} of <i>{workspace.name}</i>
 							</Typography>
+							{role.name !== "Owner" && <BottomSection />}
 						</>
 					}
 				/>
-				{role.name !== "Owner" && <BottomSection />}
 			</Card>
 		</>
 	);
