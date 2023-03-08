@@ -4,7 +4,6 @@ import RoundLogo from "../../assets/logo/round-56x56.png";
 import { LinkSection, getAllowedLinks } from "../Links";
 import { useAuthContext } from "../../Firebase";
 import { Link } from "react-router-dom";
-import { DarkModeSwitch } from "../../Theme";
 import depthEffect from "../../Theme/sx/depth-effect";
 import "./styles.css";
 
@@ -172,15 +171,6 @@ export const Footer = () => {
 			>
 				<LogoWrapper />
 			</Grid>
-			<div
-				style={{
-					position: "absolute",
-					bottom: ".5rem",
-					left: ".5rem",
-				}}
-			>
-				<DarkModeSwitch />
-			</div>
 		</Grid>
 	);
 };

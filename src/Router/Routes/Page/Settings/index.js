@@ -8,6 +8,7 @@ import WorkspaceTab from "./Tab/Workspace";
 import NotificationsTab from "./Tab/Notifications";
 import PrivacyTab from "./Tab/Privacy";
 import SubscriptionTab from "./Tab/Subscription";
+import { useRef } from "react";
 const tabs = [
 	"account",
 	"workspace",
@@ -24,6 +25,9 @@ const getTabValue = (tabs, params) => {
 	return tabValue;
 };
 export default function PageSettings() {
+	const navRef = useRef();
+	const height = navRef.current?.clientHeight;
+
 	const params = useParams();
 	useLayoutVariant({
 		variant: "SPA",
@@ -69,7 +73,9 @@ export default function PageSettings() {
 			</Grid>
 			<Grid
 				sx={{
-					padding: 1,
+					height: `var(--body-height)`,
+					overflowY: "scroll",
+					paddingX: 2,
 				}}
 			>
 				{

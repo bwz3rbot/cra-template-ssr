@@ -12,12 +12,7 @@ export default function SettingsPageWorkspaceTab() {
 	const owner = appUser?.workspace?.owner;
 
 	return (
-		<Box
-			sx={{
-				height: "calc(var(--body-height) - calc(var(--nav-height)) * 2)",
-				overflow: "auto",
-			}}
-		>
+		<>
 			<Grid
 				container
 				sx={{
@@ -72,6 +67,6 @@ export default function SettingsPageWorkspaceTab() {
 					</>
 				</Grid>
 			</Grid>
-		</Box>
+		</>
 	);
 }
