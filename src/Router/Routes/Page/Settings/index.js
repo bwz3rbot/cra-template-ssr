@@ -8,7 +8,6 @@ import WorkspaceTab from "./Tab/Workspace";
 import NotificationsTab from "./Tab/Notifications";
 import PrivacyTab from "./Tab/Privacy";
 import SubscriptionTab from "./Tab/Subscription";
-import { useRef } from "react";
 const tabs = [
 	"account",
 	"workspace",
@@ -25,15 +24,13 @@ const getTabValue = (tabs, params) => {
 	return tabValue;
 };
 export default function PageSettings() {
-	const navRef = useRef();
-	const height = navRef.current?.clientHeight;
-
 	const params = useParams();
-	useLayoutVariant({
-		variant: "SPA",
-	});
-
 	const tabValue = getTabValue(tabs, params);
+
+	// TODO: figure out why useLayoutVariant causes tabs to re-render and not have re-select effect
+	// test storing previous location inside of layout context and comparing to current location to determine if page has changed
+	// another solution is to update the layout context to return the pre-rendered pieces of the layout that are needed for the page
+	// and render the same instance of the elements when location changes
 	return (
 		<Grid
 			sx={{
@@ -74,7 +71,6 @@ export default function PageSettings() {
 			<Grid
 				sx={{
 					height: `var(--body-height)`,
-					overflowY: "scroll",
 					paddingX: 2,
 				}}
 			>

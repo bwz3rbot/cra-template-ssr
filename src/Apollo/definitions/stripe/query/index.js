@@ -11,3 +11,20 @@ export const listSubscriptionPlans = gql`
 		}
 	}
 `;
+
+export const getMySubscription = gql`
+	query {
+		stripe_getMySubscription {
+			id
+			plan_begin
+			plan_end
+			plan {
+				id
+				nickname
+				amount
+				interval
+				currency
+			}
+		}
+	}
+`;

@@ -26,9 +26,11 @@ const randomImage = () => {
 	const random = Math.floor(Math.random() * 100);
 	return `https://source.unsplash.com/random/${IMG_WIDTH}x${IMG_HEIGHT}?sig=${random}`;
 };
-export default function SubscriptionTierCard({
-	plan: { amount, currency, id, interval, nickname },
-}) {
+export default function SubscriptionTierCard({ plan, isSubscribed = false }) {
+	console.log({
+		plan,
+	});
+	const { id, nickname, amount, currency, interval } = plan;
 	const { enqueueSnackbar } = useSnackbar();
 	const { definitions, useMutation } = useRequester();
 	const [createCheckoutSession] = useMutation(
@@ -46,6 +48,7 @@ export default function SubscriptionTierCard({
 		<Card
 			sx={{
 				height: IMG_HEIGHT * 2,
+				maxWidth: IMG_WIDTH,
 				display: "flex",
 				flexDirection: "column",
 				justifyContent: "space-between",
@@ -94,10 +97,11 @@ export default function SubscriptionTierCard({
 						},
 					});
 				}}
+				disabled={isSubscribed}
 			>
 				<CardContent>
 					<Typography variant="button" color="text.secondary">
-						Subscribe to plan
+						{isSubscribed ? "Subscribed" : "Subscribe to plan"}
 					</Typography>
 				</CardContent>
 			</CardActionArea>
