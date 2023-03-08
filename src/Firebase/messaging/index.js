@@ -2,7 +2,9 @@ import { useSnackbar } from "notistack";
 import { useEffect, useState } from "react";
 import { useFirebaseContext } from "..";
 import { getMessaging, onMessage, getToken } from "firebase/messaging";
+
 import NotificationSnackbar from "../../Component/Notification/Snackbar";
+
 /*
 Enable messaging in Brave browser
 https://stackoverflow.com/questions/42385336/google-push-notifications-domexception-registration-failed-push-service-err
@@ -31,36 +33,35 @@ export const useMessaging = () => {
 
 	const handleConfigureMessaging = async app => {
 		const gcm = getMessaging(app);
+		const handleMessage = ({
+			collapseKey,
+			from,
+			messageId,
+			data,
+			fcmOptions,
+			notification,
+		}) => {
+			console.log("got message ", from);
+			enqueueSnackbar(
+				<NotificationSnackbar
+					notification={{
+						...notification,
+					}}
+				/>,
+				{
+					variant: data.type?.toLowerCase() || "info",
+					anchorOrigin: {
+						vertical: "bottom",
+						horizontal: "right",
+					},
+					onClick: () => {
+						closeSnackbar();
+					},
+				}
+			);
+		};
 
-		onMessage(
-			gcm,
-			({
-				collapseKey,
-				from,
-				messageId,
-				data,
-				fcmOptions,
-				notification,
-			}) => {
-				enqueueSnackbar(
-					<NotificationSnackbar
-						notification={{
-							...notification,
-						}}
-					/>,
-					{
-						variant: data.type?.toLowerCase() || "info",
-						anchorOrigin: {
-							vertical: "bottom",
-							horizontal: "right",
-						},
-						onClick: () => {
-							closeSnackbar();
-						},
-					}
-				);
-			}
-		);
+		onMessage(gcm, handleMessage);
 
 		const token = await getVapidToken(gcm);
 		mounted &&
@@ -84,6 +85,7 @@ export const useMessaging = () => {
 		};
 	}, [user]);
 
+	console.log(currentUser?.token);
 	return {
 		messaging,
 		getToken: getVapidToken,
