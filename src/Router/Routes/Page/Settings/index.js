@@ -1,6 +1,7 @@
 import { useParams } from "react-router-dom";
 import { Grid, Typography, Tabs, Tab } from "@mui/material";
 import { Link } from "react-router-dom";
+import { useLayoutVariant } from "../../../../Layout";
 
 import AccountTab from "./Tab/Account";
 import WorkspaceTab from "./Tab/Workspace";
@@ -24,43 +25,63 @@ const getTabValue = (tabs, params) => {
 };
 export default function PageSettings() {
 	const params = useParams();
+	useLayoutVariant({
+		variant: "SPA",
+	});
 
 	const tabValue = getTabValue(tabs, params);
 	return (
-		<Grid>
-			<Typography variant="h5">Settings Page</Typography>
-			<Tabs
+		<Grid
+			sx={{
+				height: "var(--body-height)",
+				overflow: "hidden",
+			}}
+		>
+			<Grid>
+				<Typography variant="h5">Settings Page</Typography>
+				<Tabs
+					sx={{
+						// selected tab text color
+						paddingBottom: 1,
+						"& .MuiTabs-indicator": {
+							backgroundColor: "divider",
+						},
+					}}
+					variant="scrollable"
+					value={tabValue}
+				>
+					{tabs.map((tab, i) => {
+						return (
+							<Tab
+								key={i}
+								label={tab}
+								component={Link}
+								to={`/settings/${tab.toLowerCase()}`}
+								value={i}
+								sx={{
+									height: "100%",
+									overflowY: "sroll",
+								}}
+							/>
+						);
+					})}
+				</Tabs>
+			</Grid>
+			<Grid
 				sx={{
-					// selected tab text color
-					paddingBottom: 1,
-					"& .MuiTabs-indicator": {
-						backgroundColor: "divider",
-					},
+					padding: 1,
 				}}
-				variant="scrollable"
-				value={tabValue}
 			>
-				{tabs.map((tab, i) => {
-					return (
-						<Tab
-							key={i}
-							label={tab}
-							component={Link}
-							to={`/settings/${tab.toLowerCase()}`}
-							value={i}
-						/>
-					);
-				})}
-			</Tabs>
-			{
 				{
-					account: <AccountTab />,
-					workspace: <WorkspaceTab />,
-					notifications: <NotificationsTab />,
-					privacy: <PrivacyTab />,
-					subscription: <SubscriptionTab />,
-				}[params?.tab?.toLowerCase() || "account"]
-			}
+					{
+						account: <AccountTab />,
+						workspace: <WorkspaceTab />,
+						notifications: <NotificationsTab />,
+						privacy: <PrivacyTab />,
+						subscription: <SubscriptionTab />,
+					}[params?.tab?.toLowerCase() || "account"]
+				}
+			</Grid>
 		</Grid>
 	);
 }

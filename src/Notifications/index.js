@@ -113,6 +113,8 @@ export default function NotificationsContextProvider({ children }) {
 		},
 	});
 
+	const sendPushNotification = async () => {};
+
 	const handleUpdateNotificationsList = notification => {
 		const index = notifications.findIndex(n => n.id === notification.id);
 		const newNotifications = [...notifications];

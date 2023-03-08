@@ -24,6 +24,7 @@ import { FIREBASE_CONFIG } from "./config";
 const Context = createContext({
 	app: null,
 	auth: null,
+	messaging: null,
 	analytics: null,
 	user: null,
 	isAuthenticated: false,
@@ -51,6 +52,7 @@ export default function FirebaseAppContextProvider({ children }) {
 	const [state, setState] = useState({
 		app: null,
 		auth: null,
+		messaging: null,
 		analytics: null,
 		initialized: false,
 		user: null,
@@ -73,6 +75,7 @@ export default function FirebaseAppContextProvider({ children }) {
 				}));
 			});
 			await setPersistence(auth, browserSessionPersistence);
+
 			const analytics = getAnalytics(app);
 			mounted &&
 				setState({
@@ -146,10 +149,6 @@ export default function FirebaseAppContextProvider({ children }) {
 			clearInterval(interval);
 		};
 	}, [state?.user?.idToken]);
-
-	console.log({
-		state,
-	});
 
 	return (
 		<Context.Provider

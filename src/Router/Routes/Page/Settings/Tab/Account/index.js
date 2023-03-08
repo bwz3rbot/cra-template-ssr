@@ -1,8 +1,8 @@
-import { Grid, Typography } from "@mui/material";
+import { Grid } from "@mui/material";
 import User from "../../../../../../Component/User";
 export default function SettingsPageAccountTab() {
 	return (
-		<Grid>
+		<Grid container>
 			<Grid item>
 				<User />
 			</Grid>

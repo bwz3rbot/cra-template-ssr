@@ -19,6 +19,14 @@ export const getUser = gql`
 				members {
 					id
 					name
+					avatar
+					email
+				}
+				admin {
+					id
+					name
+					avatar
+					email
 				}
 			}
 		}

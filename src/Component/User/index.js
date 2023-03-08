@@ -19,13 +19,9 @@ export default function User() {
 	const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 	const { user, sendEmailVerification, sendPasswordResetEmail } =
 		useAuthContext();
-	const { user: appUser } = useRequester();
 
 	const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-	console.log({
-		user,
-		timeZone,
-	});
+
 	const isEmailVerified = user?.emailVerified;
 	const userCreatedDate = new Date(user?.metadata.creationTime);
 	const userCreatedDateSince = calculateDateSinceTimestamp(
@@ -38,7 +34,6 @@ export default function User() {
 
 	const shouldAllowResetPassword = () => {
 		user.providerData.forEach(profile => {
-			console.log({ profile });
 			if (profile.providerId === "password") {
 				return true;
 			}
@@ -110,7 +105,6 @@ export default function User() {
 						onClick={() => {
 							sendPasswordResetEmail({
 								onSuccess: () => {
-									console.log("handling success");
 									enqueueSnackbar(
 										"Password reset email sent",
 										{
@@ -123,7 +117,6 @@ export default function User() {
 									);
 								},
 								onError: () => {
-									console.log("handling error");
 									enqueueSnackbar(
 										"Password reset email failed",
 										{
@@ -150,6 +143,7 @@ export default function User() {
 				sx={{
 					...depthEffect(),
 					maxWidth: 500,
+					height: "fit-content",
 				}}
 			>
 				<CardHeader
