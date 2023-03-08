@@ -1,6 +1,13 @@
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
+import {
+	getMessaging,
+	getToken,
+	isSupported,
+	onMessage,
+} from "firebase/messaging";
 import { pick } from "lodash";
+import { useSnackbar } from "notistack";
 
 import {
 	getAuth,
@@ -21,6 +28,7 @@ import LoadingScreen from "../Component/LoadingScreen";
 
 import { createContext, useContext, useEffect, useState } from "react";
 import { FIREBASE_CONFIG } from "./config";
+import { useAuthContext } from "./auth";
 const Context = createContext({
 	app: null,
 	auth: null,
@@ -251,6 +259,29 @@ export default function FirebaseAppContextProvider({ children }) {
 						return;
 					}
 				},
+				enableMessaging: () => {
+					if (!state.messaging) return;
+					const VAPID_KEY = process.env.REACT_APP_FIREBASE_VAPID_KEY;
+					getToken(state.messaging, { vapidKey: VAPID_KEY });
+				},
+				logToken: async () => {
+					if (!state.messaging) return;
+					const VAPID_KEY = process.env.REACT_APP_FIREBASE_VAPID_KEY;
+					console.log({
+						messaging: state.messaging,
+					});
+					const permission =
+						await state.messaging.requestPermission();
+
+					const res = await getToken(state.messaging, {
+						vapidKey: VAPID_KEY,
+						serviceWorkerRegistration: state.swRegistration,
+					}).catch(err => {
+						console.log("Error getting token");
+						console.error(err);
+					});
+					console.log(res);
+				},
 			}}
 		>
 			{!state.initialized ? <LoadingScreen /> : <>{children}</>}
@@ -261,19 +292,6 @@ export default function FirebaseAppContextProvider({ children }) {
 export const useFirebaseContext = () => {
 	return useContext(Context);
 };
+export { useAuthContext } from "./auth";
 
-export const useAuthContext = () => {
-	// return only the required auth related values from useFirebaseContext in one line
-	return pick(useFirebaseContext(), [
-		"user",
-		"username",
-		"isAuthenticated",
-		"isAnonymous",
-		"createAccount",
-		"sendEmailVerification",
-		"sendPasswordResetEmail",
-		"signInWithEmailAndPassword",
-		"signInWithGoogle",
-		"signOut",
-	]);
-};
+export { useMessaging } from "./messaging";

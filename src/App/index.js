@@ -1,5 +1,6 @@
 import HelmetContext from "../Helmet";
 import AuthContext from "../Firebase";
+import MessagingContext from "../Firebase/messaging";
 import ApolloClientContextProvider from "../Apollo";
 
 import { SnackbarProvider } from "notistack";
@@ -20,19 +21,21 @@ export default function App() {
 		<HelmetContext>
 			<SnackbarProvider>
 				<AuthContext>
-					<ApolloClientContextProvider>
-						<UploadyContext>
-							<ThemeContext>
-								<NotificationsContext>
-									<RouterContext>
-										<Layout>
-											<Routes />
-										</Layout>
-									</RouterContext>
-								</NotificationsContext>
-							</ThemeContext>
-						</UploadyContext>
-					</ApolloClientContextProvider>
+					<MessagingContext>
+						<ApolloClientContextProvider>
+							<UploadyContext>
+								<ThemeContext>
+									<NotificationsContext>
+										<RouterContext>
+											<Layout>
+												<Routes />
+											</Layout>
+										</RouterContext>
+									</NotificationsContext>
+								</ThemeContext>
+							</UploadyContext>
+						</ApolloClientContextProvider>
+					</MessagingContext>
 				</AuthContext>
 			</SnackbarProvider>
 		</HelmetContext>
