@@ -1,19 +1,16 @@
-import { createContext, useContext, useState, useEffect } from "react";
-import MessagingContext from "./Messaging";
-
+import { createContext, useContext, useState, useMemo } from "react";
 import { FIREBASE_CONFIG } from "./config";
 
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
-
 import { getMessaging } from "firebase/messaging";
-
+import MessagingContext from "./Messaging";
 import {
 	getAuth,
 	signInAnonymously,
 	signInWithPopup,
 	signInWithEmailAndPassword,
-	browserSessionPersistence,
+	indexedDBLocalPersistence,
 	GoogleAuthProvider,
 	EmailAuthProvider,
 	onAuthStateChanged,
@@ -54,14 +51,11 @@ const Context = createContext({
 
 export default function FirebaseAppContextProvider({ children }) {
 	const [currentUser, setCurrentUser] = useState(null);
-	useEffect(() => {
+	useMemo(() => {
 		if (currentUser) return;
-		console.log("Initial auth:", {
-			auth,
-		});
 		// handle auth state change - sign in anonymously if no user
 		let unsubscribe = () => {};
-		auth.setPersistence(browserSessionPersistence).then(persistence => {
+		auth.setPersistence(indexedDBLocalPersistence).then(persistence => {
 			unsubscribe = onAuthStateChanged(auth, user => {
 				if (user) {
 					setCurrentUser(user); // set the currentUser state if one exists
@@ -73,7 +67,7 @@ export default function FirebaseAppContextProvider({ children }) {
 		return () => {
 			unsubscribe();
 		};
-	}, []);
+	}, [auth]);
 
 	return (
 		<Context.Provider
