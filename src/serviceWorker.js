@@ -14,7 +14,6 @@ const firebaseConfig = new URLSearchParams({
 // Service worker URL w/config variables
 const swUrl = `${process.env.PUBLIC_URL}/firebase-messaging-sw.js?${firebaseConfig}`;
 if ("serviceWorker" in navigator) {
-	console.log("registering sw, url: ", swUrl);
 	navigator.serviceWorker.register(swUrl).catch(registrationError => {
 		console.log("SW registration failed: ", registrationError);
 	});

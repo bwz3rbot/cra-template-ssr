@@ -11,7 +11,7 @@ https://stackoverflow.com/questions/42385336/google-push-notifications-domexcept
 */
 
 const getVapidToken = async messaging => {
-	if (!messaging) return console.log("no messaging!");
+	if (!messaging) return;
 	return getToken(messaging, {
 		vapidKey: process.env.REACT_APP_FIREBASE_VAPID_KEY,
 	});

@@ -9,7 +9,6 @@ let initialized = false;
 
 self.addEventListener("fetch", e => {
 	const options = Object.fromEntries(new URLSearchParams(location.search));
-	console.log({ options });
 	if (!options.apiKey) return;
 	if (initialized) return;
 	initialized = true;
