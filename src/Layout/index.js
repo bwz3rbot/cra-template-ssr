@@ -65,7 +65,7 @@ export default function LayoutProvider({ children, variant = "standard" }) {
 			...locationMap,
 			[location.pathname]: variant,
 		};
-
+		storeLocationLayoutMap(newLocationMap);
 		const mismatches = Object.entries(newLocationMap).reduce(
 			(acc, [key, value]) => {
 				if (value !== locationMap[key]) acc++;
@@ -73,10 +73,8 @@ export default function LayoutProvider({ children, variant = "standard" }) {
 			},
 			0
 		);
-
 		if (mismatches === 0) return;
 
-		storeLocationLayoutMap(newLocationMap);
 		setLocationMap(newLocationMap);
 	};
 
