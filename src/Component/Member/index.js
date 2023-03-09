@@ -67,6 +67,7 @@ export default function Member({ workspace, user, role }) {
 					{Actions.map(({ label, onClick, Icon }, i) => {
 						return (
 							<Grid
+								key={i}
 								sx={{
 									display: "flex",
 									alignItems: "center",

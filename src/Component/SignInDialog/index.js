@@ -73,11 +73,13 @@ export default function SignInDialog() {
 					name="email"
 					label="Email"
 					type="email"
+					autoComplete="email"
 					required
 				/>
 				<TextField
 					label="Password"
 					type="password"
+					autoComplete="current-password"
 					name="password"
 					variant="filled"
 					size="small"

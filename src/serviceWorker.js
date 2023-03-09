@@ -15,9 +15,7 @@ const swUrl = `${process.env.PUBLIC_URL}/firebase-messaging-sw.js?${firebaseConf
 if ("serviceWorker" in navigator) {
 	navigator.serviceWorker
 		.register(swUrl)
-		.then(registration => {
-			console.log("SW registered: ", registration);
-		})
+		.then(() => {})
 		.catch(registrationError => {
 			console.log("SW registration failed: ", registrationError);
 		});

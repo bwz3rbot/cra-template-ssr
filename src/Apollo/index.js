@@ -1,5 +1,6 @@
 import { useContext, createContext, useState, useEffect } from "react";
-import { useAuthContext } from "../Firebase";
+import { useAuthContext, useFirebaseContext } from "../Firebase";
+
 import {
 	ApolloClient,
 	InMemoryCache,
@@ -70,23 +71,22 @@ const apolloClientFactory = (idToken, workspace_id = "default") => {
 	return client;
 };
 export default function ApolloAppContextProvider({ children }) {
-	const { user: appUser } = useAuthContext();
+	const { user } = useFirebaseContext();
+
 	const [clientState, setClientState] = useState({
-		client: apolloClientFactory(appUser?.idToken || ""),
-		status: "loading",
+		client: apolloClientFactory(),
 		user: null,
+		status: "loading",
 	});
 
 	useEffect(() => {
 		let mounted = true;
-		if (!appUser?.idToken) return;
+
+		if (!user) return;
 		// creates a new apollo client when new firebase auth context is available
 		const asyncEffect = async () => {
-			setClientState({
-				...clientState,
-				status: "loading",
-			});
-			const newClient = apolloClientFactory(appUser.idToken);
+			const token = await user.getIdToken();
+			const newClient = apolloClientFactory(token);
 			const { data } = await newClient.query({
 				query: definitions.user.query.getUser,
 			});
@@ -103,7 +103,7 @@ export default function ApolloAppContextProvider({ children }) {
 		return () => {
 			mounted = false;
 		};
-	}, [appUser]);
+	}, [user]);
 
 	return (
 		<Context.Provider

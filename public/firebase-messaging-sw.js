@@ -26,8 +26,6 @@ const messaging = firebase.messaging();
 // Configure message handler (assumes backend is set up)
 messaging.onBackgroundMessage(payload => {
 	const { icon, body, title } = payload.notification;
-	console.log("got background message", { payload, icon, body, title });
-
 	// send push notification
 	self.registration.showNotification(title, {
 		body,
