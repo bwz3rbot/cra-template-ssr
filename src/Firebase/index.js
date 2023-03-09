@@ -1,4 +1,4 @@
-import { createContext, useContext, useMemo, useState } from "react";
+import { createContext, useContext, useMemo, useState, useEffect } from "react";
 
 import { FIREBASE_CONFIG } from "./config";
 
@@ -19,6 +19,7 @@ import {
 	linkWithCredential,
 	sendEmailVerification,
 	sendPasswordResetEmail,
+	signOut,
 } from "firebase/auth";
 const app = initializeApp(FIREBASE_CONFIG);
 const auth = getAuth(app);
@@ -52,8 +53,9 @@ const Context = createContext({
 });
 
 export default function FirebaseAppContextProvider({ children }) {
-	const [currentUser, setCurrentUser] = useState(auth.currentUser);
-	useMemo(() => {
+	const [currentUser, setCurrentUser] = useState(null);
+	useEffect(() => {
+		if (currentUser) return;
 		// handle auth state change - sign in anonymously if no user
 		let unsubscribe = () => {};
 		auth.setPersistence(browserSessionPersistence).then(persistence => {
@@ -68,7 +70,7 @@ export default function FirebaseAppContextProvider({ children }) {
 		return () => {
 			unsubscribe();
 		};
-	}, [currentUser]);
+	}, []);
 
 	return (
 		<Context.Provider
@@ -106,10 +108,9 @@ export default function FirebaseAppContextProvider({ children }) {
 						.catch(onError);
 				},
 				signOut: async () => {
-					if (!auth) return;
-					await auth.signOut().catch(err => {
-						console.error(err);
-					});
+					if (!auth) return console.log("missing auth");
+					console.log("signint out");
+					auth.signOut();
 				},
 				sendEmailVerification: ({
 					onSuccess = () => {},
