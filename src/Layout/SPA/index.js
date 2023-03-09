@@ -20,6 +20,7 @@ export default function LayoutSPA({ children }) {
 
 					width: "100vw",
 					overflow: "hidden",
+					padding: ".2rem",
 				}}
 			>
 				{children}
