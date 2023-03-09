@@ -1,5 +1,5 @@
 import { useSnackbar } from "notistack";
-import { useEffect, useState, createContext, useContext } from "react";
+import { useEffect, useState, createContext, useContext, useMemo } from "react";
 import { useFirebaseContext } from "..";
 import { onMessage, getToken } from "firebase/messaging";
 
@@ -13,46 +13,28 @@ const requestPermission = async messaging => {
 	if (!messaging) return;
 	return messaging.requestPermission();
 };
-const hasPermission = async messaging => {
-	if (!messaging) return;
-	return messaging.getToken({
-		vapidKey: process.env.REACT_APP_FIREBASE_VAPID_KEY,
-	});
-};
 
 const Context = createContext({
 	messaging: null,
+	token: null,
 	getToken: () => {},
 	requestPermission: () => {},
-	hasPermission: () => {},
 });
 
 export const useMessaging = () => {
 	return useContext(Context);
 };
-
+const getVapidToken = async messaging => {
+	if (!messaging) return console.log("no messaging!");
+	return getToken(messaging, {
+		vapidKey: process.env.REACT_APP_FIREBASE_VAPID_KEY,
+	});
+};
 export default function MessagingContext({ children }) {
+	let mounted = true;
 	const { closeSnackbar, enqueueSnackbar } = useSnackbar();
 	const { user, messaging } = useFirebaseContext();
-	const [token, setToken] = useState();
-
-	const getVapidToken = async messaging => {
-		if (!messaging) return;
-		const token = await getToken(messaging, {
-			vapidKey: process.env.REACT_APP_FIREBASE_VAPID_KEY,
-		});
-		return token;
-	};
-
-	useEffect(() => {
-		if (token) return console.log(token);
-
-		if (user) {
-			getVapidToken(messaging).then(token => {
-				setToken(token);
-			});
-		}
-	}, [token]);
+	const [token, setToken] = useState(null);
 
 	useEffect(() => {
 		const handleMessage = ({
@@ -87,15 +69,29 @@ export default function MessagingContext({ children }) {
 		return () => {
 			unsubscribe();
 		};
-	}, []);
+	}, [messaging]);
+
+	useMemo(() => {
+		const asyncEffect = async () => {
+			if (!user) return;
+			// if we don't get a token when the user logs in
+			// they will not get notifications
+			const token = await getVapidToken(messaging);
+			mounted && setToken(token);
+		};
+		asyncEffect();
+		return () => {
+			mounted = false;
+		};
+	}, [user]);
 
 	return (
 		<Context.Provider
 			value={{
 				messaging,
+				token,
 				getToken: getVapidToken,
 				requestPermission,
-				hasPermission,
 			}}
 		>
 			{children}
