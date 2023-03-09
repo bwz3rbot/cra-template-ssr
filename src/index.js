@@ -1,4 +1,3 @@
-import "./serviceWorker";
 import "./Google/Analytics/Init";
 import "./Google/TagManager/Init";
 import React from "react";
