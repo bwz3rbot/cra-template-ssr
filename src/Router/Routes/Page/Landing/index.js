@@ -4,10 +4,6 @@ import { Button, Grid, Typography } from "@mui/material";
 import { useAuthContext, useMessaging } from "../../../../Firebase";
 
 export default function PageLanding() {
-	useLayoutVariant({
-		variant: "standard",
-	});
-
 	return (
 		<>
 			<Grid container>

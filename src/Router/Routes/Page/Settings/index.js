@@ -26,11 +26,8 @@ const getTabValue = (tabs, params) => {
 export default function PageSettings() {
 	const params = useParams();
 	const tabValue = getTabValue(tabs, params);
+	// useLayoutVariant({ variant: "SPA" });
 
-	// TODO: figure out why useLayoutVariant causes tabs to re-render and not have re-select effect
-	// test storing previous location inside of layout context and comparing to current location to determine if page has changed
-	// another solution is to update the layout context to return the pre-rendered pieces of the layout that are needed for the page
-	// and render the same instance of the elements when location changes
 	return (
 		<Grid
 			sx={{

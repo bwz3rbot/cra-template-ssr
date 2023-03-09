@@ -25,7 +25,7 @@ export default function App() {
 							<ThemeContext>
 								<NotificationsContext>
 									<RouterContext>
-										<Layout variant="standard">
+										<Layout variant="SPA">
 											<Routes />
 										</Layout>
 									</RouterContext>

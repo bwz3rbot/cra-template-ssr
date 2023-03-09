@@ -57,6 +57,7 @@ export const NavigationBar = () => {
 				zIndex: 1301,
 				/* must remain height=fit-content so --nav-height may be set to the height of the Toolbar component */
 				height: "fit-content",
+				maxHeight: "var(--nav-height)",
 			}}
 		>
 			<Box
