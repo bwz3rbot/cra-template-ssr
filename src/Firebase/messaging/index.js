@@ -79,7 +79,6 @@ export default function MessagingContext({ children }) {
 		};
 	}, [user]);
 
-	console.log(token);
 	return (
 		<Context.Provider
 			value={{

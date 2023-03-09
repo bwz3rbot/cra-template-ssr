@@ -1,30 +1,23 @@
-const getParams = () => {
-	const urlParams = new URLSearchParams(location.search);
-	return Object.fromEntries(urlParams);
-};
+importScripts(
+	"https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"
+);
+importScripts(
+	"https://www.gstatic.com/firebasejs/9.0.0/firebase-messaging-compat.js"
+);
+// Set Firebase configuration, once available
+let initialized = false;
 
-const params = getParams();
+self.addEventListener("fetch", e => {
+	const options = Object.fromEntries(new URLSearchParams(location.search));
+	console.log({ options });
+	if (!options.apiKey) return;
+	if (initialized) return;
+	initialized = true;
 
-const options = {
-	// it seems like this will work even without valid options?
-	apiKey: params.apiKey || true,
-	authDomain: params.authDomain || true,
-	databaseURL: params.databaseURL || true,
-	projectId: params.projectId || true,
-	storageBucket: params.storageBucket || true,
-	messagingSenderId: params.messagingSenderId || true,
-	appId: params.appId || true,
-	measurementId: params.measurementId || true,
-};
-if (params) {
-	importScripts(
-		"https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"
-	);
-	importScripts(
-		"https://www.gstatic.com/firebasejs/9.0.0/firebase-messaging-compat.js"
-	);
-	console.log("initializign firebase app with optoins: ", options);
+	// Initialize Firebase app
+	console.log("firebase messaging initializing options:", options);
 	firebase.initializeApp(options);
+
 	const messaging = firebase.messaging();
 
 	// Configure message handler (assumes backend is set up)
@@ -37,4 +30,4 @@ if (params) {
 			icon,
 		});
 	});
-}
+});

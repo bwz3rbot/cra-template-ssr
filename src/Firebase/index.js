@@ -100,7 +100,6 @@ export default function FirebaseAppContextProvider({ children }) {
 					const provider = new GoogleAuthProvider();
 
 					try {
-						console.log("signInWithGoogle");
 						/* popup seems to work better on mobile than using redirect */
 						await signInWithPopup(auth, provider);
 						onSuccess();
