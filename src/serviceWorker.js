@@ -1,3 +1,4 @@
+/* https://stackoverflow.com/questions/62225339/how-to-use-process-env-in-a-react-service-worker */
 // Convert environment variables to URL `search` parameters
 const firebaseConfig = new URLSearchParams({
 	apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
@@ -13,6 +14,7 @@ const firebaseConfig = new URLSearchParams({
 // Service worker URL w/config variables
 const swUrl = `${process.env.PUBLIC_URL}/firebase-messaging-sw.js?${firebaseConfig}`;
 if ("serviceWorker" in navigator) {
+	console.log("registering sw, url: ", swUrl);
 	navigator.serviceWorker.register(swUrl).catch(registrationError => {
 		console.log("SW registration failed: ", registrationError);
 	});
