@@ -1,4 +1,5 @@
-import { createContext, useContext, useMemo, useState, useEffect } from "react";
+import { createContext, useContext, useState, useEffect } from "react";
+import MessagingContext from "./Messaging";
 
 import { FIREBASE_CONFIG } from "./config";
 
@@ -19,7 +20,6 @@ import {
 	linkWithCredential,
 	sendEmailVerification,
 	sendPasswordResetEmail,
-	signOut,
 } from "firebase/auth";
 const app = initializeApp(FIREBASE_CONFIG);
 const auth = getAuth(app);
@@ -95,21 +95,24 @@ export default function FirebaseAppContextProvider({ children }) {
 						.then(onSuccess)
 						.catch(onError);
 				},
-				signInWithGoogle: ({
+				signInWithGoogle: async ({
 					onSuccess = () => {},
 					onError = () => {},
 				} = {}) => {
 					if (!auth) return;
 					const provider = new GoogleAuthProvider();
 
-					/* popup seems to work better on mobile than using redirect */
-					signInWithPopup(auth, provider)
-						.then(onSuccess)
-						.catch(onError);
+					try {
+						console.log("signInWithGoogle");
+						/* popup seems to work better on mobile than using redirect */
+						await signInWithPopup(auth, provider);
+						onSuccess();
+					} catch (err) {
+						onError(err);
+					}
 				},
 				signOut: async () => {
 					if (!auth) return console.log("missing auth");
-					console.log("signint out");
 					auth.signOut();
 				},
 				sendEmailVerification: ({
@@ -160,7 +163,7 @@ export default function FirebaseAppContextProvider({ children }) {
 				},
 			}}
 		>
-			{children}
+			<MessagingContext>{children}</MessagingContext>
 		</Context.Provider>
 	);
 }

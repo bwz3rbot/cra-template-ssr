@@ -13,23 +13,20 @@ const requestPermission = async messaging => {
 	if (!messaging) return;
 	return messaging.requestPermission();
 };
-
-const Context = createContext({
-	messaging: null,
-	token: null,
-	getToken: () => {},
-	requestPermission: () => {},
-});
-
-export const useMessaging = () => {
-	return useContext(Context);
-};
 const getVapidToken = async messaging => {
 	if (!messaging) return console.log("no messaging!");
 	return getToken(messaging, {
 		vapidKey: process.env.REACT_APP_FIREBASE_VAPID_KEY,
 	});
 };
+
+const Context = createContext({
+	messaging: null,
+	token: null,
+	getToken: getVapidToken,
+	requestPermission,
+});
+
 export default function MessagingContext({ children }) {
 	let mounted = true;
 	const { closeSnackbar, enqueueSnackbar } = useSnackbar();
@@ -98,3 +95,6 @@ export default function MessagingContext({ children }) {
 		</Context.Provider>
 	);
 }
+export const useMessaging = () => {
+	return useContext(Context);
+};
