@@ -56,6 +56,9 @@ export default function FirebaseAppContextProvider({ children }) {
 	const [currentUser, setCurrentUser] = useState(null);
 	useEffect(() => {
 		if (currentUser) return;
+		console.log("Initial auth:", {
+			auth,
+		});
 		// handle auth state change - sign in anonymously if no user
 		let unsubscribe = () => {};
 		auth.setPersistence(browserSessionPersistence).then(persistence => {
@@ -112,26 +115,35 @@ export default function FirebaseAppContextProvider({ children }) {
 					}
 				},
 				signOut: async () => {
-					if (!auth) return console.log("missing auth");
-					auth.signOut();
+					if (!auth) return;
+					await auth.signOut();
 				},
-				sendEmailVerification: ({
+				sendEmailVerification: async ({
 					onSuccess = () => {},
 					onError = () => {},
 				} = {}) => {
 					if (!auth) return;
-					sendEmailVerification(auth.currentUser)
-						.then(onSuccess)
-						.catch(onError);
+					try {
+						await sendEmailVerification(auth.currentUser);
+						onSuccess();
+					} catch (err) {
+						onError(err);
+					}
 				},
-				sendPasswordResetEmail: ({
+				sendPasswordResetEmail: async ({
 					onSuccess = () => {},
 					onError = () => {},
 				} = {}) => {
 					if (!auth) return;
-					sendPasswordResetEmail(auth, auth.currentUser.email)
-						.then(onSuccess)
-						.catch(onError);
+					try {
+						await sendPasswordResetEmail(
+							auth,
+							auth.currentUser.email
+						);
+						onSuccess();
+					} catch (err) {
+						onError(err);
+					}
 				},
 				createAccount: async ({
 					email,

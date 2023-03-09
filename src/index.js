@@ -1,8 +1,8 @@
-import React from "react";
+import "./serviceWorker";
 import "./Google/Analytics/Init";
 import "./Google/TagManager/Init";
+import React from "react";
 import ReactDOM from "react-dom/client";
-import "./serviceWorker";
 import App from "./App";
 
 ReactDOM.createRoot(document.getElementById("root")).render(

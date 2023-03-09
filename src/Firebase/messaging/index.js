@@ -9,10 +9,7 @@ import NotificationSnackbar from "../../Component/Notification/Snackbar";
 Enable messaging in Brave browser
 https://stackoverflow.com/questions/42385336/google-push-notifications-domexception-registration-failed-push-service-err
 */
-const requestPermission = async messaging => {
-	if (!messaging) return;
-	return messaging.requestPermission();
-};
+
 const getVapidToken = async messaging => {
 	if (!messaging) return console.log("no messaging!");
 	return getToken(messaging, {
@@ -24,7 +21,6 @@ const Context = createContext({
 	messaging: null,
 	token: null,
 	getToken: getVapidToken,
-	requestPermission,
 });
 
 export default function MessagingContext({ children }) {
@@ -34,6 +30,7 @@ export default function MessagingContext({ children }) {
 	const [token, setToken] = useState(null);
 
 	useEffect(() => {
+		if (!user || user.isAnonymous) return;
 		const handleMessage = ({
 			collapseKey,
 			from,
@@ -42,7 +39,6 @@ export default function MessagingContext({ children }) {
 			fcmOptions,
 			notification,
 		}) => {
-			console.log("got message ", from);
 			enqueueSnackbar(
 				<NotificationSnackbar
 					notification={{
@@ -71,6 +67,7 @@ export default function MessagingContext({ children }) {
 	useMemo(() => {
 		const asyncEffect = async () => {
 			if (!user) return;
+			if (user.isAnonymous) return;
 			// if we don't get a token when the user logs in
 			// they will not get notifications
 			const token = await getVapidToken(messaging);
@@ -88,7 +85,6 @@ export default function MessagingContext({ children }) {
 				messaging,
 				token,
 				getToken: getVapidToken,
-				requestPermission,
 			}}
 		>
 			{children}
