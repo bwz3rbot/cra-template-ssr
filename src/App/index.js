@@ -18,23 +18,23 @@ import "./style.css";
 export default function App() {
 	return (
 		<HelmetContext>
-			<RouterContext>
-				<SnackbarProvider>
-					<FirebaseContext>
-						<ApolloClientContext>
-							<UploadyContext>
-								<ThemeContext>
+			<ThemeContext>
+				<RouterContext>
+					<SnackbarProvider>
+						<FirebaseContext>
+							<ApolloClientContext>
+								<UploadyContext>
 									<NotificationsContext>
 										<Layout variant="SPA">
 											<Routes />
 										</Layout>
 									</NotificationsContext>
-								</ThemeContext>
-							</UploadyContext>
-						</ApolloClientContext>
-					</FirebaseContext>
-				</SnackbarProvider>
-			</RouterContext>
+								</UploadyContext>
+							</ApolloClientContext>
+						</FirebaseContext>
+					</SnackbarProvider>
+				</RouterContext>
+			</ThemeContext>
 		</HelmetContext>
 	);
 }

@@ -1,3 +1,4 @@
+import { Box } from "@mui/material";
 import "./styles.css";
 export default function LoadingScreen({ children, loading }) {
 	let className;
@@ -8,9 +9,9 @@ export default function LoadingScreen({ children, loading }) {
 	}
 	return (
 		<>
-			<div
+			<Box
 				className={className}
-				st={{
+				sx={{
 					backgroundColor: "background.default",
 				}}
 			>
@@ -22,7 +23,7 @@ export default function LoadingScreen({ children, loading }) {
 					<div className={"loadingScreen__spinner__dot"}></div>
 					<div className={"loadingScreen__spinner__dot"}></div>
 				</div>
-			</div>
+			</Box>
 			{!loading && children ? children : null}
 		</>
 	);
