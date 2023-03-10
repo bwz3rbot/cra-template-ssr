@@ -29,3 +29,15 @@ export const hide = gql`
 		}
 	}
 `;
+export const config = gql`
+	mutation NotificationConfig($input: NotificationConfigInput!) {
+		notification_config(input: $input) {
+			config {
+				enable_email
+				enable_in_app
+				enable_push
+				enable_sms
+			}
+		}
+	}
+`;
