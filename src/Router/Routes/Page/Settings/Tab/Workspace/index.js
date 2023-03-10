@@ -1,18 +1,21 @@
-import { useState } from "react";
-import { Grid, Box, Typography, Tabs, Tab } from "@mui/material";
+import { Grid } from "@mui/material";
 import Workspace from "../../../../../../Component/Workspace";
 import { useRequester } from "../../../../../../Apollo";
 import Member from "../../../../../../Component/Member";
 import depthEffect from "../../../../../../Theme/sx/depth-effect";
+import LoadingScreen from "../../../../../../Component/LoadingScreen";
 export default function SettingsPageWorkspaceTab() {
-	const { user: appUser } = useRequester();
-	const workspace = appUser?.workspace;
-	const members = appUser?.workspace?.members;
-	const administrators = appUser?.workspace?.admin;
-	const owner = appUser?.workspace?.owner;
+	const { useQuery, definitions } = useRequester();
+	const { data, loading } = useQuery(definitions.user.query.getUser);
+
+	const user = data?.user;
+	const workspace = user?.workspace;
+	const members = user?.workspace?.members || [];
+	const administrators = user?.workspace?.admin || [];
+	const owner = user?.workspace?.owner;
 
 	return (
-		<>
+		<LoadingScreen loading={loading} transparent>
 			<Grid
 				container
 				sx={{
@@ -28,7 +31,7 @@ export default function SettingsPageWorkspaceTab() {
 						height: "fit-content",
 					}}
 				>
-					<Workspace />
+					<Workspace workspace={workspace} />
 
 					<Member
 						workspace={workspace}
@@ -65,6 +68,6 @@ export default function SettingsPageWorkspaceTab() {
 					</>
 				</Grid>
 			</Grid>
-		</>
+		</LoadingScreen>
 	);
 }

@@ -1,7 +1,6 @@
 import { useParams } from "react-router-dom";
 import { Grid, Typography, Tabs, Tab } from "@mui/material";
 import { Link } from "react-router-dom";
-import { useLayoutVariant } from "../../../../Layout";
 
 import AccountTab from "./Tab/Account";
 import WorkspaceTab from "./Tab/Workspace";
@@ -26,7 +25,6 @@ const getTabValue = (tabs, params) => {
 export default function PageSettings() {
 	const params = useParams();
 	const tabValue = getTabValue(tabs, params);
-	// useLayoutVariant({ variant: "SPA" });
 
 	return (
 		<Grid

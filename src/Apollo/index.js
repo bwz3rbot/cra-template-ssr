@@ -1,6 +1,5 @@
 import { useContext, createContext, useState, useEffect } from "react";
 import { useFirebaseContext } from "../Firebase";
-import { useNavigate } from "react-router-dom";
 import {
 	ApolloClient,
 	InMemoryCache,
@@ -71,7 +70,8 @@ const apolloClientFactory = (idToken, workspace_id = "default") => {
 	return client;
 };
 export default function ApolloAppContextProvider({ children }) {
-	const navigate = useNavigate();
+	let mounted = true;
+
 	const { user } = useFirebaseContext();
 
 	const [clientState, setClientState] = useState({
@@ -81,37 +81,16 @@ export default function ApolloAppContextProvider({ children }) {
 	});
 
 	useEffect(() => {
-		let mounted = true;
-
 		if (!user) return;
 		// creates a new apollo client when new firebase auth context is available
 		const asyncEffect = async () => {
 			const token = await user.getIdToken();
 			const newClient = apolloClientFactory(token);
-			// handle error connecing to graphql server
 
-			const res = await newClient
-				.query({
-					query: definitions.user.query.getUser,
-				})
-				.catch(e => {
-					setClientState({
-						client: newClient,
-						status: "error",
-						user: null,
-
-						error: e,
-					});
-					navigate("/error");
-				});
-
-			if (!mounted) return;
-
-			res &&
+			mounted &&
 				setClientState({
 					client: newClient,
 					status: "ready",
-					user: res.data.user,
 				});
 		};
 		asyncEffect();
@@ -134,7 +113,7 @@ export default function ApolloAppContextProvider({ children }) {
 		>
 			<ApolloProvider
 				// ensure context re-renders when user changes
-				key={clientState?.user?.id}
+				key={user?.uid}
 				client={clientState.client}
 			>
 				<LoadingScreen

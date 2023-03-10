@@ -7,16 +7,12 @@ import {
 	Grid,
 	Typography,
 } from "@mui/material";
-import { useRequester } from "../../Apollo";
 
 import depthEffect from "../../Theme/sx/depth-effect";
 
 import { calculateDateSinceTimestamp } from "../../util/calculateDateSinceTimestamp";
 
-export default function Workspace() {
-	const { user: appUser } = useRequester();
-	const workspace = appUser?.workspace;
-
+export default function Workspace({ workspace }) {
 	return (
 		<>
 			<Card

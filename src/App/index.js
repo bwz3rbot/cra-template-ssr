@@ -9,7 +9,7 @@ import NotificationsContext from "../Notifications";
 import UploadyContext from "../Upload";
 import ThemeContext from "../Theme";
 
-import RouterContext from "../Router";
+import RouterContext, { RouterErrorBoundary } from "../Router";
 import Layout from "../Layout";
 import { Routes } from "../Router/Routes";
 
@@ -26,7 +26,9 @@ export default function App() {
 								<UploadyContext>
 									<NotificationsContext>
 										<Layout variant="SPA">
-											<Routes />
+											<RouterErrorBoundary>
+												<Routes />
+											</RouterErrorBoundary>
 										</Layout>
 									</NotificationsContext>
 								</UploadyContext>

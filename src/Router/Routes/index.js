@@ -10,7 +10,6 @@ const PageAbout = lazy(() => import("./Page/About"));
 const PageLanding = lazy(() => import("./Page/Landing"));
 const PageSettings = lazy(() => import("./Page/Settings"));
 const PageSubscribe = lazy(() => import("./Page/Subscribe"));
-const PageError = lazy(() => import("./Page/Error"));
 
 export const Routes = () => {
 	return (
@@ -70,14 +69,7 @@ export const Routes = () => {
 					</Suspend>
 				}
 			/>
-			<Route
-				path="/error"
-				element={
-					<Suspend>
-						<PageError />
-					</Suspend>
-				}
-			/>
+
 			<Route
 				path="*"
 				element={

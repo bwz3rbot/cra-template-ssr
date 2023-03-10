@@ -2,7 +2,6 @@ import {
 	Avatar,
 	Card,
 	Grid,
-	CardContent,
 	CardHeader,
 	CardActions,
 	Divider,

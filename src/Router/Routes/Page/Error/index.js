@@ -1,10 +1,12 @@
 import { Grid, Box, Card, Typography } from "@mui/material";
+import depthEffect from "../../../../Theme/sx/depth-effect";
 import ErrorIcon from "@mui/icons-material/Error";
 import { useLayoutVariant } from "../../../../Layout";
 export default function ApolloClientConnectionErrorPage() {
 	useLayoutVariant({
 		variant: "standard",
 	});
+
 	return (
 		<Grid
 			container
@@ -27,7 +29,12 @@ export default function ApolloClientConnectionErrorPage() {
 					textAlign: "center",
 				}}
 			>
-				<Card>
+				<Card
+					sx={{
+						padding: 1,
+						...depthEffect(),
+					}}
+				>
 					<Box p={2}>
 						<Typography
 							variant="h4"
@@ -42,6 +49,7 @@ export default function ApolloClientConnectionErrorPage() {
 							sx={{
 								fontSize: 75,
 								color: "error.main",
+								margin: 1,
 							}}
 						/>
 						<Typography
