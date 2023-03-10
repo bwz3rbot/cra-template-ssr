@@ -1,19 +1,9 @@
-import {
-	Grid,
-	Card,
-	CardContent,
-	CardHeader,
-	CardActions,
-	FormControlLabel,
-	Switch,
-	TextField,
-	Box,
-	IconButton,
-	Tooltip,
-} from "@mui/material";
 import { useRequester } from "../../../../../../Apollo";
 import LoadingScreen from "../../../../../../Component/LoadingScreen";
+import SettingsPanel from "../../../../../../Component/Settings";
+import { useSnackbar } from "notistack";
 export default function SettingsPageNotificationsTab() {
+	const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 	const { definitions, useQuery, useMutation } = useRequester();
 	const { data, loading } = useQuery(definitions.notifications.query.config, {
 		fetchPolicy: "network-only",
@@ -22,21 +12,46 @@ export default function SettingsPageNotificationsTab() {
 		definitions.notifications.mutation.config
 	);
 
-	const settings = [
+	const onChange = (name, value) => {
+		updateConfig({
+			variables: {
+				input: {
+					[name]: value,
+				},
+			},
+			onError: data => {
+				console.log("updated config", data);
+				enqueueSnackbar("Failed to update config", {
+					variant: "error",
+				});
+			},
+
+			refetchQueries: [
+				{
+					query: definitions.notifications.query.config,
+				},
+			],
+		});
+	};
+
+	const options = [
 		{
 			name: "enable_in_app",
 			label: "Enable in-app notifications",
 			value: data?.notification_config?.enable_in_app,
+			onChange: e => onChange("enable_in_app", e.target.checked),
 		},
 		{
 			name: "enable_push",
 			label: "Enable push notifications",
 			value: data?.notification_config?.enable_push,
+			onChange: e => onChange("enable_push", e.target.checked),
 		},
 		{
 			name: "enable_email",
 			label: "Enable email notifications",
 			value: data?.notification_config?.enable_email,
+			onChange: e => onChange("enable_email", e.target.checked),
 		},
 
 		{
@@ -44,77 +59,12 @@ export default function SettingsPageNotificationsTab() {
 
 			label: "Enable SMS notifications",
 			value: data?.notification_config?.enable_sms,
+			onChange: e => onChange("enable_sms", e.target.checked),
 		},
 	];
 	return (
 		<LoadingScreen transparent loading={loading}>
-			{!loading && (
-				<>
-					<Grid container spacing={2}>
-						<Grid item xs={12}>
-							<Card>
-								<CardHeader title="Notifications" />
-								<CardContent>
-									<Grid container spacing={2}>
-										{settings.map((setting, index) => {
-											return (
-												<Grid item xs={12} key={index}>
-													<FormControlLabel
-														control={
-															<Switch
-																checked={
-																	setting.value
-																}
-																name={
-																	setting.name
-																}
-																color="primary"
-															/>
-														}
-														label={setting.label}
-														onChange={e => {
-															console.log(
-																"updating config"
-															);
-															updateConfig({
-																variables: {
-																	input: {
-																		[setting.name]:
-																			e
-																				.target
-																				.checked,
-																	},
-																},
-																onCompleted:
-																	data => {
-																		console.log(
-																			"updated config",
-																			data
-																		);
-																	},
-
-																refetchQueries:
-																	[
-																		{
-																			query: definitions
-																				.notifications
-																				.query
-																				.config,
-																		},
-																	],
-															});
-														}}
-													/>
-												</Grid>
-											);
-										})}
-									</Grid>
-								</CardContent>
-							</Card>
-						</Grid>
-					</Grid>
-				</>
-			)}
+			<SettingsPanel options={options} />
 		</LoadingScreen>
 	);
 }
