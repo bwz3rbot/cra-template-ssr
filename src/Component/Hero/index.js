@@ -19,6 +19,12 @@ export default function Hero() {
 
 	return (
 		<>
+			<link
+				rel="preload"
+				fetchpriority="high"
+				as="image"
+				href={mode === "dark" ? img.dark.href : img.light.href}
+			/>
 			<Box
 				sx={{
 					width: "100%",
@@ -33,6 +39,7 @@ export default function Hero() {
 					display: "flex",
 					justifyContent: "center",
 					alignItems: "center",
+					maxHeight: "65vh",
 					height: "750px",
 					marginBottom: 6,
 				}}

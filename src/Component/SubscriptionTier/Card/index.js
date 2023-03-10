@@ -39,7 +39,7 @@ export default function SubscriptionTierCard({ plan, isSubscribed = false }) {
 		}
 	);
 
-	const image = useMemo(randomImage, []);
+	const image = useMemo(randomImage, [plan]);
 
 	return (
 		<Card
@@ -52,13 +52,7 @@ export default function SubscriptionTierCard({ plan, isSubscribed = false }) {
 				...depthEffect(),
 			}}
 		>
-			<link
-				rel="preload"
-				fetchpriority="high"
-				as="image"
-				href={image}
-				type="image/*"
-			/>
+			<link rel="preload" fetchpriority="high" as="image" href={image} />
 
 			<CardMedia
 				component="img"
