@@ -10,7 +10,7 @@ export default function SettingsPagePrivacyTab() {
 						component={Link}
 						to={"/privacy"}
 					>
-						Privacy
+						Privacy Policy
 					</Typography>
 				</Grid>
 				<Grid item xs={12}>
