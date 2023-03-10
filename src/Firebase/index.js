@@ -18,15 +18,11 @@ import {
 	sendEmailVerification,
 	sendPasswordResetEmail,
 } from "firebase/auth";
-const app = initializeApp(FIREBASE_CONFIG);
-const auth = getAuth(app);
-const analytics = getAnalytics(app);
-const messaging = getMessaging(app);
+export const app = initializeApp(FIREBASE_CONFIG);
+export const auth = getAuth(app);
+export const analytics = getAnalytics(app);
+export const messaging = getMessaging(app);
 const Context = createContext({
-	app,
-	auth,
-	messaging,
-	analytics,
 	user: null,
 	isAuthenticated: false,
 	isAnonymous: false,
@@ -72,10 +68,6 @@ export default function FirebaseAppContextProvider({ children }) {
 	return (
 		<Context.Provider
 			value={{
-				app,
-				auth,
-				analytics,
-				messaging,
 				user: currentUser,
 				isAuthenticated: !!currentUser,
 				isAnonymous: currentUser?.isAnonymous || false,

@@ -1,6 +1,6 @@
 import { useSnackbar } from "notistack";
-import { useEffect, useState, createContext, useContext, useMemo } from "react";
-import { useFirebaseContext } from "..";
+import { useState, createContext, useContext, useMemo } from "react";
+import { useFirebaseContext, messaging } from "..";
 import { onMessage, getToken } from "firebase/messaging";
 
 import NotificationSnackbar from "../../Component/Notification/Snackbar";
@@ -18,53 +18,17 @@ const getVapidToken = async messaging => {
 };
 
 const Context = createContext({
-	messaging: null,
 	token: null,
 	getToken: getVapidToken,
 });
 
 export default function MessagingContext({ children }) {
-	let mounted = true;
 	const { closeSnackbar, enqueueSnackbar } = useSnackbar();
-	const { user, messaging } = useFirebaseContext();
+	const { user } = useFirebaseContext();
 	const [token, setToken] = useState(null);
-
-	useEffect(() => {
-		if (!user || user.isAnonymous) return;
-		const handleMessage = ({
-			collapseKey,
-			from,
-			messageId,
-			data,
-			fcmOptions,
-			notification,
-		}) => {
-			enqueueSnackbar(
-				<NotificationSnackbar
-					notification={{
-						...notification,
-					}}
-				/>,
-				{
-					variant: data.type?.toLowerCase() || "info",
-					anchorOrigin: {
-						vertical: "bottom",
-						horizontal: "right",
-					},
-					onClick: () => {
-						closeSnackbar();
-					},
-				}
-			);
-		};
-
-		const unsubscribe = onMessage(messaging, handleMessage);
-		return () => {
-			unsubscribe();
-		};
-	}, [messaging]);
-
 	useMemo(() => {
+		let mounted = true;
+		let unsubscribe = () => {};
 		const asyncEffect = async () => {
 			if (!user) return;
 			if (user.isAnonymous) return;
@@ -72,17 +36,43 @@ export default function MessagingContext({ children }) {
 			// they will not get notifications
 			const token = await getVapidToken(messaging);
 			mounted && setToken(token);
+
+			unsubscribe = onMessage(
+				messaging,
+				({
+					collapseKey,
+					from,
+					messageId,
+					data,
+					fcmOptions,
+					notification,
+				}) => {
+					enqueueSnackbar(
+						<NotificationSnackbar notification={notification} />,
+						{
+							variant: data.type?.toLowerCase() || "info",
+							anchorOrigin: {
+								vertical: "bottom",
+								horizontal: "right",
+							},
+							onClick: () => {
+								closeSnackbar();
+							},
+						}
+					);
+				}
+			);
 		};
 		asyncEffect();
 		return () => {
 			mounted = false;
+			unsubscribe();
 		};
 	}, [user]);
 
 	return (
 		<Context.Provider
 			value={{
-				messaging,
 				token,
 				getToken: getVapidToken,
 			}}
