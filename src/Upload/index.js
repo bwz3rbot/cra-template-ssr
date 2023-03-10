@@ -1,7 +1,7 @@
 import { Uploady } from "@rpldy/uploady";
 import UploadButton from "@rpldy/upload-button";
 import { useSnackbar } from "notistack";
-import { createContext, useState, useContext, forwardRef, useRef } from "react";
+import { createContext, useContext, forwardRef, useRef } from "react";
 
 import RequestPresend from "./HookProvider";
 import "./styles.css";

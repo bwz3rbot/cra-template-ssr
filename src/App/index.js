@@ -1,42 +1,44 @@
-import HelmetContext from "../Helmet";
-import { SnackbarProvider } from "notistack";
+import Helmet from "../Helmet";
+import Theme from "../Theme";
 
-import FirebaseContext from "../Firebase";
+import { SnackbarProvider as Snackbar } from "notistack";
 
-import ApolloClientContext from "../Apollo";
-import NotificationsContext from "../Notifications";
-
-import UploadyContext from "../Upload";
-import ThemeContext from "../Theme";
-
-import RouterContext, { RouterErrorBoundary } from "../Router";
-import Layout from "../Layout";
+import Router, { RouterErrorBoundary } from "../Router";
 import { Routes } from "../Router/Routes";
+
+import Firebase from "../Firebase";
+
+import Apollo from "../Apollo";
+
+import Layout from "../Layout";
+import Uploady from "../Upload";
+
+import Notifications from "../Notifications";
 
 import "./style.css";
 
 export default function App() {
 	return (
-		<HelmetContext>
-			<ThemeContext>
-				<RouterContext>
-					<SnackbarProvider>
-						<FirebaseContext>
-							<ApolloClientContext>
-								<UploadyContext>
-									<NotificationsContext>
-										<Layout variant="SPA">
+		<Helmet>
+			<Theme>
+				<Snackbar>
+					<Router>
+						<Firebase>
+							<Apollo>
+								<Layout variant="SPA">
+									<Uploady>
+										<Notifications>
 											<RouterErrorBoundary>
 												<Routes />
 											</RouterErrorBoundary>
-										</Layout>
-									</NotificationsContext>
-								</UploadyContext>
-							</ApolloClientContext>
-						</FirebaseContext>
-					</SnackbarProvider>
-				</RouterContext>
-			</ThemeContext>
-		</HelmetContext>
+										</Notifications>
+									</Uploady>
+								</Layout>
+							</Apollo>
+						</Firebase>
+					</Router>
+				</Snackbar>
+			</Theme>
+		</Helmet>
 	);
 }
