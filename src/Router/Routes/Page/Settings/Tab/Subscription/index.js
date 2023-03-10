@@ -8,7 +8,6 @@ export default function SettingsPageSubscriptionTab() {
 
 	const plan = data?.stripe_getMySubscription?.plan;
 
-	if (!plan) return;
 	return (
 		<>
 			<Grid
@@ -16,12 +15,26 @@ export default function SettingsPageSubscriptionTab() {
 				sx={{
 					width: "100%",
 					display: "flex",
-					justifyContent: "center",
 					marginTop: 2,
 				}}
 			>
 				<Grid item xs={12} md={4} lg={3}>
-					<SubscriptionTier plan={plan} isSubscribed />
+					{plan ? (
+						<SubscriptionTier plan={plan} isSubscribed />
+					) : (
+						<>
+							<SubscriptionTier
+								plan={{
+									id: 0,
+									nickname: "Free",
+									amount: 0,
+									interval: "month",
+									currency: "usd",
+								}}
+								isSubscribed
+							/>
+						</>
+					)}
 				</Grid>
 				<Grid
 					item
@@ -31,7 +44,7 @@ export default function SettingsPageSubscriptionTab() {
 					}}
 				>
 					<Link to={"/subscribe"}>
-						<Typography variant="body1" align="center">
+						<Typography variant="body1">
 							View other plans
 						</Typography>
 					</Link>

@@ -52,38 +52,7 @@ export default function Member({ workspace, user, role }) {
 			Icon: PersonRemoveIcon,
 		},
 	];
-	const BottomSection = () => {
-		return (
-			<>
-				<Divider />
 
-				<CardActions
-					sx={{
-						display: "flex",
-						justifyContent: "space-evenly",
-					}}
-				>
-					{Actions.map(({ label, onClick, Icon }, i) => {
-						return (
-							<Grid
-								key={i}
-								sx={{
-									display: "flex",
-									alignItems: "center",
-									flexDirection: "column",
-								}}
-							>
-								<IconButton onClick={onClick} key={i}>
-									<Icon />
-								</IconButton>
-								<Typography>{label}</Typography>
-							</Grid>
-						);
-					})}
-				</CardActions>
-			</>
-		);
-	};
 	return (
 		<>
 			<Card
@@ -125,7 +94,45 @@ export default function Member({ workspace, user, role }) {
 								{RoleIcon[role.name.toLowerCase()]}
 								{role.name} of <i>{workspace.name}</i>
 							</Typography>
-							{role.name !== "Owner" && <BottomSection />}
+							{role.name !== "Owner" && (
+								<>
+									<Divider />
+
+									<CardActions
+										sx={{
+											display: "flex",
+											justifyContent: "space-evenly",
+										}}
+									>
+										{Actions.map(
+											({ label, onClick, Icon }, i) => {
+												return (
+													<Grid
+														key={i}
+														sx={{
+															display: "flex",
+															alignItems:
+																"center",
+															flexDirection:
+																"column",
+														}}
+													>
+														<IconButton
+															onClick={onClick}
+															key={i}
+														>
+															<Icon />
+														</IconButton>
+														<Typography>
+															{label}
+														</Typography>
+													</Grid>
+												);
+											}
+										)}
+									</CardActions>
+								</>
+							)}
 						</>
 					}
 				/>

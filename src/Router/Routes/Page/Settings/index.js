@@ -27,12 +27,7 @@ export default function PageSettings() {
 	const tabValue = getTabValue(tabs, params);
 
 	return (
-		<Grid
-			sx={{
-				height: "var(--body-height)",
-				overflow: "hidden",
-			}}
-		>
+		<>
 			<Grid>
 				<Typography variant="h5">Settings Page</Typography>
 				<Tabs
@@ -65,8 +60,7 @@ export default function PageSettings() {
 			</Grid>
 			<Grid
 				sx={{
-					height: `var(--body-height)`,
-					paddingX: 2,
+					padding: ".5rem .5rem 2rem .5rem",
 				}}
 			>
 				{
@@ -79,6 +73,6 @@ export default function PageSettings() {
 					}[params?.tab?.toLowerCase() || "account"]
 				}
 			</Grid>
-		</Grid>
+		</>
 	);
 }

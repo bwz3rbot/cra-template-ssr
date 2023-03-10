@@ -21,7 +21,7 @@ export default function SettingsPageWorkspaceTab() {
 				sx={{
 					width: "100%",
 					display: "flex",
-					justifyContent: "space-around",
+					gap: 2,
 				}}
 			>
 				<Grid
@@ -53,18 +53,20 @@ export default function SettingsPageWorkspaceTab() {
 								}}
 							/>
 						))}
-						{[...members, ...members].map((member, i) => {
-							return (
-								<Member
-									key={i}
-									user={member}
-									workspace={workspace}
-									role={{
-										name: "Member",
-									}}
-								/>
-							);
-						})}
+						{[...members, ...members, ...members, ...members].map(
+							(member, i) => {
+								return (
+									<Member
+										key={i}
+										user={member}
+										workspace={workspace}
+										role={{
+											name: "Member",
+										}}
+									/>
+								);
+							}
+						)}
 					</>
 				</Grid>
 			</Grid>

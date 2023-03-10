@@ -20,9 +20,9 @@ export default function SettingsPageNotificationsTab() {
 				},
 			},
 			onError: data => {
-				console.log("updated config", data);
 				enqueueSnackbar("Failed to update config", {
 					variant: "error",
+					onClick: () => closeSnackbar(),
 				});
 			},
 
