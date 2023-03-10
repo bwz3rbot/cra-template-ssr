@@ -1,18 +1,16 @@
 import { Box } from "@mui/material";
 import "./styles.css";
-export default function LoadingScreen({ children, loading }) {
-	let className;
-	if (loading === undefined) {
-		className = "loadingScreen";
-	} else {
-		className = `loadingScreen ${loading ? "" : "loadingScreen--hidden"}`;
-	}
+export default function LoadingScreen({ children, loading, transparent }) {
 	return (
 		<>
 			<Box
-				className={className}
+				className={`loadingScreen ${
+					loading ? "" : "loadingScreen--hidden"
+				}`}
 				sx={{
-					backgroundColor: "background.default",
+					backgroundColor: transparent
+						? "transparent"
+						: "background.default",
 				}}
 			>
 				<div className={"loadingScreen__spinner"}>
