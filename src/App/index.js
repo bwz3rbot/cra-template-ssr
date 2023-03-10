@@ -25,7 +25,7 @@ export default function App() {
 					<Router>
 						<Firebase>
 							<Apollo>
-								<Layout variant="SPA">
+								<Layout variant="standard">
 									<Uploady>
 										<Notifications>
 											<RouterErrorBoundary>

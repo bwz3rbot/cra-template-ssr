@@ -29,7 +29,14 @@ export default function PageSettings() {
 	return (
 		<>
 			<Grid>
-				<Typography variant="h5">Settings Page</Typography>
+				<Typography
+					variant="h5"
+					sx={{
+						padding: ".5rem",
+					}}
+				>
+					Settings
+				</Typography>
 				<Tabs
 					sx={{
 						// selected tab text color
