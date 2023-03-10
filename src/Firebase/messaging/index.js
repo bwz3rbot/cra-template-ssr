@@ -23,52 +23,59 @@ const Context = createContext({
 });
 
 export default function MessagingContext({ children }) {
+	let mounted = true;
 	const { closeSnackbar, enqueueSnackbar } = useSnackbar();
 	const { user } = useFirebaseContext();
 	const [token, setToken] = useState(null);
-	useMemo(() => {
-		let mounted = true;
-		let unsubscribe = () => {};
-		const asyncEffect = async () => {
-			if (!user) return;
-			if (user.isAnonymous) return;
-			// if we don't get a token when the user logs in
-			// they will not get notifications
-			const token = await getVapidToken(messaging);
-			mounted && setToken(token);
 
-			unsubscribe = onMessage(
-				messaging,
-				({
-					collapseKey,
-					from,
-					messageId,
-					data,
-					fcmOptions,
-					notification,
-				}) => {
-					enqueueSnackbar(
-						<NotificationSnackbar notification={notification} />,
-						{
-							variant: data.type?.toLowerCase() || "info",
-							anchorOrigin: {
-								vertical: "bottom",
-								horizontal: "right",
-							},
-							onClick: () => {
-								closeSnackbar();
-							},
-						}
-					);
-				}
-			);
-		};
-		asyncEffect();
+	useMemo(() => {
+		if (!messaging) return;
+		const unsubscribe = onMessage(
+			messaging,
+			({
+				collapseKey,
+				from,
+				messageId,
+				data,
+				fcmOptions,
+				notification,
+			}) => {
+				enqueueSnackbar(
+					<NotificationSnackbar notification={notification} />,
+					{
+						variant: data.type?.toLowerCase() || "info",
+						anchorOrigin: {
+							vertical: "bottom",
+							horizontal: "right",
+						},
+						onClick: () => {
+							closeSnackbar();
+						},
+					}
+				);
+			}
+		);
 		return () => {
 			mounted = false;
 			unsubscribe();
 		};
-	}, [user]);
+	}, [messaging]);
+
+	useMemo(() => {
+		if (!user) return;
+
+		const asyncEffect = async () => {
+			// if we don't get a token when the user logs in
+			// they will not get notifications
+			const token = await getVapidToken(messaging);
+			mounted && setToken(token);
+		};
+		asyncEffect();
+
+		return () => {
+			mounted = false;
+		};
+	}, [user?.uid]);
 
 	return (
 		<Context.Provider

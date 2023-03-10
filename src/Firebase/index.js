@@ -141,14 +141,11 @@ export default function FirebaseAppContextProvider({ children }) {
 					// This causes auth state to update and onAuthStateChanged fire -
 					// causing the app to re-render with a new user context
 
-					if (!auth) return;
 					try {
-						const currentUser = auth.currentUser;
 						const Credential = EmailAuthProvider.credential(
 							email,
 							password
 						);
-
 						await linkWithCredential(currentUser, Credential);
 						await signInWithEmailAndPassword(auth, email, password);
 
