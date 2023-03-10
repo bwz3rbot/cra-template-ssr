@@ -29,7 +29,6 @@ export default function SubscribePage() {
 				display: "flex",
 				flexDirection: "column",
 				overflowX: "hidden",
-				marginY: 6,
 			}}
 		>
 			<Grid
@@ -55,7 +54,7 @@ export default function SubscribePage() {
 									display: "flex",
 									justifyContent: "center",
 									margin: md ? "4px" : "0px",
-									marginY: "3px",
+									marginY: 2,
 								}}
 							>
 								<SubscriptionTierCard key={i} plan={plan} />
