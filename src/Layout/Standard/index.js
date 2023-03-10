@@ -25,7 +25,7 @@ export default function LayoutStandard({ children }) {
 					sx={{
 						minHeight: "40vh",
 						width: "100vw",
-						padding: ".2rem",
+						overflowX: "hidden",
 					}}
 				>
 					{children}

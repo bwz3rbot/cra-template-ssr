@@ -52,6 +52,14 @@ export default function SubscriptionTierCard({ plan, isSubscribed = false }) {
 				...depthEffect(),
 			}}
 		>
+			<link
+				rel="preload"
+				fetchpriority="high"
+				as="image"
+				href={image}
+				type="image/*"
+			/>
+
 			<CardMedia
 				component="img"
 				width={IMG_WIDTH}
