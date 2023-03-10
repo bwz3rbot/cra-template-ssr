@@ -1,6 +1,6 @@
 import { useContext, createContext, useState, useEffect } from "react";
-import { useAuthContext, useFirebaseContext } from "../Firebase";
-
+import { useFirebaseContext } from "../Firebase";
+import { useNavigate } from "react-router-dom";
 import {
 	ApolloClient,
 	InMemoryCache,
@@ -71,6 +71,7 @@ const apolloClientFactory = (idToken, workspace_id = "default") => {
 	return client;
 };
 export default function ApolloAppContextProvider({ children }) {
+	const navigate = useNavigate();
 	const { user } = useFirebaseContext();
 
 	const [clientState, setClientState] = useState({
@@ -87,17 +88,31 @@ export default function ApolloAppContextProvider({ children }) {
 		const asyncEffect = async () => {
 			const token = await user.getIdToken();
 			const newClient = apolloClientFactory(token);
-			const { data } = await newClient.query({
-				query: definitions.user.query.getUser,
-			});
+			// handle error connecing to graphql server
 
-			if (mounted) {
+			const res = await newClient
+				.query({
+					query: definitions.user.query.getUser,
+				})
+				.catch(e => {
+					setClientState({
+						client: newClient,
+						status: "error",
+						user: null,
+
+						error: e,
+					});
+					navigate("/error");
+				});
+
+			if (!mounted) return;
+
+			res &&
 				setClientState({
 					client: newClient,
 					status: "ready",
-					user: data.user,
+					user: res.data.user,
 				});
-			}
 		};
 		asyncEffect();
 		return () => {
@@ -125,7 +140,7 @@ export default function ApolloAppContextProvider({ children }) {
 				<LoadingScreen
 					loading={
 						// only render children when loading is false
-						clientState?.status !== "ready"
+						clientState.status === "loading"
 					}
 				>
 					{children}
