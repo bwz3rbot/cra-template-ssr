@@ -18,6 +18,9 @@ export const Routes = () => {
 	const location = useLocation();
 	return (
 		<ErrorBoundary
+			// resetKeys is used to reset the error boundary when the location changes
+			// without this the router context will lose its location state
+			// and navigating to a new page will not work
 			resetKeys={[location.pathname, location.search, location.hash]}
 			FallbackComponent={PageError}
 		>
