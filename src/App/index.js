@@ -28,9 +28,7 @@ export default function App() {
 								<Layout variant="standard">
 									<Uploady>
 										<Notifications>
-											<RouterErrorBoundary>
-												<Routes />
-											</RouterErrorBoundary>
+											<Routes />
 										</Notifications>
 									</Uploady>
 								</Layout>

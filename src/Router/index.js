@@ -1,6 +1,4 @@
 import { BrowserRouter } from "react-router-dom";
-import { ErrorBoundary } from "react-error-boundary";
-import PageError from "./Routes/Page/Error";
 
 export default function RouterContextProvider({ children }) {
 	return (
@@ -12,9 +10,3 @@ export default function RouterContextProvider({ children }) {
 		</BrowserRouter>
 	);
 }
-
-export const RouterErrorBoundary = ({ children }) => {
-	return (
-		<ErrorBoundary FallbackComponent={PageError}>{children}</ErrorBoundary>
-	);
-};

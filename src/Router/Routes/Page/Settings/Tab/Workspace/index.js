@@ -13,7 +13,6 @@ export default function SettingsPageWorkspaceTab() {
 	const members = user?.workspace?.members || [];
 	const administrators = user?.workspace?.admin || [];
 	const owner = user?.workspace?.owner;
-
 	return (
 		<LoadingScreen loading={loading} transparent>
 			<Grid
