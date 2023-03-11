@@ -17,7 +17,10 @@ const PageSubscribe = lazy(() => import("./Page/Subscribe"));
 export const Routes = () => {
 	const location = useLocation();
 	return (
-		<ErrorBoundary key={location.pathname} FallbackComponent={PageError}>
+		<ErrorBoundary
+			resetKeys={[location.pathname, location.search, location.hash]}
+			FallbackComponent={PageError}
+		>
 			<RouteContext>
 				<Route
 					path="/"
