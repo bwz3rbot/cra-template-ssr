@@ -47,11 +47,13 @@ export default function HelmetContext({ children }) {
 
 				<meta name="twitter:card" content="summary_large_image" />
 				<meta name="twitter:site" content={creator} />
-				<meta name="twitter:creator" content={creator} />
-				<meta name="twitter:title" content={title} />
 				<meta name="twitter:description" content={description} />
 
+				<meta name="twitter:creator" content={creator} />
+				<meta name="twitter:title" content={title} />
+
 				<meta name="twitter:image" content={Logo} />
+				<meta name="twitter:image:alt" content={title} />
 			</Helmet>
 			{children}
 		</HelmetProvider>
