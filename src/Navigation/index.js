@@ -15,9 +15,6 @@ import MenuIcon from "@mui/icons-material/Menu";
 import { getAllowedLinks } from "./Links";
 import { NavDrawer } from "./Drawer";
 
-import RoundLogo from "../assets/logo/round-56x56.png";
-import WideLogo from "../assets/logo/wide-56x112.png";
-
 import AccountWidget from "./AccountWidget";
 
 import { NotificationsWidget } from "../Notifications";
@@ -25,6 +22,8 @@ import { NotificationsWidget } from "../Notifications";
 import { useAuthContext } from "../Firebase";
 import depthEffect from "../Theme/sx/depth-effect";
 export { Footer } from "./Footer";
+const WideLogo = "/logo/wide-56x112.png";
+const RoundLogo = "/logo/round-56x56.png";
 
 export const NavigationBar = () => {
 	const { user, isAnonymous } = useAuthContext();

@@ -2,7 +2,6 @@ import { createContext, useContext, useState, useEffect } from "react";
 import NotificationsNoneRoundedIcon from "@mui/icons-material/NotificationsNoneRounded";
 import NotificationsActiveRoundedIcon from "@mui/icons-material/NotificationsActiveRounded";
 import NotificationsOffRoundedIcon from "@mui/icons-material/NotificationsOffRounded";
-import { Typography } from "@mui/material";
 import { useRequester } from "../Apollo";
 import { useSnackbar } from "notistack";
 
@@ -72,14 +71,10 @@ export default function NotificationsContextProvider({ children }) {
 			const count = data.data.notifications.length;
 
 			if (count === 0) return;
-			enqueueSnackbar(
-				<Typography>
-					New notification{`${count > 1 ? "s" : ""}`}
-				</Typography>,
-				{
-					autoHideDuration: 5000,
-				}
-			);
+			enqueueSnackbar(`New notification${count > 1 ? "s" : ""}`, {
+				autoHideDuration: 5000,
+				variant: "info",
+			});
 		},
 	});
 

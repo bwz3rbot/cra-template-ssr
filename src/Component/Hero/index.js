@@ -1,19 +1,17 @@
 import { Grid, Card, Box, Typography } from "@mui/material";
-import DarkHero from "../../assets/hero/dark.webp";
-import LightHero from "../../assets/hero/light.webp";
 import { useDarkMode } from "../../Theme";
 export default function Hero() {
 	const { mode } = useDarkMode();
 	const img = {
 		dark: {
-			url: DarkHero,
+			url: "/hero/dark.webp",
 			alt: "Dark Hero",
-			href: "/assets/hero/dark.webp",
+			href: "/hero/dark.webp",
 		},
 		light: {
-			url: LightHero,
+			url: "/hero/light.webp",
 			alt: "Light Hero",
-			href: "/assets/hero/light.webp",
+			href: "/hero/light.webp",
 		},
 	};
 

@@ -1,12 +1,12 @@
 import { Fragment } from "react";
 import { Grid, Typography, Divider, Box } from "@mui/material";
-import RoundLogo from "../../assets/logo/round-56x56.png";
-import { LinkSection, getAllowedLinks } from "../Links";
+import { getAllowedLinks } from "../Links";
 import { useAuthContext } from "../../Firebase";
 import { Link } from "react-router-dom";
 import depthEffect from "../../Theme/sx/depth-effect";
 import "./styles.css";
 
+const RoundLogo = "/logo/round-56x56.png";
 const LogoWrapper = () => {
 	return (
 		<Grid

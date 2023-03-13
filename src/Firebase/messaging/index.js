@@ -67,7 +67,9 @@ export default function MessagingContext({ children }) {
 		const asyncEffect = async () => {
 			// if we don't get a token when the user logs in
 			// they will not get notifications
-			const token = await getVapidToken(messaging);
+			const token = await getVapidToken(messaging).catch(err => {
+				console.log("Error fetching token: ", err);
+			});
 			mounted && setToken(token);
 		};
 		asyncEffect();
