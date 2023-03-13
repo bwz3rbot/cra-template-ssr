@@ -2,10 +2,15 @@ required to run:
 
 Step 1:
 
--   Add 2 image assets:
+-   Add image assets:
 
 1. Round Logo: 56px x 56px - ./src/assets/logo/round-56x56.png
 2. Wide Logo: 56px x 112px - ./src/assets/logo/wide-56x112.png
+3. dark.webp - widescreen size ./src/assets/hero/dark.webp
+4. light.webp - widescreen size ./src/assets/hero/light.webp;
+5. favicon.ico: 32x32 ./public/favicon.ico [https://cloudconvert.com/png-to-ico](converter tool)
+6. logo192.png 192x192 ./public/logo192.png
+7. logo512.png 512x512 ./public/logo512.png
 
 Step 2:
 
