@@ -64,7 +64,9 @@ export default function NotificationsContextProvider({ children }) {
 		},
 		onData: ({ data }) => {
 			const newNotifications = [...notifications];
+
 			newNotifications.unshift(...data.data.notifications);
+
 			if (newNotifications.length > 25) newNotifications.length = 25;
 			handleSetNotifications(newNotifications);
 			const count = data.data.notifications.length;
@@ -112,8 +114,6 @@ export default function NotificationsContextProvider({ children }) {
 			});
 		},
 	});
-
-	const sendPushNotification = async () => {};
 
 	const handleUpdateNotificationsList = notification => {
 		const index = notifications.findIndex(n => n.id === notification.id);

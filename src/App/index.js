@@ -25,13 +25,13 @@ export default function App() {
 					<Router>
 						<Firebase>
 							<Apollo>
-								<Layout variant="standard">
-									<Uploady>
-										<Notifications>
+								<Notifications>
+									<Layout variant="standard">
+										<Uploady>
 											<Routes />
-										</Notifications>
-									</Uploady>
-								</Layout>
+										</Uploady>
+									</Layout>
+								</Notifications>
 							</Apollo>
 						</Firebase>
 					</Router>
