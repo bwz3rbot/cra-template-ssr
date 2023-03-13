@@ -3,7 +3,7 @@ import Theme from "../Theme";
 
 import { SnackbarProvider as Snackbar } from "notistack";
 
-import Router, { RouterErrorBoundary } from "../Router";
+import Router from "../Router";
 import { Routes } from "../Router/Routes";
 
 import Firebase from "../Firebase";
@@ -19,10 +19,10 @@ import "./style.css";
 
 export default function App() {
 	return (
-		<Helmet>
-			<Theme>
-				<Snackbar>
-					<Router>
+		<Router>
+			<Helmet>
+				<Theme>
+					<Snackbar>
 						<Firebase>
 							<Apollo>
 								<Notifications>
@@ -34,9 +34,9 @@ export default function App() {
 								</Notifications>
 							</Apollo>
 						</Firebase>
-					</Router>
-				</Snackbar>
-			</Theme>
-		</Helmet>
+					</Snackbar>
+				</Theme>
+			</Helmet>
+		</Router>
 	);
 }

@@ -1,5 +1,10 @@
 import { Helmet, HelmetProvider } from "react-helmet-async";
+import { useLocation } from "react-router-dom";
 export default function HelmetContext({ children }) {
+	const location = useLocation();
+	const protocol = window.location.protocol;
+	const hostname = window.location.hostname;
+	const url = `${protocol}//${hostname}${location.pathname}`;
 	return (
 		<HelmetProvider>
 			<Helmet>
@@ -12,7 +17,7 @@ export default function HelmetContext({ children }) {
 				<link rel="canonical" href={""} />
 				{/* Facebook Tags */}
 				<meta property="og:type" content="website" />
-				<meta property="og:url" content={window.location.href} />
+				<meta property="og:url" content={url} />
 
 				<meta
 					property="og:title"
@@ -25,7 +30,7 @@ export default function HelmetContext({ children }) {
 				<meta property="og:image" content={"/logo/round-56x56.png"} />
 				{/* Twitter Tags */}
 				<meta property="twitter:card" content="summary_large_image" />
-				<meta property="twitter:url" content={""} />
+				<meta property="twitter:url" content={url} />
 				<meta
 					property="twitter:title"
 					content={process.env.REACT_APP_SITE_NAME}
@@ -34,7 +39,10 @@ export default function HelmetContext({ children }) {
 					property="twitter:description"
 					content={process.env.REACT_APP_SITE_DESCRIPTION}
 				/>
-				<meta property="twitter:image" content={""} />
+				<meta
+					property="twitter:image"
+					content={"/logo/round-56x56.png"}
+				/>
 			</Helmet>
 			{children}
 		</HelmetProvider>
