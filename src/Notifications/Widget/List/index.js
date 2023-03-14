@@ -40,8 +40,6 @@ export default function NotificationsMenu({ anchorEl, onClose = () => {} }) {
 					disableRipple
 					selected={false}
 					style={{
-						minWidth: "500px",
-						maxWidth: "100%",
 						backgroundColor: "transparent",
 					}}
 					onClick={() => {
@@ -70,7 +68,6 @@ export default function NotificationsMenu({ anchorEl, onClose = () => {} }) {
 					disableRipple
 					selected={false}
 					style={{
-						minWidth: "450px",
 						maxWidth: "100%",
 						backgroundColor: "transparent",
 					}}

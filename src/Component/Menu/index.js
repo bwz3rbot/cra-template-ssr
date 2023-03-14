@@ -27,7 +27,7 @@ export default function Menu({
 					borderRadius: "2%",
 					overflow: "visible",
 					filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
-					minWidth: 220,
+					minWidth: "20rem",
 					mt: 1.5,
 					...depthEffect(),
 
@@ -54,7 +54,7 @@ export default function Menu({
 			transformOrigin={{ horizontal: "right", vertical: "top" }}
 			anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
 		>
-			<div>{children}</div>
+			{children}
 		</MuiMenu>
 	);
 }

@@ -1,4 +1,4 @@
-import { Box, Grid, Typography, Card } from "@mui/material";
+import { Box, Grid } from "@mui/material";
 
 import Hero from "../../../../Component/Hero";
 import { TextCard, ImageDescriptor } from "./FeatureCard";
