@@ -122,10 +122,10 @@ export default function ContactForm({ onSuccess }) {
 					/>
 					<Button
 						type="submit"
+						variant="contained"
 						disabled={state.submitting}
 						sx={{
 							fontSize: "0.8rem",
-							color: "primary.contrastText",
 						}}
 					>
 						Submit
