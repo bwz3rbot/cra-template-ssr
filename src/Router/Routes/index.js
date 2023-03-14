@@ -33,6 +33,14 @@ export const Routes = () => {
 						<Suspend>
 							<Helmet
 								title={`${process.env.REACT_APP_SITE_NAME} - ${process.env.REACT_APP_SITE_DESCRIPTION}`}
+								meta={[
+									{
+										name: "description",
+										content:
+											process.env
+												.REACT_APP_SITE_DESCRIPTION,
+									},
+								]}
 							/>
 							<PageLanding />
 						</Suspend>
@@ -44,6 +52,12 @@ export const Routes = () => {
 						<Suspend>
 							<Helmet
 								title={`${process.env.REACT_APP_SITE_NAME} - Contact`}
+								meta={[
+									{
+										name: "description",
+										content: "Send us a message!",
+									},
+								]}
 							/>
 							<PageContact />
 						</Suspend>
@@ -55,6 +69,12 @@ export const Routes = () => {
 						<Suspend>
 							<Helmet
 								title={`${process.env.REACT_APP_SITE_NAME} - Sign In`}
+								meta={[
+									{
+										name: "description",
+										content: "Sign in to your account",
+									},
+								]}
 							/>
 							<PageSignIn />
 						</Suspend>
@@ -66,6 +86,12 @@ export const Routes = () => {
 						<Suspend>
 							<Helmet
 								title={`${process.env.REACT_APP_SITE_NAME} - Home`}
+								meta={[
+									{
+										name: "description",
+										content: "Welcome to your home page",
+									},
+								]}
 							/>
 							<Restrict>
 								<PageHome />
@@ -79,6 +105,12 @@ export const Routes = () => {
 						<Suspend>
 							<Helmet
 								title={`${process.env.REACT_APP_SITE_NAME} - About Us`}
+								meta={[
+									{
+										name: "description",
+										content: "Learn more about us",
+									},
+								]}
 							/>
 							<PageAbout />
 						</Suspend>
@@ -91,6 +123,12 @@ export const Routes = () => {
 						<Suspend>
 							<Helmet
 								title={`${process.env.REACT_APP_SITE_NAME} - Settings`}
+								meta={[
+									{
+										name: "description",
+										content: "Manage your account settings",
+									},
+								]}
 							/>
 							<Restrict>
 								<PageSettings />
@@ -104,6 +142,12 @@ export const Routes = () => {
 						<Suspend>
 							<Helmet
 								title={`${process.env.REACT_APP_SITE_NAME} - Subscribe`}
+								meta={[
+									{
+										name: "description",
+										content: "Subscribe to our newsletter",
+									},
+								]}
 							/>
 							<Restrict>
 								<PageSubscribe />
@@ -118,6 +162,12 @@ export const Routes = () => {
 						<Suspend>
 							<Helmet
 								title={`${process.env.REACT_APP_SITE_NAME} - 404`}
+								meta={[
+									{
+										name: "description",
+										content: "Page not found",
+									},
+								]}
 							/>
 							<Page404 />
 						</Suspend>
