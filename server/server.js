@@ -13,6 +13,9 @@ const PORT = process.env.PORT || 8080;
 const app = express();
 app.use(express.static(path.resolve(__dirname, "..", "build")));
 
+app.use("/eb-health", (req, res) => {
+	res.send("OK");
+});
 app.get("*", (req, res, next) => {
 	fs.readFile(path.resolve("./build/index.html"), "utf-8", (err, data) => {
 		console.log("rendering StaticRouter with url:", req.url);
