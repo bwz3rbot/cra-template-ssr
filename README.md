@@ -2,9 +2,12 @@
 docker:
 https://medium.com/devops-with-valentine/how-to-deploy-a-docker-container-to-aws-elastic-beanstalk-using-aws-cli-87ccef0d5189
 
+https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/RelatedResources.html?icmpid=docs_elasticbeanstalk_console
+
 .ebextensions
 https://johanrin.medium.com/i-deployed-a-server-side-react-app-with-aws-elastic-beanstalk-heres-what-i-learned-34c8399079c5
 -->
+
 required to run:
 
 Step 1:
@@ -15,7 +18,8 @@ Step 1:
 2. Wide Logo: 56px x 112px - ./src/assets/logo/wide-56x112.png
 3. dark.webp - widescreen size ./src/assets/hero/dark.webp
 4. light.webp - widescreen size ./src/assets/hero/light.webp;
-5. favicon.ico: 32x32 ./public/favicon.ico [https://cloudconvert.com/png-to-ico](converter tool)
+5. favicon.ico: 32x32 ./public/favicon.ico
+   [https://cloudconvert.com/png-to-ico](converter tool)
 6. logo192.png 192x192 ./public/logo192.png
 7. logo512.png 512x512 ./public/logo512.png
 
