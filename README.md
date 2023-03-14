@@ -27,6 +27,11 @@ Step 2:
 
 -   Create a Firebase application and paste credentials in .env file
 
+1. Add authentication providers-
+    - anonymous
+    - google
+2. Add Messaging
+
 Step 3:
 
 -   Give the site a name in REACT_APP_SITE_NAME
@@ -38,3 +43,9 @@ Step 4:
 1. Spin up the GraphQL Server
 
 2. paste the endpoint url in REACT_APP_GQL_ENDPOINT
+
+Step 5:
+
+-   Configure Formspree.io integration
+
+1.  Create the form and copy the form id to paste into .env file
