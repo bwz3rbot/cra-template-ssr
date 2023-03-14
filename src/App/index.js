@@ -1,3 +1,5 @@
+import "../Google/Analytics/Init";
+import "../Google/TagManager/Init";
 import Helmet from "../Helmet";
 import Theme from "../Theme";
 

@@ -2,8 +2,14 @@ import { createContext, useContext, useState, useMemo } from "react";
 import { FIREBASE_CONFIG } from "./config";
 
 import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
-import { getMessaging } from "firebase/messaging";
+import {
+	getAnalytics,
+	isSupported as isSupportedAnalytics,
+} from "firebase/analytics";
+import {
+	getMessaging,
+	isSupported as isSupportedMessaging,
+} from "firebase/messaging";
 import MessagingContext from "./Messaging";
 import {
 	getAuth,
@@ -20,8 +26,9 @@ import {
 } from "firebase/auth";
 export const app = initializeApp(FIREBASE_CONFIG);
 export const auth = getAuth(app);
-export const analytics = getAnalytics(app);
-export const messaging = getMessaging(app);
+export const analytics = isSupportedAnalytics() ? getAnalytics(app) : null;
+export const messaging = isSupportedMessaging() ? getMessaging(app) : null;
+
 const Context = createContext({
 	user: null,
 	isAuthenticated: false,

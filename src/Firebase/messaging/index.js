@@ -1,7 +1,7 @@
 import { useSnackbar } from "notistack";
 import { useState, createContext, useContext, useMemo } from "react";
 import { useFirebaseContext, messaging } from "..";
-import { onMessage, getToken } from "firebase/messaging";
+import { onMessage, getToken, isSupported } from "firebase/messaging";
 
 import NotificationSnackbar from "../../Component/Notification/Snackbar";
 
@@ -29,7 +29,7 @@ export default function MessagingContext({ children }) {
 	const [token, setToken] = useState(null);
 
 	useMemo(() => {
-		if (!messaging) return;
+		if (!messaging || !isSupported()) return;
 		const unsubscribe = onMessage(
 			messaging,
 			({
@@ -62,7 +62,7 @@ export default function MessagingContext({ children }) {
 	}, [messaging]);
 
 	useMemo(() => {
-		if (!user) return;
+		if (!user || !isSupported()) return;
 
 		const asyncEffect = async () => {
 			// if we don't get a token when the user logs in
