@@ -8,7 +8,7 @@ import { StaticRouter } from "react-router-dom/server";
 
 import App from "../src/App/SSRHandler";
 
-const PORT = 8000;
+const PORT = process.env.PORT || 8080;
 
 const app = express();
 app.use(express.static(path.resolve(__dirname, "..", "build")));
