@@ -63,6 +63,7 @@ export default function ErrorPanel({
 					component="h1"
 					sx={{
 						fontWeight: 600,
+						color: "text.primary",
 					}}
 				>
 					{message}
@@ -79,6 +80,8 @@ export default function ErrorPanel({
 					component="p"
 					sx={{
 						fontWeight: 600,
+						marginBottom: 2,
+						color: "text.primary",
 					}}
 				>
 					{action}

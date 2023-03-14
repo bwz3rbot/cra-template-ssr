@@ -7,6 +7,7 @@ import PageError from "./Page/Error"; // can't lazyload the error page. needs to
 import { lazy } from "react";
 
 const Page404 = lazy(() => import("./Page/404"));
+const PageContact = lazy(() => import("./Page/Contact"));
 const PageSignIn = lazy(() => import("./Page/SignIn"));
 const PageHome = lazy(() => import("./Page/Home"));
 const PageAbout = lazy(() => import("./Page/About"));
@@ -30,6 +31,14 @@ export const Routes = () => {
 					element={
 						<Suspend>
 							<PageLanding />
+						</Suspend>
+					}
+				/>
+				<Route
+					path="/contact"
+					element={
+						<Suspend>
+							<PageContact />
 						</Suspend>
 					}
 				/>
