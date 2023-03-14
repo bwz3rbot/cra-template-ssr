@@ -5,6 +5,7 @@ import { ErrorBoundary } from "react-error-boundary";
 import { useLocation } from "react-router-dom";
 import PageError from "./Page/Error"; // can't lazyload the error page. needs to be available immediately
 import { lazy } from "react";
+import { Helmet } from "react-helmet-async";
 
 const Page404 = lazy(() => import("./Page/404"));
 const PageContact = lazy(() => import("./Page/Contact"));
@@ -30,6 +31,9 @@ export const Routes = () => {
 					path="/"
 					element={
 						<Suspend>
+							<Helmet
+								title={`${process.env.REACT_APP_SITE_NAME} - ${process.env.REACT_APP_SITE_DESCRIPTION}`}
+							/>
 							<PageLanding />
 						</Suspend>
 					}
@@ -38,6 +42,9 @@ export const Routes = () => {
 					path="/contact"
 					element={
 						<Suspend>
+							<Helmet
+								title={`${process.env.REACT_APP_SITE_NAME} - Contact`}
+							/>
 							<PageContact />
 						</Suspend>
 					}
@@ -46,6 +53,9 @@ export const Routes = () => {
 					path="/signin"
 					element={
 						<Suspend>
+							<Helmet
+								title={`${process.env.REACT_APP_SITE_NAME} - Sign In`}
+							/>
 							<PageSignIn />
 						</Suspend>
 					}
@@ -54,6 +64,9 @@ export const Routes = () => {
 					path="/home"
 					element={
 						<Suspend>
+							<Helmet
+								title={`${process.env.REACT_APP_SITE_NAME} - Home`}
+							/>
 							<Restrict>
 								<PageHome />
 							</Restrict>
@@ -64,6 +77,9 @@ export const Routes = () => {
 					path="/about"
 					element={
 						<Suspend>
+							<Helmet
+								title={`${process.env.REACT_APP_SITE_NAME} - About Us`}
+							/>
 							<PageAbout />
 						</Suspend>
 					}
@@ -73,6 +89,9 @@ export const Routes = () => {
 					exact={false}
 					element={
 						<Suspend>
+							<Helmet
+								title={`${process.env.REACT_APP_SITE_NAME} - Settings`}
+							/>
 							<Restrict>
 								<PageSettings />
 							</Restrict>
@@ -83,6 +102,9 @@ export const Routes = () => {
 					path="/subscribe"
 					element={
 						<Suspend>
+							<Helmet
+								title={`${process.env.REACT_APP_SITE_NAME} - Subscribe`}
+							/>
 							<Restrict>
 								<PageSubscribe />
 							</Restrict>
@@ -94,6 +116,9 @@ export const Routes = () => {
 					path="*"
 					element={
 						<Suspend>
+							<Helmet
+								title={`${process.env.REACT_APP_SITE_NAME} - 404`}
+							/>
 							<Page404 />
 						</Suspend>
 					}
