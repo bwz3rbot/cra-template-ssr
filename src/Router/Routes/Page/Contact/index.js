@@ -55,7 +55,11 @@ export default function PageContact() {
 				/>
 			</Dialog>
 
-			<ContactForm />
+			<ContactForm
+				onSuccess={() => {
+					setSuccessDialogOpen(true);
+				}}
+			/>
 		</Grid>
 	);
 }

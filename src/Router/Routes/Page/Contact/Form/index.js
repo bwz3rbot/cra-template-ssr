@@ -1,4 +1,5 @@
 import { useForm, ValidationError } from "@formspree/react";
+import { useSnackbar } from "notistack";
 
 import {
 	TextField,
@@ -11,6 +12,7 @@ import {
 import useAnalytics from "../../../../../Google/Analytics";
 
 export default function ContactForm({ onSuccess }) {
+	const { closeSnackbar, enqueueSnackbar } = useSnackbar();
 	const { form_submit } = useAnalytics();
 	const [state, submit] = useForm(
 		process.env.REACT_APP_FORMSPREE_CONTACT_FORM_ID
@@ -19,13 +21,21 @@ export default function ContactForm({ onSuccess }) {
 		<>
 			<FormControl
 				component="form"
-				onSubmit={e => {
+				onSubmit={async e => {
 					e.preventDefault();
-					form_submit({
-						category: "Contact Form",
-					});
-					onSuccess(true);
-					submit(e);
+					console.log("sending event");
+
+					try {
+						await submit(e);
+						onSuccess?.(true);
+						form_submit({
+							category: "Contact Form",
+						});
+					} catch (err) {
+						enqueueSnackbar("Error submitting form", {
+							type: "error",
+						});
+					}
 				}}
 				sx={{
 					display: "flex",
