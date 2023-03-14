@@ -18,6 +18,7 @@ const PageSubscribe = lazy(() => import("./Page/Subscribe"));
 
 export const Routes = () => {
 	const location = useLocation();
+
 	return (
 		<ErrorBoundary
 			// resetKeys is used to reset the error boundary when the location changes

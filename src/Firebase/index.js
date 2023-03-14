@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useMemo } from "react";
+import { useLogger } from "../Logger";
 import { FIREBASE_CONFIG } from "./config";
 
 import { initializeApp } from "firebase/app";
@@ -53,6 +54,7 @@ const Context = createContext({
 });
 
 export default function FirebaseAppContextProvider({ children }) {
+	const { setUser } = useLogger();
 	const [currentUser, setCurrentUser] = useState(null);
 	useMemo(() => {
 		if (currentUser) return;
@@ -61,6 +63,9 @@ export default function FirebaseAppContextProvider({ children }) {
 		auth.setPersistence(indexedDBLocalPersistence).then(persistence => {
 			unsubscribe = onAuthStateChanged(auth, user => {
 				if (user) {
+					setUser({
+						user_id: user.uid,
+					});
 					setCurrentUser(user); // set the currentUser state if one exists
 				} else {
 					signInAnonymously(auth); // otherwise, sign in anonymously
