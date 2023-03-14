@@ -1,5 +1,6 @@
 import "../Google/Analytics/Init";
 import "../Google/TagManager/Init";
+import Router from "../Router";
 import Helmet from "../Helmet";
 import Theme from "../Theme";
 
@@ -20,22 +21,24 @@ import "./style.css";
 
 export default function App() {
 	return (
-		<Helmet>
-			<Theme>
-				<Snackbar>
-					<Firebase>
-						<Apollo>
-							<Notifications>
-								<Layout variant="standard">
-									<Uploady>
-										<Routes />
-									</Uploady>
-								</Layout>
-							</Notifications>
-						</Apollo>
-					</Firebase>
-				</Snackbar>
-			</Theme>
-		</Helmet>
+		<Router>
+			<Helmet>
+				<Theme>
+					<Snackbar>
+						<Firebase>
+							<Apollo>
+								<Notifications>
+									<Layout variant="standard">
+										<Uploady>
+											<Routes />
+										</Uploady>
+									</Layout>
+								</Notifications>
+							</Apollo>
+						</Firebase>
+					</Snackbar>
+				</Theme>
+			</Helmet>
+		</Router>
 	);
 }
