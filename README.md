@@ -1,3 +1,10 @@
+<!--
+docker:
+https://medium.com/devops-with-valentine/how-to-deploy-a-docker-container-to-aws-elastic-beanstalk-using-aws-cli-87ccef0d5189
+
+.ebextensions
+https://johanrin.medium.com/i-deployed-a-server-side-react-app-with-aws-elastic-beanstalk-heres-what-i-learned-34c8399079c5
+-->
 required to run:
 
 Step 1:
