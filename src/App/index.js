@@ -5,7 +5,6 @@ import Theme from "../Theme";
 
 import { SnackbarProvider as Snackbar } from "notistack";
 
-import Router from "../Router";
 import { Routes } from "../Router/Routes";
 
 import Firebase from "../Firebase";
@@ -21,24 +20,22 @@ import "./style.css";
 
 export default function App() {
 	return (
-		<Router>
-			<Helmet>
-				<Theme>
-					<Snackbar>
-						<Firebase>
-							<Apollo>
-								<Notifications>
-									<Layout variant="standard">
-										<Uploady>
-											<Routes />
-										</Uploady>
-									</Layout>
-								</Notifications>
-							</Apollo>
-						</Firebase>
-					</Snackbar>
-				</Theme>
-			</Helmet>
-		</Router>
+		<Helmet>
+			<Theme>
+				<Snackbar>
+					<Firebase>
+						<Apollo>
+							<Notifications>
+								<Layout variant="standard">
+									<Uploady>
+										<Routes />
+									</Uploady>
+								</Layout>
+							</Notifications>
+						</Apollo>
+					</Firebase>
+				</Snackbar>
+			</Theme>
+		</Helmet>
 	);
 }
