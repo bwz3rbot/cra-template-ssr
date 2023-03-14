@@ -40,9 +40,9 @@
 		"web-vitals": "^2.1.4"
 	},
 	"scripts": {
-		"prestart": "npm run build",
 		"start": "node server/index.js",
-		"build": "react-scripts build"
+		"build": "react-scripts build",
+		"develop": "react-scripts start"
 	},
 	"eslintConfig": {
 		"extends": [
