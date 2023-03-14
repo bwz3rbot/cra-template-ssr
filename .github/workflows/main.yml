@@ -1,0 +1,113 @@
+# Name of workflow as seen in Github actions tab
+name: Deploy
+# Run workflow only on push to dev branch
+on:
+    push:
+        branches:
+            - dev
+            - main
+
+jobs:
+    #  Prebuild
+    prebuild:
+        name: prebuild
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: get_env_name
+              id: get_env_name
+              run: |
+                  echo "Running on branch ${{ github.ref }}"
+                  if [ "${{ github.ref }}" = "refs/heads/main" ]; then
+                      echo "::set-output name=env_name::prod"
+                  elif [ "${{ github.ref }}" = "refs/heads/dev" ]; then
+                      echo "::set-output name=env_name::dev"
+                    fi
+            - name: get_env_url
+              id: get_env_url
+              run: |
+                  if [ "${{ steps.get_env_name.outputs.env_name }}" = "prod" ]; then
+                      echo "::set-output name=env_url::https://api.fanheat.com"
+                  elif [ "${{ steps.get_env_name.outputs.env_name }}" = "dev" ]; then
+                      echo "::set-output name=env_url::https://api.dev.fanheat.com"
+                    fi
+
+            - name: Get uuid
+              id: uuid
+              run: |
+                  echo "::set-output name=uuid::$(uuidgen)"
+
+        outputs:
+            env_name: ${{ steps.get_env_name.outputs.env_name }}
+            env_url: ${{ steps.get_env_url.outputs.env_url }}
+            uuid: ${{ steps.uuid.outputs.uuid }}
+
+    # Configure
+    deploy:
+        needs: prebuild
+        name: deploy
+        runs-on: ubuntu-latest
+        environment: ${{ needs.prebuild.outputs.env_name }}
+        steps:
+            - uses: actions/checkout@v1
+            - uses: chrnorm/deployment-action@v2
+              # Create Deployment
+              name: Init Deployment
+              id: deployment
+              with:
+                  token: "${{ github.token }}"
+                  environment-url: ${{ needs.prebuild.outputs.env_url }}
+                  environment: ${{ needs.prebuild.outputs.env_name }}
+
+            # Configure Environment
+            - name: Checking out code
+              uses: actions/checkout@v3
+            - name: Build React App
+              run: |
+                  npm install
+                  npm run build
+
+            - name: Generate deployment package
+              run: zip -r deploy.zip . -x '*.git*'
+
+            - name: Deploy Content API to EB
+              uses: einaregilsson/beanstalk-deploy@v21
+              with:
+                  aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+                  aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+                  application_name: ${{ secrets.AWS_EB_APPLICATION_NAME }}
+                  environment_name: ${{ secrets.AWS_EB_ENVIRONMENT_NAME }}
+                  version_label: ${{ needs.prebuild.outputs.uuid }}
+                  region: ${{ secrets.AWS_REGION }}
+                  deployment_package: deploy.zip
+                  wait_for_environment_recovery: 1800
+
+            # Configure AWS credentials
+            - name: Configure AWS Credentials
+              uses: aws-actions/configure-aws-credentials@v1
+              with:
+                  aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+                  aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+                  aws-region: ${{ secrets.AWS_REGION }}
+
+            # Update Deployment Status = Success
+            - name: Update deployment status (success)
+              if: success()
+              uses: chrnorm/deployment-status@v2
+              with:
+                  token: "${{ github.token }}"
+                  environment-url:
+                      ${{ steps.deployment.outputs.environment_url }}
+                  deployment-id: ${{ steps.deployment.outputs.deployment_id }}
+                  state: "success"
+
+            # Update deployment status = Failure
+            - name: Update deployment status (failure)
+              if: failure()
+              uses: chrnorm/deployment-status@v2
+              with:
+                  token: "${{ github.token }}"
+                  environment-url:
+                      ${{ steps.deployment.outputs.environment_url }}
+                  deployment-id: ${{ steps.deployment.outputs.deployment_id }}
+                  state: "failure"
