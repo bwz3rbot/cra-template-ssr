@@ -6,7 +6,7 @@ import MarkEmailReadOutlinedIcon from "@mui/icons-material/MarkEmailReadOutlined
 import { useNavigate } from "react-router-dom";
 export default function PageContact() {
 	const navigate = useNavigate();
-	const [successDialogOpen, setSuccessDialogOpen] = useState(true);
+	const [successDialogOpen, setSuccessDialogOpen] = useState(false);
 	return (
 		<Grid
 			container
@@ -14,6 +14,7 @@ export default function PageContact() {
 				display: "flex",
 				justifyContent: "center",
 				padding: 2,
+				flexDirection: "column",
 			}}
 		>
 			<Typography
