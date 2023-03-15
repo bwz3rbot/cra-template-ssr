@@ -98,7 +98,7 @@ jobs:
                   git archive --format=zip --output=deploy.zip HEAD && zip -r
                   deploy.zip build
 
-            - name: Deploy Content API to EB
+            - name: Deploy to AWS Elastic Beanstalk
               uses: einaregilsson/beanstalk-deploy@v21
               with:
                   aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
