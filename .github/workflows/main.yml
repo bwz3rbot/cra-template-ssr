@@ -48,6 +48,7 @@ jobs:
         name: deploy
         runs-on: ubuntu-latest
         environment: ${{ needs.prebuild.outputs.env_name }}
+
         steps:
             - uses: actions/checkout@v1
             - uses: chrnorm/deployment-action@v2
@@ -59,6 +60,11 @@ jobs:
                   environment-url: ${{ needs.prebuild.outputs.env_url }}
                   environment: ${{ needs.prebuild.outputs.env_name }}
 
+            # Set up Node.js
+            - name: Set up Node.js
+              uses: actions/setup-node@v1
+              with:
+                  node-version: 16.3.0
             # Configure AWS credentials
             - name: Configure AWS Credentials
               uses: aws-actions/configure-aws-credentials@v1
