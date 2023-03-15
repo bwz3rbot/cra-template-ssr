@@ -59,16 +59,27 @@ jobs:
                   environment-url: ${{ needs.prebuild.outputs.env_url }}
                   environment: ${{ needs.prebuild.outputs.env_name }}
 
+            # Configure AWS credentials
+            - name: Configure AWS Credentials
+              uses: aws-actions/configure-aws-credentials@v1
+              with:
+                  aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+                  aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+                  aws-region: ${{ secrets.AWS_REGION }}
+
+            - name: Get Secrets from AWS
+              run: |
+                  aws secretsmanager get-secret-value --secret-id ${{ secrets.AWS_SECRET_NAME }} --query SecretString --output text > .env
+
             # Configure Environment
-            - name: Checking out code
-              uses: actions/checkout@v3
             - name: Build React App
               run: |
                   npm install
                   npm run build
 
             - name: Generate deployment package
-              run: zip -r deploy.zip . -x '*.git*'
+              run:
+                  git archive --format=zip --output=deploy.zip HEAD && zip -r deploy.zip build
 
             - name: Deploy Content API to EB
               uses: einaregilsson/beanstalk-deploy@v21
@@ -81,14 +92,6 @@ jobs:
                   region: ${{ secrets.AWS_REGION }}
                   deployment_package: deploy.zip
                   wait_for_environment_recovery: 1800
-
-            # Configure AWS credentials
-            - name: Configure AWS Credentials
-              uses: aws-actions/configure-aws-credentials@v1
-              with:
-                  aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-                  aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-                  aws-region: ${{ secrets.AWS_REGION }}
 
             # Update Deployment Status = Success
             - name: Update deployment status (success)
