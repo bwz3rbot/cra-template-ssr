@@ -89,6 +89,10 @@ jobs:
               run: |
                   npm run build --verbose
 
+            - name: Append Service Worker
+              run: |
+                  npm run sw-append:messaging
+
             - name: Generate deployment package
               run:
                   git archive --format=zip --output=deploy.zip HEAD && zip -r
