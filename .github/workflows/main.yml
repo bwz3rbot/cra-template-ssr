@@ -1,6 +1,6 @@
 # Name of workflow as seen in Github actions tab
 name: Deploy
-# Run workflow only on push to dev branch
+# Run workflow only on push to dev or main branches
 on:
     push:
         branches:
@@ -45,7 +45,7 @@ jobs:
             env_url: ${{ steps.get_env_url.outputs.env_url }}
             uuid: ${{ steps.uuid.outputs.uuid }}
 
-    # Configure
+    # Deploy
     deploy:
         needs: prebuild
         name: deploy
@@ -105,6 +105,7 @@ jobs:
             # Generate Git Archive
             - name: Generate Git Archive
               run: git archive --format=zip --output=deploy.zip HEAD
+            # Include Build Folder in Archive
             - name: Include Build Folder in Archive
               run: zip -r deploy.zip build
 
