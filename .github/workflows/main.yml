@@ -88,19 +88,16 @@ jobs:
 
             # Install Dependencies
             - name: Install Dependencies
-              run: |
-                  npm install
+              run: npm install
 
             # Build Static Files
             - name: Build Static Files
               continue-on-error: true
-              run: |
-                  npm run build
+              run: npm run build
 
             # Append Service Worker (Elastic Beanstalk won't run prestart script correctly so this must be done here)
             - name: Append Service Worker
-              run: |
-                  npm run sw-append:messaging
+              run: npm run sw-append:messaging
 
             # Generate Git Archive
             - name: Generate Git Archive
@@ -121,6 +118,12 @@ jobs:
                   region: ${{ secrets.AWS_REGION }}
                   deployment_package: deploy.zip
                   wait_for_environment_recovery: 1800
+
+            # Invalidate CloudFront cache
+            - name: Invalidate CloudFront cache
+              run:
+                  aws cloudfront create-invalidation --distribution-id ${{
+                  secrets.AWS_CLOUDFRONT_DISTRIBUTION_ID }} --paths "/*"
 
             # [ON SUCCESS] Update Deployment Status = Success
             - name: Update deployment status (success)
