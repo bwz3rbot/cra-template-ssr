@@ -26,3 +26,4 @@ public/firebase-messaging-sw.js
 deploy.bat
 run.bat
 token
+deploy.zip
