@@ -44,7 +44,7 @@
 	"scripts": {
 		"start": "node server/index.js",
 		"build": "react-scripts build",
-		"postbuild": "cra-append-sw --mode build --env ./.env ./src/firebase-messaging-sw.js",
+		"sw-append:messaging": "cra-append-sw --mode build --env ./.env ./src/firebase-messaging-sw.js",
 		"develop": "react-scripts start"
 	},
 	"eslintConfig": {

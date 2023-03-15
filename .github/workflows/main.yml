@@ -13,7 +13,9 @@ jobs:
         name: prebuild
         runs-on: ubuntu-latest
 
+        # Configure github actions build environment
         steps:
+            # Determine environment name by branch name (banch:dev=dev or branch:main=prod)
             - name: get_env_name
               id: get_env_name
               run: |
@@ -32,6 +34,7 @@ jobs:
                       echo "::set-output name=env_url::https://api.dev.fanheat.com"
                     fi
 
+            # Generate UUID for Elastic Beanstalk version label
             - name: Get uuid
               id: uuid
               run: |
@@ -48,27 +51,29 @@ jobs:
         name: deploy
         runs-on: ubuntu-latest
         strategy:
+            # Ensure Node.js version is 16.x - required to run node crypto functions (they become deprecated in 17.x)
             matrix:
                 node-version: [16.x]
         environment: ${{ needs.prebuild.outputs.env_name }}
 
         steps:
+            # Initialize Deployment (required for deployment status updates such as Jira integration)
             - uses: actions/checkout@v1
             - uses: chrnorm/deployment-action@v2
-              # Create Deployment
-              name: Init Deployment
+              name: Initialize Deployment
               id: deployment
               with:
                   token: "${{ github.token }}"
                   environment-url: ${{ needs.prebuild.outputs.env_url }}
                   environment: ${{ needs.prebuild.outputs.env_name }}
 
-            # Setup Node
+            # Use Node.js 16.x from matrix.node-version
             - name: Use Node.js ${{ matrix.node-version }}
               uses: actions/setup-node@v1
               with:
                   node-version: ${{ matrix.node-version }}
-            # Configure AWS credentials
+
+            # Configure AWS credentials (requires access to Secrets Manager and Elastic Beanstalk)
             - name: Configure AWS Credentials
               uses: aws-actions/configure-aws-credentials@v1
               with:
@@ -76,24 +81,34 @@ jobs:
                   aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
                   aws-region: ${{ secrets.AWS_REGION }}
 
-            - name: Get Secrets from AWS
+            # Get Environment Variables From AWS Secrets Manager
+            - name: Get Environment Variables From AWS Secrets Manager
               run: |
                   aws secretsmanager get-secret-value --secret-id ${{ secrets.AWS_SECRET_NAME }} --query SecretString --output text > .env
 
-            # Configure Environment
+            # Install Dependencies
             - name: Install Dependencies
               run: |
-                  npm install --verbose
+                  npm install
+
+            # Build Static Files
             - name: Build Static Files
               continue-on-error: true
               run: |
-                  npm run build --verbose
+                  npm run build
 
-            - name: Generate deployment package
-              run:
-                  git archive --format=zip --output=deploy.zip HEAD && zip -r
-                  deploy.zip build
+            # Append Service Worker (Elastic Beanstalk won't run prestart script correctly so this must be done here)
+            - name: Append Service Worker
+              run: |
+                  npm run sw-append:messaging
 
+            # Generate Git Archive
+            - name: Generate Git Archive
+              run: git archive --format=zip --output=deploy.zip HEAD
+            - name: Include Build Folder in Archive
+              run: zip -r deploy.zip build
+
+            # Deploy to AWS Elastic Beanstalk
             - name: Deploy to AWS Elastic Beanstalk
               uses: einaregilsson/beanstalk-deploy@v21
               with:
@@ -106,7 +121,7 @@ jobs:
                   deployment_package: deploy.zip
                   wait_for_environment_recovery: 1800
 
-            # Update Deployment Status = Success
+            # [ON SUCCESS] Update Deployment Status = Success
             - name: Update deployment status (success)
               if: success()
               uses: chrnorm/deployment-status@v2
@@ -117,7 +132,7 @@ jobs:
                   deployment-id: ${{ steps.deployment.outputs.deployment_id }}
                   state: "success"
 
-            # Update deployment status = Failure
+            # [ON ERROR] Update deployment status = Failure
             - name: Update deployment status (failure)
               if: failure()
               uses: chrnorm/deployment-status@v2
