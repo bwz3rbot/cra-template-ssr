@@ -14,6 +14,12 @@ jobs:
         runs-on: ubuntu-latest
 
         steps:
+            - name: log node version
+              run: |
+                  node --version
+            - name: log npm version
+              run: |
+                  npm --version
             - name: get_env_name
               id: get_env_name
               run: |
@@ -79,7 +85,8 @@ jobs:
 
             - name: Generate deployment package
               run:
-                  git archive --format=zip --output=deploy.zip HEAD && zip -r deploy.zip build
+                  git archive --format=zip --output=deploy.zip HEAD && zip -r
+                  deploy.zip build
 
             - name: Deploy Content API to EB
               uses: einaregilsson/beanstalk-deploy@v21
