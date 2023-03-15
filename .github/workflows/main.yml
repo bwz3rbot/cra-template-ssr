@@ -14,12 +14,6 @@ jobs:
         runs-on: ubuntu-latest
 
         steps:
-            - name: log node version
-              run: |
-                  node --version
-            - name: log npm version
-              run: |
-                  npm --version
             - name: get_env_name
               id: get_env_name
               run: |
