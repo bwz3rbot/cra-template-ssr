@@ -43,6 +43,7 @@
 	},
 	"scripts": {
 		"start": "node server/index.js",
+		"prebuild": "cra-append-sw --mode build --env ./.env ./src/firebase-messaging-sw.js",
 		"build": "react-scripts build",
 		"develop": "react-scripts start"
 	},
