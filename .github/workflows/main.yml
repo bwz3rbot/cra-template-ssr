@@ -83,10 +83,10 @@ jobs:
             # Configure Environment
             - name: Install Dependencies
               run: |
-                  npm install
+                  npm install --verbose
             - name: Build Static Files
               run: |
-                  npm run build
+                  npm run build --verbose
 
             - name: Generate deployment package
               run:
