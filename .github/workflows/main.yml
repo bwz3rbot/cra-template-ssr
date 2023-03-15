@@ -47,6 +47,8 @@ jobs:
         needs: prebuild
         name: deploy
         runs-on: ubuntu-latest
+        container:
+            image: node:16.3.0
         environment: ${{ needs.prebuild.outputs.env_name }}
 
         steps:
@@ -60,11 +62,6 @@ jobs:
                   environment-url: ${{ needs.prebuild.outputs.env_url }}
                   environment: ${{ needs.prebuild.outputs.env_name }}
 
-            # Set up Node.js
-            - name: Set up Node.js
-              uses: actions/setup-node@v1
-              with:
-                  node-version: 16.3.0
             # Configure AWS credentials
             - name: Configure AWS Credentials
               uses: aws-actions/configure-aws-credentials@v1
