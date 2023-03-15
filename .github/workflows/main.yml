@@ -81,9 +81,11 @@ jobs:
                   aws secretsmanager get-secret-value --secret-id ${{ secrets.AWS_SECRET_NAME }} --query SecretString --output text > .env
 
             # Configure Environment
-            - name: Build React App
+            - name: Install Dependencies
               run: |
                   npm install
+            - name: Build Static Files
+              run: |
                   npm run build
 
             - name: Generate deployment package
