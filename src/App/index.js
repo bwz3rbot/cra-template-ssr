@@ -1,46 +1,46 @@
 import Logger from "../Logger";
 import "../Google/Analytics/Init";
 import "../Google/TagManager/Init";
+
+import Head from "../Head";
 import Router from "../Router";
-import Helmet from "../Helmet";
+
 import Theme from "../Theme";
 
 import { SnackbarProvider as Snackbar } from "notistack";
 
-import { Routes } from "../Router/Routes";
-
 import Firebase from "../Firebase";
 
 import Apollo from "../Apollo";
+import Notifications from "../Notifications";
 
 import Layout from "../Layout";
 import Uploady from "../Upload";
 
-import Notifications from "../Notifications";
+import { Routes } from "../Router/Routes";
 
 import "./style.css";
 
 export default function App() {
 	return (
 		<Router>
+			<Head />
 			<Logger>
-				<Helmet>
-					<Theme>
-						<Snackbar>
-							<Firebase>
-								<Apollo>
-									<Notifications>
-										<Layout variant="standard">
-											<Uploady>
-												<Routes />
-											</Uploady>
-										</Layout>
-									</Notifications>
-								</Apollo>
-							</Firebase>
-						</Snackbar>
-					</Theme>
-				</Helmet>
+				<Theme>
+					<Snackbar>
+						<Firebase>
+							<Apollo>
+								<Notifications>
+									<Layout variant="standard">
+										<Uploady>
+											<Routes />
+										</Uploady>
+									</Layout>
+								</Notifications>
+							</Apollo>
+						</Firebase>
+					</Snackbar>
+				</Theme>
 			</Logger>
 		</Router>
 	);

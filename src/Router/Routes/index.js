@@ -5,7 +5,6 @@ import { ErrorBoundary } from "react-error-boundary";
 import { useLocation } from "react-router-dom";
 import PageError from "./Page/Error"; // can't lazyload the error page. needs to be available immediately
 import { lazy } from "react";
-import { Helmet } from "react-helmet-async";
 
 const Page404 = lazy(() => import("./Page/404"));
 const PageContact = lazy(() => import("./Page/Contact"));
@@ -18,7 +17,6 @@ const PageSubscribe = lazy(() => import("./Page/Subscribe"));
 
 export const Routes = () => {
 	const location = useLocation();
-
 	return (
 		<ErrorBoundary
 			// resetKeys is used to reset the error boundary when the location changes
@@ -32,17 +30,6 @@ export const Routes = () => {
 					path="/"
 					element={
 						<Suspend>
-							<Helmet
-								title={`${process.env.REACT_APP_SITE_NAME} - ${process.env.REACT_APP_SITE_DESCRIPTION}`}
-								meta={[
-									{
-										name: "description",
-										content:
-											process.env
-												.REACT_APP_SITE_DESCRIPTION,
-									},
-								]}
-							/>
 							<PageLanding />
 						</Suspend>
 					}
@@ -51,15 +38,6 @@ export const Routes = () => {
 					path="/contact"
 					element={
 						<Suspend>
-							<Helmet
-								title={`${process.env.REACT_APP_SITE_NAME} - Contact`}
-								meta={[
-									{
-										name: "description",
-										content: "Send us a message!",
-									},
-								]}
-							/>
 							<PageContact />
 						</Suspend>
 					}
@@ -68,15 +46,6 @@ export const Routes = () => {
 					path="/signin"
 					element={
 						<Suspend>
-							<Helmet
-								title={`${process.env.REACT_APP_SITE_NAME} - Sign In`}
-								meta={[
-									{
-										name: "description",
-										content: "Sign in to your account",
-									},
-								]}
-							/>
 							<PageSignIn />
 						</Suspend>
 					}
@@ -85,15 +54,6 @@ export const Routes = () => {
 					path="/home"
 					element={
 						<Suspend>
-							<Helmet
-								title={`${process.env.REACT_APP_SITE_NAME} - Home`}
-								meta={[
-									{
-										name: "description",
-										content: "Welcome to your home page",
-									},
-								]}
-							/>
 							<Restrict>
 								<PageHome />
 							</Restrict>
@@ -104,15 +64,6 @@ export const Routes = () => {
 					path="/about"
 					element={
 						<Suspend>
-							<Helmet
-								title={`${process.env.REACT_APP_SITE_NAME} - About Us`}
-								meta={[
-									{
-										name: "description",
-										content: "Learn more about us",
-									},
-								]}
-							/>
 							<PageAbout />
 						</Suspend>
 					}
@@ -122,15 +73,6 @@ export const Routes = () => {
 					exact={false}
 					element={
 						<Suspend>
-							<Helmet
-								title={`${process.env.REACT_APP_SITE_NAME} - Settings`}
-								meta={[
-									{
-										name: "description",
-										content: "Manage your account settings",
-									},
-								]}
-							/>
 							<Restrict>
 								<PageSettings />
 							</Restrict>
@@ -141,15 +83,6 @@ export const Routes = () => {
 					path="/subscribe"
 					element={
 						<Suspend>
-							<Helmet
-								title={`${process.env.REACT_APP_SITE_NAME} - Subscribe`}
-								meta={[
-									{
-										name: "description",
-										content: "Subscribe to our newsletter",
-									},
-								]}
-							/>
 							<Restrict>
 								<PageSubscribe />
 							</Restrict>
@@ -161,15 +94,6 @@ export const Routes = () => {
 					path="*"
 					element={
 						<Suspend>
-							<Helmet
-								title={`${process.env.REACT_APP_SITE_NAME} - 404`}
-								meta={[
-									{
-										name: "description",
-										content: "Page not found",
-									},
-								]}
-							/>
 							<Page404 />
 						</Suspend>
 					}
