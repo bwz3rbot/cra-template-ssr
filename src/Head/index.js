@@ -9,9 +9,9 @@ export default function HelmetContext() {
 	// this hook will get its state from the ssr server request if it exists
 	const { hostname, pathname, port, protocol } = useDynamicLocation();
 
-	const url = `${protocol}//${hostname}${port ? ":" + port : ""}${pathname}`;
+	const url = `${protocol}://${hostname}${port ? ":" + port : ""}${pathname}`;
 
-	const Logo = `${protocol}//${hostname}${
+	const Logo = `${protocol}://${hostname}${
 		port ? ":" + port : ""
 	}/${RoundLogo}`;
 
