@@ -11,7 +11,8 @@ import { SSRLocationContext } from "../../src/Head/SSRLocationContext";
 import App from "../App";
 
 const app = express();
-const PORT = process.env.PORT || 8080;
+let PORT = process.env.PORT || 8080;
+PORT = `${PORT}`; // convert to string
 const build = path.resolve(__dirname, "..", "..", "build");
 const indexFilepath = path.resolve(build, "index.html");
 
@@ -33,7 +34,11 @@ fs.readFile(indexFilepath, "utf-8", async (err, data) => {
 					<SSRLocationContext
 						hostname={req.hostname}
 						pathname={req.path}
-						port={req.socket.localPort}
+						port={
+							PORT === "80" || PORT === "443" || PORT === "8080"
+								? ""
+								: PORT
+						}
 						protocol={req.protocol}
 					>
 						<App />
