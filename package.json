@@ -28,6 +28,7 @@
 		"graphql-ws": "^5.11.3",
 		"ignore-styles": "^5.0.1",
 		"lodash": "^4.17.21",
+		"nodemon": "^2.0.21",
 		"notistack": "^2.0.8",
 		"react": "^18.2.0",
 		"react-dom": "^18.2.0",
@@ -46,7 +47,7 @@
 		"start": "node server/index.js",
 		"build": "react-scripts build",
 		"sw-append:messaging": "cra-append-sw --mode build --env ./.env ./src/firebase-messaging-sw.js",
-		"develop": "react-scripts start"
+		"develop": "nodemon --watch . server/index.js"
 	},
 	"eslintConfig": {
 		"extends": [
