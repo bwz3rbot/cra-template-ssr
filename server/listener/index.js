@@ -30,7 +30,7 @@ fs.readFile(indexFilepath, "utf-8", async (err, data) => {
 
 	app.use(express.static(build));
 
-	app.use("/api/auth", express.json(), Auth);
+	// app.use("/api/auth", express.json(), Auth);
 
 	app.get("*", async (req, res, next) => {
 		let htmlString = `${data}`;

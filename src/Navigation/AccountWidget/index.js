@@ -1,4 +1,4 @@
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Avatar, IconButton } from "@mui/material";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useState, useEffect } from "react";
@@ -6,6 +6,7 @@ import AccountMenu from "./Menu";
 export default function AccountWidget() {
 	const { user } = useAuth0();
 	const location = useLocation();
+	const navigate = useNavigate();
 	const [menuAnchorEl, setMenuAnchorEl] = useState(null);
 
 	const handleSetAnchorEl = e => {
@@ -33,6 +34,9 @@ export default function AccountWidget() {
 			<AccountMenu
 				anchorEl={menuAnchorEl}
 				onClose={() => setMenuAnchorEl(null)}
+				onSignInSuccess={() => {
+					navigate("/home");
+				}}
 			/>
 		</>
 	);

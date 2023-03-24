@@ -7,16 +7,13 @@ import SettingsIcon from "@mui/icons-material/Settings";
 import SignOutIcon from "@mui/icons-material/Logout";
 import Menu, { Divider, ListItemIcon, MenuItem } from "../../../Component/Menu";
 
-import { useNavigate } from "react-router-dom";
-
 import { useAuth0 } from "@auth0/auth0-react";
-export default function AccountMenu({ anchorEl, onClose = () => {} }) {
-	const { user, logout } = useAuth0();
-
-	const navigate = useNavigate();
-	const setShowingSignInDialog = () => {
-		navigate("/signin");
-	};
+export default function AccountMenu({
+	anchorEl,
+	onClose = () => {},
+	onSignInSuccess = () => {},
+}) {
+	const { user, logout, loginWithPopup } = useAuth0();
 
 	return (
 		<>
@@ -26,7 +23,15 @@ export default function AccountMenu({ anchorEl, onClose = () => {} }) {
 						{!user ? (
 							<>
 								<MenuItem
-									onClick={() => setShowingSignInDialog(true)}
+									onClick={async () => {
+										await loginWithPopup({
+											authorizationParams: {
+												screen_hint: "login",
+											},
+										});
+										onClose?.();
+										onSignInSuccess?.();
+									}}
 								>
 									<ListItemIcon>
 										<SignInIcon fontSize="small" />
@@ -34,7 +39,15 @@ export default function AccountMenu({ anchorEl, onClose = () => {} }) {
 									Sign In
 								</MenuItem>
 								<MenuItem
-									onClick={() => setShowingSignInDialog(true)}
+									onClick={async () => {
+										await loginWithPopup({
+											authorizationParams: {
+												screen_hint: "signup",
+											},
+										});
+										onClose?.();
+										onSignInSuccess?.();
+									}}
 								>
 									<ListItemIcon>
 										<PersonAddIcon fontSize="small" />
