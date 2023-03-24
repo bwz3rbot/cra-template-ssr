@@ -1,4 +1,4 @@
-import { useAuthContext } from "../../../Firebase";
+import { useAuthContext } from "../../../Auth";
 
 import { useState } from "react";
 

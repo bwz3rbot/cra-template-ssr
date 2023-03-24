@@ -19,14 +19,14 @@ import AccountWidget from "./AccountWidget";
 
 import { NotificationsWidget } from "../Notifications";
 
-import { useAuthContext } from "../Firebase";
+import { useAuthContext } from "../Auth";
 import depthEffect from "../Theme/sx/depth-effect";
 export { Footer } from "./Footer";
 const WideLogo = "/logo/wide-56x112.png";
 const RoundLogo = "/logo/round-56x56.png";
 
 export const NavigationBar = () => {
-	const { user, isAnonymous } = useAuthContext();
+	const { user } = useAuthContext();
 	const isMedium = useMediaQuery(theme => theme.breakpoints.up("md"));
 	const [open, setOpen] = useState(false);
 	const toggleDrawer = () => {
@@ -175,7 +175,7 @@ export const NavigationBar = () => {
 									);
 								})}
 						</div>
-						{!isAnonymous && <NotificationsWidget />}
+						{!user?.isAnonymous && <NotificationsWidget />}
 						<AccountWidget />
 					</Toolbar>
 				</AppBar>

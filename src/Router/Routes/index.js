@@ -6,17 +6,28 @@ import { useLocation } from "react-router-dom";
 import PageError from "./Page/Error"; // can't lazyload the error page. needs to be available immediately
 import { lazy } from "react";
 
-const Page404 = lazy(() => import("./Page/404"));
-const PageContact = lazy(() => import("./Page/Contact"));
-const PageSignIn = lazy(() => import("./Page/SignIn"));
-const PageHome = lazy(() => import("./Page/Home"));
-const PageAbout = lazy(() => import("./Page/About"));
-const PageLanding = lazy(() => import("./Page/Landing"));
-const PageSettings = lazy(() => import("./Page/Settings"));
-const PageSubscribe = lazy(() => import("./Page/Subscribe"));
+// const Page404 = lazy(() => import("./Page/404"));
+// const PageContact = lazy(() => import("./Page/Contact"));
+// const PageSignIn = lazy(() => import("./Page/SignIn"));
+// const PageHome = lazy(() => import("./Page/Home"));
+// const PageAbout = lazy(() => import("./Page/About"));
+// const PageLanding = lazy(() => import("./Page/Landing"));
+// const PageSettings = lazy(() => import("./Page/Settings"));
+// const PageSubscribe = lazy(() => import("./Page/Subscribe"));
+
+import Page404 from "./Page/404";
+import PageContact from "./Page/Contact";
+import PageSignIn from "./Page/SignIn";
+import PageHome from "./Page/Home";
+import PageAbout from "./Page/About";
+import PageLanding from "./Page/Landing";
+import PageSettings from "./Page/Settings";
+import PageSubscribe from "./Page/Subscribe";
+import { useDynamicLocation } from "../../Head/SSRLocationContext";
 
 export const Routes = () => {
-	const location = useLocation();
+	const location = useDynamicLocation();
+	console.log("rendering routes with location:", location);
 	return (
 		<ErrorBoundary
 			// resetKeys is used to reset the error boundary when the location changes

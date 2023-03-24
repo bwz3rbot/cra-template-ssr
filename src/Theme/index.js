@@ -3,6 +3,8 @@ import { red } from "@mui/material/colors";
 import { createContext, useContext, useState } from "react";
 import useCSSProps from "./useCSSProps";
 import ThemeColor from "./ThemeColor";
+import { useCookies } from "../Cookies";
+import "./styles.css";
 export { DarkModeSwitch } from "./DarkModeSwitch";
 
 const lightModeTheme = createTheme({
@@ -53,8 +55,11 @@ const AppThemeContext = createContext({
 });
 export const useDarkMode = () => useContext(AppThemeContext);
 
-const useRecallTheme = () => {
+export default function ThemeContextProvider({ children }) {
+	const cookies = useCookies();
+	useCSSProps();
 	const getDeviceTheme = () => {
+		if (typeof window === "undefined") return null;
 		if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
 			return "dark";
 		}
@@ -64,10 +69,10 @@ const useRecallTheme = () => {
 		return null;
 	};
 	const storeSelectedTheme = theme => {
-		localStorage.setItem("theme", theme);
+		cookies.set("theme", theme);
 	};
 	const recallStoredTheme = () => {
-		return localStorage.getItem("theme");
+		return cookies.get("theme");
 	};
 	const [theme, setTheme] = useState(
 		recallStoredTheme() || getDeviceTheme() || "light"
@@ -82,23 +87,13 @@ const useRecallTheme = () => {
 		const newTheme = theme === "light" ? "dark" : "light";
 		handleSetTheme(newTheme);
 	};
-	return {
-		theme,
-		toggleDarkMode,
-		setDarkMode: handleSetTheme,
-	};
-};
-
-export default function ThemeContextProvider({ children }) {
-	useCSSProps();
-	const { theme, toggleDarkMode, setDarkMode } = useRecallTheme();
 
 	return (
 		<AppThemeContext.Provider
 			value={{
 				mode: theme,
 				toggleDarkMode,
-				setDarkMode,
+				setDarkMode: handleSetTheme,
 			}}
 		>
 			<Provider

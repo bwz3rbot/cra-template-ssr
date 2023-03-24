@@ -1,5 +1,5 @@
 import { useContext, createContext, useState, useEffect } from "react";
-import { useFirebaseContext } from "../Firebase";
+import { useAuthContext } from "../Auth";
 import {
 	ApolloClient,
 	InMemoryCache,
@@ -16,6 +16,8 @@ import { GraphQLWsLink } from "@apollo/client/link/subscriptions";
 import LoadingScreen from "../Component/LoadingScreen";
 
 import { createClient } from "graphql-ws";
+import fetch from "cross-fetch";
+import ws from "ws";
 
 import definitions from "./definitions";
 
@@ -36,6 +38,7 @@ const apolloClientFactory = (idToken, workspace_id = "default") => {
 			authorization: idToken ? `Bearer ${idToken}` : "",
 			workspace_id,
 		},
+		fetch,
 	});
 
 	const wsLink = new GraphQLWsLink(
@@ -45,6 +48,7 @@ const apolloClientFactory = (idToken, workspace_id = "default") => {
 				authorization: idToken ? `Bearer ${idToken}` : "",
 				workspace_id,
 			},
+			webSocketImpl: typeof window === "undefined" ? ws : null,
 		})
 	);
 	const splitLink = split(
@@ -72,7 +76,7 @@ const apolloClientFactory = (idToken, workspace_id = "default") => {
 export default function ApolloAppContextProvider({ children }) {
 	let mounted = true;
 
-	const { user } = useFirebaseContext();
+	const { user } = useAuthContext();
 
 	const [clientState, setClientState] = useState({
 		client: apolloClientFactory(),
@@ -116,14 +120,7 @@ export default function ApolloAppContextProvider({ children }) {
 				key={user?.uid}
 				client={clientState.client}
 			>
-				<LoadingScreen
-					loading={
-						// only render children when loading is false
-						clientState.status === "loading"
-					}
-				>
-					{children}
-				</LoadingScreen>
+				{children}
 			</ApolloProvider>
 		</Context.Provider>
 	);

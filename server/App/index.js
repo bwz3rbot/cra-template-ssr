@@ -1,6 +1,7 @@
 import React, { useEffect, useState, lazy } from "react";
 import Head from "../../src/Head";
-const App = lazy(() => import("../../src/App"));
+// const App = lazy(() => import("../../src/App"));
+import App from "../../src/App";
 const useIsSsr = () => {
 	// we always start off in "SSR mode", to ensure our initial browser render
 	// matches the SSR render
@@ -24,7 +25,7 @@ export default function SSRApp() {
 	const isSsr = useIsSsr();
 	// we're on the server, so we need to render the head -
 	// these values will be extracted using helmet context and then passed into the html template
-	if (isSsr) return <Head />;
+	if (isSsr) return <App />;
 	// we're on the client, so the head is rendered inside of the app
 	return <App />;
 }

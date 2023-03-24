@@ -1,7 +1,7 @@
 import { Fragment } from "react";
 import { Grid, Typography, Divider, Box } from "@mui/material";
 import { getAllowedLinks } from "../Links";
-import { useAuthContext } from "../../Firebase";
+import { useAuthContext } from "../../Auth";
 import { Link } from "react-router-dom";
 import depthEffect from "../../Theme/sx/depth-effect";
 import "./styles.css";

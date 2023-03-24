@@ -1,16 +1,9 @@
-import Logger from "../Logger";
-import "../Google/Analytics/Init";
-import "../Google/TagManager/Init";
-
 import Head from "../Head";
-import Router from "../Router";
 
 import Theme from "../Theme";
 
 import { SnackbarProvider as Snackbar } from "notistack";
-
-import Firebase from "../Firebase";
-
+import Auth from "../Auth";
 import Apollo from "../Apollo";
 import Notifications from "../Notifications";
 
@@ -20,15 +13,16 @@ import Uploady from "../Upload";
 import { Routes } from "../Router/Routes";
 
 import "./style.css";
+import Cookies from "../Cookies";
 
 export default function App() {
 	return (
-		<Router>
-			<Head />
-			<Logger>
+		<>
+			<Cookies>
+				<Head />
 				<Theme>
 					<Snackbar>
-						<Firebase>
+						<Auth>
 							<Apollo>
 								<Notifications>
 									<Layout variant="standard">
@@ -38,10 +32,10 @@ export default function App() {
 									</Layout>
 								</Notifications>
 							</Apollo>
-						</Firebase>
+						</Auth>
 					</Snackbar>
 				</Theme>
-			</Logger>
-		</Router>
+			</Cookies>
+		</>
 	);
 }

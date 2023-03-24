@@ -1,14 +1,9 @@
 import { PropTypes } from "prop-types";
-import {
-	createContext,
-	useContext,
-	useState,
-	useEffect,
-	useLayoutEffect,
-} from "react";
+import { createContext, useContext, useState, useEffect } from "react";
 import { useLocation, useParams } from "react-router-dom";
 import LayoutSPA from "./SPA";
 import LayoutStandard from "./Standard";
+import { useCookies } from "../Cookies";
 
 const defaultVariant = "standard";
 const Context = createContext({
@@ -37,22 +32,23 @@ useLayoutVariant.propTypes = {
 	variant: PropTypes.oneOf(["standard", "SPA"]),
 };
 
-const localStorage = window.localStorage;
-
 const LOCAL_STORAGE_KEY_LOCATION_MAP = "LAYOUT-PROVIDER-LOCATION-MAP";
-const getLocationLayoutMap = () => {
-	const locationMap = localStorage.getItem(LOCAL_STORAGE_KEY_LOCATION_MAP);
-	return JSON.parse(locationMap || "{}");
-};
-const storeLocationLayoutMap = map => {
-	localStorage.setItem(LOCAL_STORAGE_KEY_LOCATION_MAP, JSON.stringify(map));
-};
 
 export default function LayoutProvider({ children, variant = "standard" }) {
+	const cookies = useCookies();
 	const location = useLocation();
+	console.log("rendering LayoutProvider: ", location.pathname);
 	const params = useParams();
 
 	const [currentVariant, setCurrentVariant] = useState(variant);
+	const getLocationLayoutMap = () => {
+		console.log("getting layout map from cookies", cookies);
+		const locationMap = cookies.get(LOCAL_STORAGE_KEY_LOCATION_MAP);
+		return JSON.parse(locationMap || "{}");
+	};
+	const storeLocationLayoutMap = map => {
+		cookies.set(LOCAL_STORAGE_KEY_LOCATION_MAP, JSON.stringify(map));
+	};
 
 	const [locationMap, setLocationMap] = useState(getLocationLayoutMap());
 
@@ -78,7 +74,7 @@ export default function LayoutProvider({ children, variant = "standard" }) {
 		setLocationMap(newLocationMap);
 	};
 
-	useLayoutEffect(() => {
+	useEffect(() => {
 		let thisPageVariant = locationMap[location.pathname] || variant;
 
 		if (thisPageVariant !== currentVariant) {

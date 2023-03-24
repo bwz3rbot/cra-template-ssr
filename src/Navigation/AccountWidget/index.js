@@ -1,10 +1,10 @@
 import { useLocation } from "react-router-dom";
 import { Avatar, IconButton } from "@mui/material";
-import { useAuthContext } from "../../Firebase/index";
+import { useAuthContext } from "../../Auth";
 import { useState, useEffect } from "react";
 import AccountMenu from "./Menu";
 export default function AccountWidget() {
-	const { username, user } = useAuthContext();
+	const { user } = useAuthContext();
 	const location = useLocation();
 	const [menuAnchorEl, setMenuAnchorEl] = useState(null);
 
@@ -22,12 +22,12 @@ export default function AccountWidget() {
 			<IconButton onClick={handleSetAnchorEl}>
 				<Avatar
 					src={user?.photoURL}
-					alt={username || "Anonymous User"}
+					alt={user?.username || "Anonymous User"}
 					imgProps={{
 						referrerPolicy: "no-referrer",
 					}}
 				>
-					{username?.slice(0, 1) || null}
+					{user?.username?.slice(0, 1) || null}
 				</Avatar>
 			</IconButton>
 			<AccountMenu

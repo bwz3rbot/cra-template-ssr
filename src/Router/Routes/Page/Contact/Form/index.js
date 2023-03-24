@@ -9,11 +9,11 @@ import {
 	FormGroup,
 	FormControlLabel,
 } from "@mui/material";
-import useAnalytics from "../../../../../Google/Analytics";
+// import useAnalytics from "../../../../../Google/Analytics";
 
 export default function ContactForm({ onSuccess }) {
 	const { closeSnackbar, enqueueSnackbar } = useSnackbar();
-	const { form_submit } = useAnalytics();
+	// const { form_submit } = useAnalytics();
 	const [state, submit] = useForm(
 		process.env.REACT_APP_FORMSPREE_CONTACT_FORM_ID
 	);
@@ -28,9 +28,9 @@ export default function ContactForm({ onSuccess }) {
 					try {
 						await submit(e);
 						onSuccess?.(true);
-						form_submit({
-							category: "Contact Form",
-						});
+						// form_submit({
+						// 	category: "Contact Form",
+						// });
 					} catch (err) {
 						enqueueSnackbar("Error submitting form", {
 							type: "error",

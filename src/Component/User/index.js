@@ -8,7 +8,7 @@ import {
 	Typography,
 	Button,
 } from "@mui/material";
-import { useAuthContext } from "../../Firebase";
+import { useAuthContext } from "../../Auth";
 import { useRequester } from "../../Apollo";
 import { calculateDateSinceTimestamp } from "../../util/calculateDateSinceTimestamp";
 import { useSnackbar } from "notistack";

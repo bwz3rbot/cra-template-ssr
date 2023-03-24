@@ -7,7 +7,7 @@ import ReactDOMServer from "react-dom/server";
 import { StaticRouter } from "react-router-dom/server";
 import { HelmetProvider } from "react-helmet-async";
 import { SSRLocationContext } from "../../src/Head/SSRLocationContext";
-
+import Firebase from "../Firebase";
 import App from "../App";
 
 const app = express();
@@ -24,13 +24,37 @@ fs.readFile(indexFilepath, "utf-8", async (err, data) => {
 
 	app.use(express.static(build));
 
+	app.use(express.json());
+	app.post("/api/auth/login", async (req, res) => {
+		console.log(req.body);
+		res.send("Hello World!");
+		const signInResponse = await Firebase.signInWithEmailAndPassword(
+			req.body.email,
+			req.body.password
+		);
+		console.log(signInResponse);
+		return signInResponse;
+	});
+	app.post("/api/auth/signup", async (req, res) => {
+		let user;
+		let error;
+		try {
+			user = await Firebase.createUser(req.body.email, req.body.password);
+			res.status(201).send({ user });
+		} catch (err) {
+			error = err;
+			res.status(400).send({ error });
+		}
+	});
+
 	app.get("*", async (req, res, next) => {
 		let htmlString = `${data}`;
 
 		const helmetContext = {};
+		const routerContext = {};
 		const markup = ReactDOMServer.renderToString(
 			<HelmetProvider context={helmetContext}>
-				<StaticRouter location={req.url}>
+				<StaticRouter location={req.url} context={routerContext}>
 					<SSRLocationContext
 						hostname={req.hostname}
 						pathname={req.path}
@@ -47,6 +71,13 @@ fs.readFile(indexFilepath, "utf-8", async (err, data) => {
 			</HelmetProvider>
 		);
 		const { helmet } = helmetContext;
+		console.log({ routerContext });
+		if (routerContext.url) {
+			// Somewhere a `<Redirect>` was rendered
+			res.redirect(301, routerContext.url);
+		} else {
+			// we're good, send the response
+		}
 
 		const head = `
 		  ${helmet.title.toString()}

@@ -4,9 +4,14 @@ import ContactForm from "./Form";
 import AlertPanel from "../../../../Component/ErrorPanel";
 import MarkEmailReadOutlinedIcon from "@mui/icons-material/MarkEmailReadOutlined";
 import { useNavigate } from "react-router-dom";
+import { useIsSSR } from "react-aria";
+import { useIsClient } from "usehooks-ts";
+
 export default function PageContact() {
 	const navigate = useNavigate();
 	const [successDialogOpen, setSuccessDialogOpen] = useState(false);
+	const isClient = useIsClient();
+	console.log("rendering contact page:", { isClient });
 	return (
 		<Grid
 			container
@@ -55,11 +60,13 @@ export default function PageContact() {
 				/>
 			</Dialog>
 
-			<ContactForm
-				onSuccess={() => {
-					setSuccessDialogOpen(true);
-				}}
-			/>
+			{isClient && (
+				<ContactForm
+					onSuccess={() => {
+						setSuccessDialogOpen(true);
+					}}
+				/>
+			)}
 		</Grid>
 	);
 }

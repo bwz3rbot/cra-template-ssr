@@ -10,9 +10,10 @@ import {
 } from "@mui/material";
 import { Link } from "react-router-dom";
 import { LinkSection, getAllowedLinks } from "../Links";
-import { useAuthContext } from "../../Firebase";
+import { useAuthContext } from "../../Auth";
 export const NavDrawer = ({ onClose: toggleDrawer, open }) => {
 	const { user } = useAuthContext();
+
 	return (
 		<Drawer anchor="top" open={open} onClose={toggleDrawer}>
 			<Box

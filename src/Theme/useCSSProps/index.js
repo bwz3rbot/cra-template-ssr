@@ -1,6 +1,7 @@
-import { useLayoutEffect } from "react";
+import { useEffect } from "react";
 export default function useCSSProps() {
-	useLayoutEffect(() => {
+	useEffect(() => {
+		if (typeof window === "undefined") return;
 		const setCSSProps = () => {
 			/* --app-height fixes IOS window height bug (url bar covers part of page unless --app-height is set dynamically) */
 			const appHeight = window.innerHeight;

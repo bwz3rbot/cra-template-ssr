@@ -12,7 +12,7 @@ import {
 } from "@mui/material";
 import { useSnackbar } from "notistack";
 
-import { useAuthContext } from "../../Firebase";
+import { useAuthContext } from "../../Auth";
 import { SignInWithGoogleIconButton } from "../../Navigation/AccountWidget/GoogleIcon";
 import { useNavigate } from "react-router-dom";
 

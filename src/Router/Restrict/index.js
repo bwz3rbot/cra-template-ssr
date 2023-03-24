@@ -1,5 +1,5 @@
-import { useAuthContext } from "../../Firebase";
-import { Navigate } from "react-router-dom";
+import { useAuthContext } from "../../Auth";
+import { Navigate, Redirect } from "react-router-dom";
 export const Restrict = ({ children, allowAnonymous }) => {
 	const { user } = useAuthContext();
 
@@ -14,5 +14,12 @@ export const Restrict = ({ children, allowAnonymous }) => {
 	}
 
 	// handle unauthenticated user
-	return <Navigate to="/signin" />;
+
+	// only use Navigate if client side
+	if (typeof window !== "undefined") {
+		console.log("navigating to signin");
+		return <Navigate to="/signin" />;
+	}
+	// use Redirect if server side
+	return children;
 };

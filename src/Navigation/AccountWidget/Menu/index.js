@@ -9,10 +9,10 @@ import Menu, { Divider, ListItemIcon, MenuItem } from "../../../Component/Menu";
 
 import { useNavigate } from "react-router-dom";
 
-import { useAuthContext } from "../../../Firebase";
+import { useAuthContext } from "../../../Auth";
 
 export default function AccountMenu({ anchorEl, onClose = () => {} }) {
-	const { signOut, user, username, isAuthenticated } = useAuthContext();
+	const { signOut, user } = useAuthContext();
 
 	const navigate = useNavigate();
 	const setShowingSignInDialog = () => {
@@ -21,11 +21,7 @@ export default function AccountMenu({ anchorEl, onClose = () => {} }) {
 
 	return (
 		<>
-			<Menu
-				key={isAuthenticated.toString()}
-				anchorEl={anchorEl}
-				onClose={onClose}
-			>
+			<Menu key={user?.toString()} anchorEl={anchorEl} onClose={onClose}>
 				<div>
 					<div>
 						{user?.isAnonymous ? (
@@ -52,12 +48,12 @@ export default function AccountMenu({ anchorEl, onClose = () => {} }) {
 								<MenuItem>
 									<Avatar
 										src={user?.photoURL}
-										alt={username || "Anonymous"}
+										alt={user?.username || "Anonymous"}
 										imgProps={{
 											referrerPolicy: "no-referrer",
 										}}
 									/>
-									{username}
+									{user?.username}
 								</MenuItem>
 								<Divider />
 							</>
