@@ -9,7 +9,6 @@ import { HelmetProvider } from "react-helmet-async";
 import { SSRLocationContext } from "../../src/Head/SSRLocationContext";
 import App from "../../src/App";
 
-const Auth = require("../Router/Auth/auth0");
 const app = express();
 let PORT = process.env.PORT || 8080;
 PORT = `${PORT}`; // convert to string
@@ -27,10 +26,7 @@ fs.readFile(indexFilepath, "utf-8", async (err, data) => {
 		// Elastic Beanstalk health check endpoint
 		res.send("OK");
 	});
-
 	app.use(express.static(build));
-
-	// app.use("/api/auth", express.json(), Auth);
 
 	app.get("*", async (req, res, next) => {
 		let htmlString = `${data}`;
@@ -84,6 +80,8 @@ fs.readFile(indexFilepath, "utf-8", async (err, data) => {
 				.replace("<head>", `<head>${head}`) // place the helmet data in the head
 		);
 	});
+
+	app.use(express.static(build));
 
 	app.listen(PORT, () => {
 		console.log(`App launched on ${PORT}`);

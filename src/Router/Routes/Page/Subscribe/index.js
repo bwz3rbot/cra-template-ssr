@@ -31,7 +31,6 @@ export default function SubscribePage() {
 				overflowX: "hidden",
 			}}
 		>
-			hello
 			<Grid
 				item
 				xs={12}
