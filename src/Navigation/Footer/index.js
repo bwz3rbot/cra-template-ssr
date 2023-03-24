@@ -1,7 +1,7 @@
 import { Fragment } from "react";
 import { Grid, Typography, Divider, Box } from "@mui/material";
 import { getAllowedLinks } from "../Links";
-import { useAuthContext } from "../../Auth";
+import { useAuth0 } from "@auth0/auth0-react";
 import { Link } from "react-router-dom";
 import depthEffect from "../../Theme/sx/depth-effect";
 import "./styles.css";
@@ -59,7 +59,7 @@ const LogoWrapper = () => {
 	);
 };
 export const Footer = () => {
-	const { user } = useAuthContext();
+	const { user } = useAuth0();
 	return (
 		<Grid
 			/*

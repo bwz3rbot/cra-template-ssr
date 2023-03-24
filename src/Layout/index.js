@@ -37,12 +37,10 @@ const LOCAL_STORAGE_KEY_LOCATION_MAP = "LAYOUT-PROVIDER-LOCATION-MAP";
 export default function LayoutProvider({ children, variant = "standard" }) {
 	const cookies = useCookies();
 	const location = useLocation();
-	console.log("rendering LayoutProvider: ", location.pathname);
 	const params = useParams();
 
 	const [currentVariant, setCurrentVariant] = useState(variant);
 	const getLocationLayoutMap = () => {
-		console.log("getting layout map from cookies", cookies);
 		const locationMap = cookies.get(LOCAL_STORAGE_KEY_LOCATION_MAP);
 		return JSON.parse(locationMap || "{}");
 	};

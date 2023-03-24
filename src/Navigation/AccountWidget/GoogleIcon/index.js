@@ -1,5 +1,4 @@
-import { useAuthContext } from "../../../Auth";
-
+import { useAuth0 } from "@auth0/auth0-react";
 import { useState } from "react";
 
 import { useTheme } from "@emotion/react";
@@ -38,7 +37,7 @@ const states = {
 export const SignInWithGoogleIconButton = ({
 	onSuccess: onSignInSuccess = () => {},
 }) => {
-	const { signInWithGoogle, setShowingSignInDialog } = useAuthContext();
+	const { loginWithPopup } = useAuth0();
 	const theme = useTheme();
 	const isLg = useMediaQuery(theme => theme.breakpoints.up("lg"));
 
@@ -62,13 +61,21 @@ export const SignInWithGoogleIconButton = ({
 			onMouseLeave={() => {
 				setState("normal");
 			}}
-			onClick={() =>
-				signInWithGoogle({
-					onSuccess: () => {
-						setShowingSignInDialog(false);
-						onSignInSuccess();
-					},
-				})
+			onClick={
+				async () => {
+					await loginWithPopup({
+						authorizationParams: {
+							prompt: "select_account",
+						},
+					});
+					onSignInSuccess();
+				}
+				// signInWithGoogle({
+				// 	onSuccess: () => {
+				// 		setShowingSignInDialog(false);
+				// 		onSignInSuccess();
+				// 	},
+				// })
 			}
 		>
 			<img src={src} alt="Google" />

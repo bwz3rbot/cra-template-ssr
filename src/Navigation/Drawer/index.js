@@ -10,9 +10,9 @@ import {
 } from "@mui/material";
 import { Link } from "react-router-dom";
 import { LinkSection, getAllowedLinks } from "../Links";
-import { useAuthContext } from "../../Auth";
+import { useAuth0 } from "@auth0/auth0-react";
 export const NavDrawer = ({ onClose: toggleDrawer, open }) => {
-	const { user } = useAuthContext();
+	const { user } = useAuth0();
 
 	return (
 		<Drawer anchor="top" open={open} onClose={toggleDrawer}>
@@ -22,47 +22,47 @@ export const NavDrawer = ({ onClose: toggleDrawer, open }) => {
 					// (only way to position a mui drawer behind an AppBar :shrug:)
 					marginTop: "var(--nav-height)",
 				}}
-				role="navigation"
+				// role="navigation"
 			>
 				<List>
-					{getAllowedLinks({
-						isTopNav: false,
-						user,
-					}).map(({ name, links }, i) => (
-						<Box key={name}>
-							<ListItem disablePadding>
-								<ListItemText
-									style={{
-										fontWeight: "bold",
-										paddingLeft: "4px",
-									}}
-									primary={name}
-								/>
-							</ListItem>
-							{links.map(({ to, text, Icon }, index) => (
-								<ListItem key={index} disablePadding>
-									<ListItemButton
-										component={Link}
-										to={to}
-										target={
-											to.startsWith("http")
-												? "_blank"
-												: "_self"
-										}
-									>
-										<ListItemIcon>
-											<Icon />
-										</ListItemIcon>
-										<ListItemText primary={text} />
-									</ListItemButton>
+					<>
+						{getAllowedLinks({
+							isTopNav: false,
+							user,
+						}).map(({ name, links }, i) => (
+							<Box key={name}>
+								<ListItem disablePadding>
+									<ListItemText
+										style={{
+											fontWeight: "bold",
+											paddingLeft: "4px",
+										}}
+										primary={name}
+									/>
 								</ListItem>
-							))}
-							{
-								// only add a divider if there is another section
-								i < LinkSection.length - 1 && <Divider />
-							}
-							{!user ||
-								(user.isAnonymous && (
+								{links.map(({ to, text, Icon }, index) => (
+									<ListItem key={index} disablePadding>
+										<ListItemButton
+											component={Link}
+											to={to}
+											target={
+												to.startsWith("http")
+													? "_blank"
+													: "_self"
+											}
+										>
+											<ListItemIcon>
+												<Icon />
+											</ListItemIcon>
+											<ListItemText primary={text} />
+										</ListItemButton>
+									</ListItem>
+								))}
+								{
+									// only add a divider if there is another section
+									i < LinkSection.length - 1 && <Divider />
+								}
+								{!user && (
 									<>
 										<ListItem disablePadding>
 											<ListItemButton
@@ -75,9 +75,10 @@ export const NavDrawer = ({ onClose: toggleDrawer, open }) => {
 											</ListItemButton>
 										</ListItem>
 									</>
-								))}
-						</Box>
-					))}
+								)}
+							</Box>
+						))}
+					</>
 				</List>
 			</Box>
 		</Drawer>

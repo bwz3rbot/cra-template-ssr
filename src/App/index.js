@@ -1,9 +1,7 @@
 import Head from "../Head";
-
 import Theme from "../Theme";
 
 import { SnackbarProvider as Snackbar } from "notistack";
-import Auth from "../Auth";
 import Apollo from "../Apollo";
 import Notifications from "../Notifications";
 
@@ -14,15 +12,24 @@ import { Routes } from "../Router/Routes";
 
 import "./style.css";
 import Cookies from "../Cookies";
+import { Auth0Provider } from "@auth0/auth0-react";
+import Analytics from "../Google/Analytics";
 
 export default function App() {
 	return (
-		<>
+		<Analytics>
 			<Cookies>
 				<Head />
 				<Theme>
 					<Snackbar>
-						<Auth>
+						<Auth0Provider
+							domain={process.env.REACT_APP_AUTH0_DOMAIN}
+							clientId={process.env.REACT_APP_AUTH0_CLIENTID}
+							authorizationParams={{
+								redirect_uri:
+									process.env.REACT_APP_AUTH0_CALLBACK_URL,
+							}}
+						>
 							<Apollo>
 								<Notifications>
 									<Layout variant="standard">
@@ -32,10 +39,10 @@ export default function App() {
 									</Layout>
 								</Notifications>
 							</Apollo>
-						</Auth>
+						</Auth0Provider>
 					</Snackbar>
 				</Theme>
 			</Cookies>
-		</>
+		</Analytics>
 	);
 }

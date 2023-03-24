@@ -1,25 +1,11 @@
-import { useAuthContext } from "../../Auth";
-import { Navigate, Redirect } from "react-router-dom";
-export const Restrict = ({ children, allowAnonymous }) => {
-	const { user } = useAuthContext();
+import React from "react";
+import { withAuthenticationRequired } from "@auth0/auth0-react";
+import { Navigate } from "react-router-dom";
 
-	// handle anonymous user
-	if (user?.isAnonymous && allowAnonymous) {
-		return <>{children}</>;
-	}
-
-	// handle authenticated user
-	if (user && !user.isAnonymous) {
-		return <>{children}</>;
-	}
-
-	// handle unauthenticated user
-
-	// only use Navigate if client side
-	if (typeof window !== "undefined") {
-		console.log("navigating to signin");
-		return <Navigate to="/signin" />;
-	}
-	// use Redirect if server side
-	return children;
+export const RestrictedRoute = PrivateRoute => {
+	const route = withAuthenticationRequired(PrivateRoute, {
+		// Show a message while the user waits to be redirected to the login page.
+		onRedirecting: () => <Navigate to="signin" />,
+	});
+	return route;
 };

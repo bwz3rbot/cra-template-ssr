@@ -5,6 +5,7 @@ export const SSRContext = createContext({
 	pathname: "",
 	port: "",
 	protocol: "",
+	hash: "",
 });
 
 /*
@@ -20,6 +21,7 @@ export const SSRLocationContext = ({
 	pathname,
 	port,
 	protocol,
+	hash,
 }) => {
 	return (
 		<SSRContext.Provider
@@ -28,6 +30,7 @@ export const SSRLocationContext = ({
 				pathname,
 				port,
 				protocol,
+				hash,
 			}}
 		>
 			{children}

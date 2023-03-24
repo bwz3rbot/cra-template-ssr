@@ -8,7 +8,7 @@ import {
 	Typography,
 	Button,
 } from "@mui/material";
-import { useAuthContext } from "../../Auth";
+import { useAuth0 } from "@auth0/auth0-react";
 import { useRequester } from "../../Apollo";
 import { calculateDateSinceTimestamp } from "../../util/calculateDateSinceTimestamp";
 import { useSnackbar } from "notistack";
@@ -17,28 +17,20 @@ import depthEffect from "../../Theme/sx/depth-effect";
 
 export default function User() {
 	const { enqueueSnackbar, closeSnackbar } = useSnackbar();
-	const { user, sendEmailVerification, sendPasswordResetEmail } =
-		useAuthContext();
+	const { user } = useAuth0();
 
 	const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
 	const isEmailVerified = user?.emailVerified;
-	const userCreatedDate = new Date(user?.metadata.creationTime);
+	const userCreatedDate = new Date(user?.updated_at);
 	const userCreatedDateSince = calculateDateSinceTimestamp(
 		userCreatedDate.getTime()
 	);
-	const lastLoginDate = new Date(user?.metadata.lastSignInTime);
+	const lastLoginDate = new Date(user?.updated_at);
 	const lastLoginDateSince = calculateDateSinceTimestamp(
 		lastLoginDate.getTime()
 	);
 
-	const shouldAllowResetPassword = () => {
-		user.providerData.forEach(profile => {
-			if (profile.providerId === "password") {
-				return true;
-			}
-		});
-	};
 	const section = [
 		[
 			{
@@ -58,32 +50,32 @@ export default function User() {
 					"Yes"
 				) : (
 					<Button
-						onClick={() => {
-							sendEmailVerification({
-								onSuccess: () => {
-									enqueueSnackbar("Email verification sent", {
-										variant: "success",
-										autoHideDuration: 5000,
-										onClick: () => {
-											closeSnackbar();
-										},
-									});
-								},
-								onError: () => {
-									enqueueSnackbar(
-										"Email verification failed",
-										{
-											variant: "error",
-											autoHideDuration: 5000,
+					// onClick={() => {
+					// 	sendEmailVerification({
+					// 		onSuccess: () => {
+					// 			enqueueSnackbar("Email verification sent", {
+					// 				variant: "success",
+					// 				autoHideDuration: 5000,
+					// 				onClick: () => {
+					// 					closeSnackbar();
+					// 				},
+					// 			});
+					// 		},
+					// 		onError: () => {
+					// 			enqueueSnackbar(
+					// 				"Email verification failed",
+					// 				{
+					// 					variant: "error",
+					// 					autoHideDuration: 5000,
 
-											onClick: () => {
-												closeSnackbar();
-											},
-										}
-									);
-								},
-							});
-						}}
+					// 					onClick: () => {
+					// 						closeSnackbar();
+					// 					},
+					// 				}
+					// 			);
+					// 		},
+					// 	});
+					// }}
 					>
 						Click to verify
 					</Button>
@@ -96,40 +88,40 @@ export default function User() {
 		],
 	];
 
-	if (shouldAllowResetPassword()) {
+	if (false) {
 		section.push([
 			{
 				label: "Reset Password",
 				value: (
 					<Button
-						onClick={() => {
-							sendPasswordResetEmail({
-								onSuccess: () => {
-									enqueueSnackbar(
-										"Password reset email sent",
-										{
-											variant: "success",
-											autoHideDuration: 5000,
-											onClick: () => {
-												closeSnackbar();
-											},
-										}
-									);
-								},
-								onError: () => {
-									enqueueSnackbar(
-										"Password reset email failed",
-										{
-											variant: "error",
-											autoHideDuration: 5000,
-											onClick: () => {
-												closeSnackbar();
-											},
-										}
-									);
-								},
-							});
-						}}
+					// onClick={() => {
+					// 	sendPasswordResetEmail({
+					// 		onSuccess: () => {
+					// 			enqueueSnackbar(
+					// 				"Password reset email sent",
+					// 				{
+					// 					variant: "success",
+					// 					autoHideDuration: 5000,
+					// 					onClick: () => {
+					// 						closeSnackbar();
+					// 					},
+					// 				}
+					// 			);
+					// 		},
+					// 		onError: () => {
+					// 			enqueueSnackbar(
+					// 				"Password reset email failed",
+					// 				{
+					// 					variant: "error",
+					// 					autoHideDuration: 5000,
+					// 					onClick: () => {
+					// 						closeSnackbar();
+					// 					},
+					// 				}
+					// 			);
+					// 		},
+					// 	});
+					// }}
 					>
 						Click to reset
 					</Button>
@@ -150,7 +142,7 @@ export default function User() {
 					avatar={
 						<Avatar
 							alt="User"
-							src={user?.photoURL}
+							src={user?.picture}
 							sx={{
 								height: 100,
 								width: 100,

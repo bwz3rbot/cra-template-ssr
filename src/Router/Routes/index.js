@@ -5,6 +5,7 @@ import { ErrorBoundary } from "react-error-boundary";
 import { useLocation } from "react-router-dom";
 import PageError from "./Page/Error"; // can't lazyload the error page. needs to be available immediately
 import { lazy } from "react";
+import { withAuthenticationRequired } from "@auth0/auth0-react";
 
 // const Page404 = lazy(() => import("./Page/404"));
 // const PageContact = lazy(() => import("./Page/Contact"));
@@ -24,10 +25,18 @@ import PageLanding from "./Page/Landing";
 import PageSettings from "./Page/Settings";
 import PageSubscribe from "./Page/Subscribe";
 import { useDynamicLocation } from "../../Head/SSRLocationContext";
-
+const ProtectedRoute = ({ component, ...args }) => {
+	const Component = withAuthenticationRequired(component, {
+		loginOptions: {
+			authorizationParams: {
+				redirect_uri: process.env.REACT_APP_AUTH0_CALLBACK_URL,
+			},
+		},
+	});
+	return <Component {...args} />;
+};
 export const Routes = () => {
 	const location = useDynamicLocation();
-	console.log("rendering routes with location:", location);
 	return (
 		<ErrorBoundary
 			// resetKeys is used to reset the error boundary when the location changes
@@ -65,9 +74,7 @@ export const Routes = () => {
 					path="/home"
 					element={
 						<Suspend>
-							<Restrict>
-								<PageHome />
-							</Restrict>
+							<ProtectedRoute component={PageHome} />
 						</Suspend>
 					}
 				/>
@@ -84,9 +91,7 @@ export const Routes = () => {
 					exact={false}
 					element={
 						<Suspend>
-							<Restrict>
-								<PageSettings />
-							</Restrict>
+							<ProtectedRoute component={PageSettings} />
 						</Suspend>
 					}
 				/>
@@ -94,9 +99,7 @@ export const Routes = () => {
 					path="/subscribe"
 					element={
 						<Suspend>
-							<Restrict>
-								<PageSubscribe />
-							</Restrict>
+							<ProtectedRoute component={PageSubscribe} />
 						</Suspend>
 					}
 				/>

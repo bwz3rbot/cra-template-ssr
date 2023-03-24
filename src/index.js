@@ -2,6 +2,7 @@ import React from "react";
 import { render, hydrate } from "react-dom";
 
 import { HelmetProvider } from "react-helmet-async";
+import { BrowserRouter } from "react-router-dom";
 
 import App from "./App";
 import Router from "./Router";
@@ -13,8 +14,15 @@ import Router from "./Router";
 const rootElement = document.getElementById("root");
 
 // if (rootElement.hasChildNodes()) {
-// this will be called after the app is hydrated on the client
-// hydrate(<App />, rootElement);
+// 	// this will be called after the app is hydrated on the client
+// 	hydrate(
+// 		<BrowserRouter>
+// 			<HelmetProvider>
+// 				<App />
+// 			</HelmetProvider>
+// 		</BrowserRouter>,
+// 		rootElement
+// 	);
 // } else {
 // this will be called on the client when the app is first rendered
 render(

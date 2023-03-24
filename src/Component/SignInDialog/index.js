@@ -12,12 +12,12 @@ import {
 } from "@mui/material";
 import { useSnackbar } from "notistack";
 
-import { useAuthContext } from "../../Auth";
+import { useAuth0 } from "@auth0/auth0-react";
 import { SignInWithGoogleIconButton } from "../../Navigation/AccountWidget/GoogleIcon";
 import { useNavigate } from "react-router-dom";
 
 export default function SignInDialog() {
-	const { signInWithEmailAndPassword, createAccount } = useAuthContext();
+	const { loginWithRedirect, loginWithPopup } = useAuth0();
 
 	const navigate = useNavigate();
 
@@ -33,29 +33,28 @@ export default function SignInDialog() {
 				spacing={2}
 				onSubmit={e => {
 					e.preventDefault();
-					const handleCreateAccount = () => {
-						createAccount({
-							email: e.target.email.value,
-							password: e.target.password.value,
-							onError: err => {
-								enqueueSnackbar(err.message, {
-									variant: "error",
-								});
+					const handleCreateAccount = async () => {
+						loginWithPopup({
+							authorizationParams: {
+								prompt: "signup",
 							},
-							onSuccess: handleSuccess,
 						});
+
+						// loginWithRedirect({
+						// 	redirect_uri:
+						// 		process.env.REACT_APP_AUTH0_CALLBACK_URL,
+						// });
 					};
 					const handleSignIn = () => {
-						signInWithEmailAndPassword({
-							email: e.target.email.value,
-							password: e.target.password.value,
-							onError: err => {
-								enqueueSnackbar(err.message, {
-									variant: "error",
-								});
+						loginWithPopup({
+							authorizationParams: {
+								prompt: "login",
 							},
-							onSuccess: handleSuccess,
 						});
+						// loginWithRedirect({
+						// 	redirect_uri:
+						// 		process.env.REACT_APP_AUTH0_CALLBACK_URL,
+						// });
 					};
 
 					const submitBtn = e.nativeEvent.submitter.name;

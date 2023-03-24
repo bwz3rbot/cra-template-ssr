@@ -1,5 +1,5 @@
 import { useContext, createContext, useState, useEffect } from "react";
-import { useAuthContext } from "../Auth";
+import { useAuth0 } from "@auth0/auth0-react";
 import {
 	ApolloClient,
 	InMemoryCache,
@@ -76,7 +76,7 @@ const apolloClientFactory = (idToken, workspace_id = "default") => {
 export default function ApolloAppContextProvider({ children }) {
 	let mounted = true;
 
-	const { user } = useAuthContext();
+	const { user, getIdTokenClaims } = useAuth0();
 
 	const [clientState, setClientState] = useState({
 		client: apolloClientFactory(),
@@ -88,8 +88,8 @@ export default function ApolloAppContextProvider({ children }) {
 		if (!user) return;
 		// creates a new apollo client when new firebase auth context is available
 		const asyncEffect = async () => {
-			const token = await user.getIdToken();
-			const newClient = apolloClientFactory(token);
+			const token = await getIdTokenClaims();
+			const newClient = apolloClientFactory(token.__raw);
 
 			mounted &&
 				setClientState({

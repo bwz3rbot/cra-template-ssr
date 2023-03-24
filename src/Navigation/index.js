@@ -19,14 +19,14 @@ import AccountWidget from "./AccountWidget";
 
 import { NotificationsWidget } from "../Notifications";
 
-import { useAuthContext } from "../Auth";
+import { useAuth0 } from "@auth0/auth0-react";
 import depthEffect from "../Theme/sx/depth-effect";
 export { Footer } from "./Footer";
 const WideLogo = "/logo/wide-56x112.png";
 const RoundLogo = "/logo/round-56x56.png";
 
 export const NavigationBar = () => {
-	const { user } = useAuthContext();
+	const { user } = useAuth0();
 	const isMedium = useMediaQuery(theme => theme.breakpoints.up("md"));
 	const [open, setOpen] = useState(false);
 	const toggleDrawer = () => {

@@ -10,13 +10,13 @@ module.exports = {
 	createUser: async (email, password) => {
 		const user = await app.auth().createUser({
 			email,
-
 			password,
 		});
+
 		return user;
 	},
 	signInWithEmailAndPassword: async (email, password) => {
-		const user = await app.auth().c;
+		const user = await app.auth().createCustomToken(email);
 		return user;
 	},
 	getUserFromToken: async token => {

@@ -1,10 +1,10 @@
 import { useLocation } from "react-router-dom";
 import { Avatar, IconButton } from "@mui/material";
-import { useAuthContext } from "../../Auth";
+import { useAuth0 } from "@auth0/auth0-react";
 import { useState, useEffect } from "react";
 import AccountMenu from "./Menu";
 export default function AccountWidget() {
-	const { user } = useAuthContext();
+	const { user } = useAuth0();
 	const location = useLocation();
 	const [menuAnchorEl, setMenuAnchorEl] = useState(null);
 
@@ -21,13 +21,13 @@ export default function AccountWidget() {
 		<>
 			<IconButton onClick={handleSetAnchorEl}>
 				<Avatar
-					src={user?.photoURL}
-					alt={user?.username || "Anonymous User"}
+					src={user?.picture}
+					alt={user?.name}
 					imgProps={{
 						referrerPolicy: "no-referrer",
 					}}
 				>
-					{user?.username?.slice(0, 1) || null}
+					{user?.name?.slice(0, 1) || null}
 				</Avatar>
 			</IconButton>
 			<AccountMenu

@@ -11,11 +11,12 @@ export default function useCSSProps() {
 			);
 
 			/* navigation element is in file: src/Navigation/index.js */
-			// const navHeight =
-			// 	document.getElementById("navigation").getBoundingClientRect()
-			// 		.height + "px";
+			let navHeight =
+				document.getElementById("navigation")?.getBoundingClientRect()
+					.height + "px";
 			// allowing this to be set dynamically was causing the page to render strangely sometimes... not sure if this will work in production?
-			const navHeight = `57px`;
+			if (!navHeight) navHeight = `57px`;
+
 			document.documentElement.style.setProperty(
 				"--nav-height",
 				navHeight

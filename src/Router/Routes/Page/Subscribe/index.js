@@ -31,6 +31,7 @@ export default function SubscribePage() {
 				overflowX: "hidden",
 			}}
 		>
+			hello
 			<Grid
 				item
 				xs={12}
@@ -62,7 +63,6 @@ export default function SubscribePage() {
 						);
 					})}
 			</Grid>
-
 			<Grid
 				container
 				sx={{

@@ -9,10 +9,9 @@ import Menu, { Divider, ListItemIcon, MenuItem } from "../../../Component/Menu";
 
 import { useNavigate } from "react-router-dom";
 
-import { useAuthContext } from "../../../Auth";
-
+import { useAuth0 } from "@auth0/auth0-react";
 export default function AccountMenu({ anchorEl, onClose = () => {} }) {
-	const { signOut, user } = useAuthContext();
+	const { user, logout } = useAuth0();
 
 	const navigate = useNavigate();
 	const setShowingSignInDialog = () => {
@@ -24,7 +23,7 @@ export default function AccountMenu({ anchorEl, onClose = () => {} }) {
 			<Menu key={user?.toString()} anchorEl={anchorEl} onClose={onClose}>
 				<div>
 					<div>
-						{user?.isAnonymous ? (
+						{!user ? (
 							<>
 								<MenuItem
 									onClick={() => setShowingSignInDialog(true)}
@@ -47,20 +46,20 @@ export default function AccountMenu({ anchorEl, onClose = () => {} }) {
 							<>
 								<MenuItem>
 									<Avatar
-										src={user?.photoURL}
-										alt={user?.username || "Anonymous"}
+										src={user?.picture}
+										alt={user?.name}
 										imgProps={{
 											referrerPolicy: "no-referrer",
 										}}
 									/>
-									{user?.username}
+									{user?.name}
 								</MenuItem>
 								<Divider />
 							</>
 						)}
 					</div>
 
-					{!user?.isAnonymous && (
+					{user && (
 						<>
 							<Link to="/settings">
 								<MenuItem>
@@ -70,7 +69,7 @@ export default function AccountMenu({ anchorEl, onClose = () => {} }) {
 									Settings
 								</MenuItem>
 							</Link>
-							<MenuItem onClick={signOut}>
+							<MenuItem onClick={logout}>
 								<ListItemIcon>
 									<SignOutIcon fontSize="small" />
 								</ListItemIcon>
