@@ -6,6 +6,7 @@ import { BrowserRouter } from "react-router-dom";
 
 import App from "./App";
 import Router from "./Router";
+import Cookies from "./Cookies";
 
 // this script is invoked when using npm run develop
 // this will only be called on the client so helmet provider must be passed here.
@@ -30,7 +31,9 @@ render(
 	// in order to gain access to the values set by its children
 	<HelmetProvider>
 		<Router>
-			<App />
+			<Cookies>
+				<App />
+			</Cookies>
 		</Router>
 	</HelmetProvider>,
 	rootElement

@@ -1,34 +1,45 @@
 import { createContext, useContext } from "react";
-import Cookie from "ssr-cookie";
-const set = (k, v) => {
-	const cookie = new Cookie();
-	cookie.set(k, v);
+import Cookie from "cookie-universal";
+const set = (k, v, opts, req, res) => {
+	console.log("setting cookie:", k, v, opts);
+	const cookie = Cookie(req, res);
+	cookie.set(k, v, opts);
 	return cookie;
 };
 
-const get = k => {
-	const cookie = new Cookie();
-	return cookie.get(k);
+const get = (k, opts, req, res) => {
+	console.log("getting cookie:", k, opts);
+	const cookie = Cookie(req, res);
+	return cookie.get(k, opts);
 };
-const remove = k => {
-	const cookie = new Cookie();
-	cookie.remove(k);
+const remove = (k, opts, req, res) => {
+	console.log("removing cookie", k, opts);
+	const cookie = Cookie(req, res);
+	cookie.remove(k, opts);
 	return cookie;
+};
+
+const allKeys = (opts, req, res) => {
+	console.log("getting all keys", opts);
+	const cookie = Cookie(req, res);
+	return cookie.getAll(opts);
 };
 
 const Context = createContext({
 	set,
 	get,
 	remove,
+	allKeys: () => [],
 });
 export const useCookies = () => useContext(Context);
-export default function CookiesContext({ children }) {
+export default function CookiesContext({ children, req, res }) {
 	return (
 		<Context.Provider
 			value={{
-				set,
-				get,
-				remove,
+				set: (k, v, opts) => set(k, v, req, res),
+				get: (k, opts) => get(k, opts, req, res),
+				remove: (k, opts) => remove(k, opts, req, res),
+				allKeys: opts => allKeys(opts, req, res),
 			}}
 		>
 			{children}

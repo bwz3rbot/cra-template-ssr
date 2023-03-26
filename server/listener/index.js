@@ -8,6 +8,8 @@ import { StaticRouter } from "react-router-dom/server";
 import { HelmetProvider } from "react-helmet-async";
 import { SSRLocationContext } from "../../src/Head/SSRLocationContext";
 import App from "../../src/App";
+import Cookies from "../../src/Cookies";
+import cookieParser from "cookie-parser";
 
 const app = express();
 let PORT = process.env.PORT || 8080;
@@ -27,9 +29,12 @@ fs.readFile(indexFilepath, "utf-8", async (err, data) => {
 		res.send("OK");
 	});
 	app.use(express.static(build));
+	app.use(cookieParser());
 
 	app.get("*", async (req, res, next) => {
 		let htmlString = `${data}`;
+
+		console.log("cookies: ", req.cookies);
 
 		const helmetContext = {};
 		const routerContext = {};
@@ -51,7 +56,9 @@ fs.readFile(indexFilepath, "utf-8", async (err, data) => {
 								: createHash(req.url)
 						}
 					>
-						<App />
+						<Cookies req={req} res={res}>
+							<App />
+						</Cookies>
 					</SSRLocationContext>
 				</StaticRouter>
 			</HelmetProvider>

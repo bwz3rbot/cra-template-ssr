@@ -5,7 +5,13 @@ import { ErrorBoundary } from "react-error-boundary";
 import { useLocation } from "react-router-dom";
 import PageError from "./Page/Error"; // can't lazyload the error page. needs to be available immediately
 import { lazy } from "react";
-import { withAuthenticationRequired } from "@auth0/auth0-react";
+import { useCookies } from "../../Cookies";
+import {
+	withAuthenticationRequired,
+	WithAuthenticationRequiredOptions,
+	withAuth0,
+	initialContext,
+} from "@auth0/auth0-react";
 
 // const Page404 = lazy(() => import("./Page/404"));
 // const PageContact = lazy(() => import("./Page/Contact"));
@@ -15,6 +21,7 @@ import { withAuthenticationRequired } from "@auth0/auth0-react";
 // const PageLanding = lazy(() => import("./Page/Landing"));
 // const PageSettings = lazy(() => import("./Page/Settings"));
 // const PageSubscribe = lazy(() => import("./Page/Subscribe"));
+import { useAuth0 } from "@auth0/auth0-react";
 
 import Page404 from "./Page/404";
 import PageContact from "./Page/Contact";
@@ -24,7 +31,9 @@ import PageAbout from "./Page/About";
 import PageLanding from "./Page/Landing";
 import PageSettings from "./Page/Settings";
 import PageSubscribe from "./Page/Subscribe";
+import PageSignOut from "./Page/SignOut";
 import { useDynamicLocation } from "../../Head/SSRLocationContext";
+
 const ProtectedRoute = ({ component, ...args }) => {
 	const Component = withAuthenticationRequired(component, {
 		loginOptions: {
@@ -32,9 +41,13 @@ const ProtectedRoute = ({ component, ...args }) => {
 				redirect_uri: process.env.REACT_APP_AUTH0_CALLBACK_URL,
 			},
 		},
+		onRedirecting: () => <div>not authorized</div>,
+
+		returnTo: "/",
 	});
 	return <Component {...args} />;
 };
+
 export const Routes = () => {
 	const location = useDynamicLocation();
 	return (
@@ -100,6 +113,15 @@ export const Routes = () => {
 					element={
 						<Suspend>
 							<ProtectedRoute component={PageSubscribe} />
+						</Suspend>
+					}
+				/>
+
+				<Route
+					path="/signout"
+					element={
+						<Suspend>
+							<PageSignOut />
 						</Suspend>
 					}
 				/>

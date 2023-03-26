@@ -103,6 +103,8 @@ export default function ApolloAppContextProvider({ children }) {
 		};
 	}, [user]);
 
+	console.log("Rendering ApolloAppContextProvider", user);
+
 	return (
 		<Context.Provider
 			value={{

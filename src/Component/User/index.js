@@ -31,6 +31,7 @@ export default function User() {
 		lastLoginDate.getTime()
 	);
 
+	console.log("rendering user with user: ", user);
 	const section = [
 		[
 			{

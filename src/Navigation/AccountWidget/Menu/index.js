@@ -7,13 +7,26 @@ import SettingsIcon from "@mui/icons-material/Settings";
 import SignOutIcon from "@mui/icons-material/Logout";
 import Menu, { Divider, ListItemIcon, MenuItem } from "../../../Component/Menu";
 
-import { useAuth0 } from "@auth0/auth0-react";
+import { useAuth0 } from "../../../Auth";
 export default function AccountMenu({
 	anchorEl,
 	onClose = () => {},
 	onSignInSuccess = () => {},
 }) {
 	const { user, logout, loginWithPopup } = useAuth0();
+
+	const handleSignIn = async ({ screen_hint }) => {
+		// close the dialog before starting the sign in flow -
+		// otherwise the menu won't open when the sign in flow is complete
+		// because the menu overrides all mouse events
+		onClose?.();
+		await loginWithPopup({
+			authorizationParams: {
+				screen_hint,
+			},
+		});
+		onSignInSuccess?.();
+	};
 
 	return (
 		<>
@@ -23,14 +36,8 @@ export default function AccountMenu({
 						{!user ? (
 							<>
 								<MenuItem
-									onClick={async () => {
-										await loginWithPopup({
-											authorizationParams: {
-												screen_hint: "login",
-											},
-										});
-										onClose?.();
-										onSignInSuccess?.();
+									onClick={() => {
+										handleSignIn({ screen_hint: "login" });
 									}}
 								>
 									<ListItemIcon>
@@ -39,14 +46,8 @@ export default function AccountMenu({
 									Sign In
 								</MenuItem>
 								<MenuItem
-									onClick={async () => {
-										await loginWithPopup({
-											authorizationParams: {
-												screen_hint: "signup",
-											},
-										});
-										onClose?.();
-										onSignInSuccess?.();
+									onClick={() => {
+										handleSignIn({ screen_hint: "signup" });
 									}}
 								>
 									<ListItemIcon>
