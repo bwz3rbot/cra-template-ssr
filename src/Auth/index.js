@@ -1,10 +1,5 @@
 import { useCookies } from "../Cookies";
-import {
-	Auth0Provider,
-	withAuth0,
-	useAuth0 as useAuth0Base,
-} from "@auth0/auth0-react";
-import LoadingScreen from "../Component/LoadingScreen";
+import { Auth0Provider, withAuth0, useAuth0 } from "@auth0/auth0-react";
 import { useEffect } from "react";
 import { useIsClient } from "usehooks-ts";
 const PreloadedAppUserState = withAuth0(({ auth0, children }) => {
@@ -20,33 +15,13 @@ const PreloadedAppUserState = withAuth0(({ auth0, children }) => {
 });
 
 const Persistor = ({ children }) => {
-	const { user } = useAuth0Base();
+	const { user } = useAuth0();
 	const cookies = useCookies();
 	useEffect(() => {
-		if (user) {
-			console.log("settign user cookie", user);
-			cookies.set("user", JSON.stringify(user));
-		} else {
-			console.log("Persistor did not have a user to set");
-		}
+		if (!user) return;
+		cookies.set("user", JSON.stringify(user));
 	}, [user]);
 	return <PreloadedAppUserState>{children}</PreloadedAppUserState>;
-};
-
-export const useAuth0 = () => {
-	const auth0 = useAuth0Base();
-	const cookies = useCookies();
-	return {
-		...auth0,
-		logout: () => {
-			auth0.logout({
-				logoutParams: {
-					returnTo: "http://localhost:8080/signout",
-				},
-			});
-			cookies.remove("user");
-		},
-	};
 };
 
 export default function AuthContext({ children }) {

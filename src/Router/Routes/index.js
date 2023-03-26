@@ -1,17 +1,8 @@
 import { Routes as RouteContext, Route } from "react-router-dom";
 import { Suspend } from "../Suspend";
-import { Restrict } from "../Restrict";
 import { ErrorBoundary } from "react-error-boundary";
-import { useLocation } from "react-router-dom";
 import PageError from "./Page/Error"; // can't lazyload the error page. needs to be available immediately
-import { lazy } from "react";
-import { useCookies } from "../../Cookies";
-import {
-	withAuthenticationRequired,
-	WithAuthenticationRequiredOptions,
-	withAuth0,
-	initialContext,
-} from "@auth0/auth0-react";
+import { withAuthenticationRequired } from "@auth0/auth0-react";
 
 // const Page404 = lazy(() => import("./Page/404"));
 // const PageContact = lazy(() => import("./Page/Contact"));
@@ -21,7 +12,6 @@ import {
 // const PageLanding = lazy(() => import("./Page/Landing"));
 // const PageSettings = lazy(() => import("./Page/Settings"));
 // const PageSubscribe = lazy(() => import("./Page/Subscribe"));
-import { useAuth0 } from "@auth0/auth0-react";
 
 import Page404 from "./Page/404";
 import PageContact from "./Page/Contact";

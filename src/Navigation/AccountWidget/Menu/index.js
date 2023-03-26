@@ -7,7 +7,7 @@ import SettingsIcon from "@mui/icons-material/Settings";
 import SignOutIcon from "@mui/icons-material/Logout";
 import Menu, { Divider, ListItemIcon, MenuItem } from "../../../Component/Menu";
 
-import { useAuth0 } from "../../../Auth";
+import { useAuth0 } from "@auth0/auth0-react";
 export default function AccountMenu({
 	anchorEl,
 	onClose = () => {},
