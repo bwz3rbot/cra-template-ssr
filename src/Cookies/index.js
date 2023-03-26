@@ -1,26 +1,22 @@
 import { createContext, useContext } from "react";
 import Cookie from "cookie-universal";
 const set = (k, v, opts, req, res) => {
-	console.log("setting cookie:", k, v, opts);
 	const cookie = Cookie(req, res);
 	cookie.set(k, v, opts);
 	return cookie;
 };
 
 const get = (k, opts, req, res) => {
-	console.log("getting cookie:", k, opts);
 	const cookie = Cookie(req, res);
 	return cookie.get(k, opts);
 };
 const remove = (k, opts, req, res) => {
-	console.log("removing cookie", k, opts);
 	const cookie = Cookie(req, res);
 	cookie.remove(k, opts);
 	return cookie;
 };
 
 const allKeys = (opts, req, res) => {
-	console.log("getting all keys", opts);
 	const cookie = Cookie(req, res);
 	return cookie.getAll(opts);
 };
