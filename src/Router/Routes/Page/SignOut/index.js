@@ -5,7 +5,7 @@ export default function SubscribePage() {
 	const navigate = useNavigate();
 	const cookies = useCookies();
 	useEffect(() => {
-		cookies.remove("user");
+		cookies.remove("token");
 		navigate("/");
 	}, []);
 
