@@ -1,4 +1,5 @@
 import { Routes as RouteContext, Route } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 import { Suspend } from "../Suspend";
 import { ErrorBoundary } from "react-error-boundary";
 import PageError from "./Page/Error"; // can't lazyload the error page. needs to be available immediately
@@ -26,13 +27,7 @@ import { useDynamicLocation } from "../../Head/SSRLocationContext";
 
 const ProtectedRoute = ({ component, ...args }) => {
 	const Component = withAuthenticationRequired(component, {
-		loginOptions: {
-			authorizationParams: {
-				redirect_uri: process.env.REACT_APP_AUTH0_CALLBACK_URL,
-			},
-		},
 		onRedirecting: () => <div>not authorized</div>,
-
 		returnTo: "/",
 	});
 	return <Component {...args} />;
@@ -61,6 +56,7 @@ export const Routes = () => {
 					path="/contact"
 					element={
 						<Suspend>
+							<Helmet title="Contact bingobangobotto" />
 							<PageContact />
 						</Suspend>
 					}
