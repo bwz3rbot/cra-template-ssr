@@ -1,7 +1,6 @@
 import React from "react";
 import { Helmet } from "react-helmet-async";
 import { useDynamicLocation } from "./SSRLocationContext";
-import { definePageData } from "./PageData";
 const RoundLogo = "logo/round-56x56.png";
 
 export default function HelmetContext() {
@@ -18,13 +17,16 @@ export default function HelmetContext() {
 	const keywords = process.env.REACT_APP_SITE_KEYWORDS || "";
 	const creator = process.env.REACT_APP_SITE_CREATOR || "@BangoBotto";
 
-	const { title, description } = definePageData(pathname);
-
+	const title = process.env.REACT_APP_SITE_TITLE || "BangoBotto";
+	const description = process.env.REACT_APP_SITE_DESCRIPTION || "";
 	return (
 		<Helmet prioritizeSeoTags>
 			{/* Basic Tags */}
 			<title>{title}</title>
-			<meta name="description" content={description} />
+			<meta
+				name="description"
+				content={process.env.REACT_APP_SITE_DESCRIPTION}
+			/>
 			<meta name="keywords" content={keywords} />
 			<link rel="canonical" href={""} />
 			{/* Open Graph Tags */}
