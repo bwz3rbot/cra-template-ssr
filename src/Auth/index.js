@@ -1,27 +1,61 @@
 import { useCookies } from "../Cookies";
 import { Auth0Provider, withAuth0, useAuth0 } from "@auth0/auth0-react";
-import { useEffect } from "react";
+import { useEffect, createContext, useContext } from "react";
+import LoadingScreen from "../Component/LoadingScreen";
 import { useIsClient } from "usehooks-ts";
+
+const SSRUserContext = createContext({
+	user: null,
+});
+export const useSSRUser = () => useContext(SSRUserContext);
+export const SSRUserProvider = ({ children, user }) => {
+	return (
+		<SSRUserContext.Provider
+			value={{
+				user,
+			}}
+		>
+			<AuthContext>{children}</AuthContext>
+		</SSRUserContext.Provider>
+	);
+};
 const PreloadedAppUserState = withAuth0(({ auth0, children }) => {
-	const cookies = useCookies();
-	const initialUser = cookies.get("user");
-
+	const { user } = useSSRUser();
 	const isClient = useIsClient();
-	if (isClient) return children;
-	auth0.user = initialUser;
-	auth0.isAuthenticated = !!initialUser;
 
+	if (isClient) return children;
+
+	auth0.user = user;
+	auth0.isAuthenticated = !!user;
 	return <>{children}</>;
 });
-
 const Persistor = ({ children }) => {
-	const { user } = useAuth0();
+	const { user, getAccessTokenSilently, isLoading } = useAuth0();
 	const cookies = useCookies();
+	const isClient = useIsClient();
 	useEffect(() => {
 		if (!user) return;
-		cookies.set("user", JSON.stringify(user));
+		getAccessTokenSilently({
+			detailedResponse: true,
+			authorizationParams: {
+				scope: "openid profile email offline_access",
+			},
+		})
+			.then(response => {
+				cookies.set("token", `Bearer ${response.id_token}`);
+			})
+			.catch(err => {
+				console.log("error getting token: ", err);
+			});
 	}, [user]);
-	return <PreloadedAppUserState>{children}</PreloadedAppUserState>;
+
+	return (
+		<PreloadedAppUserState>
+			<LoadingScreen loading={isClient && isLoading}>
+				{children}
+			</LoadingScreen>
+		</PreloadedAppUserState>
+	);
 };
 
 export default function AuthContext({ children }) {
