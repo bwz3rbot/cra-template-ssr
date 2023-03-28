@@ -9,12 +9,8 @@ import { useMemo } from "react";
 import { useRequester } from "../../../Apollo";
 import { useSnackbar } from "notistack";
 import depthEffect from "../../../Theme/sx/depth-effect";
-
-const parseAmountToDollars = ({ amount, currency }) => {
-	let language = "en-US";
-	if (typeof navigator !== "undefined") {
-		language = navigator.language || navigator.userLanguage;
-	}
+import { useLocale } from "react-aria";
+const parseAmountToDollars = ({ language, amount, currency }) => {
 	return (amount / 100).toLocaleString(language, {
 		style: "currency",
 		currency: currency.toUpperCase(),
@@ -28,6 +24,8 @@ const randomImage = () => {
 	return `https://source.unsplash.com/random/${IMG_WIDTH}x${IMG_HEIGHT}?sig=${random}`;
 };
 export default function SubscriptionTierCard({ plan, isSubscribed = false }) {
+	const { locale } = useLocale();
+
 	const { id, nickname, amount, currency, interval } = plan;
 	const { enqueueSnackbar } = useSnackbar();
 	const { definitions, useMutation } = useRequester();
@@ -68,6 +66,7 @@ export default function SubscriptionTierCard({ plan, isSubscribed = false }) {
 				</Typography>
 				<Typography variant="body2" color="text.secondary">
 					{parseAmountToDollars({
+						language: locale,
 						amount,
 						currency,
 					})}
