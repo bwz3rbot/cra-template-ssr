@@ -10,7 +10,6 @@ import Uploady from "../Upload";
 
 import { Routes } from "../Router/Routes";
 
-import AuthContext from "../Auth";
 import Analytics from "../Google/Analytics";
 import "./style.css";
 
@@ -20,17 +19,15 @@ export default function App() {
 			<Head />
 			<Theme>
 				<Snackbar>
-					<AuthContext>
-						<Apollo>
-							<Notifications>
-								<Layout variant="standard">
-									<Uploady>
-										<Routes />
-									</Uploady>
-								</Layout>
-							</Notifications>
-						</Apollo>
-					</AuthContext>
+					<Apollo>
+						<Notifications>
+							<Layout variant="standard">
+								<Uploady>
+									<Routes />
+								</Uploady>
+							</Layout>
+						</Notifications>
+					</Apollo>
 				</Snackbar>
 			</Theme>
 		</Analytics>
