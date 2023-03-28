@@ -1,5 +1,4 @@
-import { useContext, createContext, useState, useEffect } from "react";
-import { useAuth0 } from "@auth0/auth0-react";
+import { useContext, createContext } from "react";
 import {
 	ApolloClient,
 	InMemoryCache,
@@ -9,15 +8,17 @@ import {
 	useMutation,
 	useSubscription,
 	useApolloClient,
+	ApolloLink,
 } from "@apollo/client";
 import { split, HttpLink } from "@apollo/client";
 import { getMainDefinition } from "@apollo/client/utilities";
 import { GraphQLWsLink } from "@apollo/client/link/subscriptions";
-import LoadingScreen from "../Component/LoadingScreen";
 
 import { createClient } from "graphql-ws";
 import fetch from "cross-fetch";
 import ws from "ws";
+import { setContext } from "@apollo/client/link/context";
+import { useCookies } from "../Cookies";
 
 import definitions from "./definitions";
 
@@ -31,84 +32,63 @@ const Context = createContext({
 	useApolloClient,
 });
 
-const apolloClientFactory = (idToken, workspace_id = "default") => {
-	const httpLink = new HttpLink({
-		uri: process.env.REACT_APP_API_ENDPOINT,
-		headers: {
-			authorization: idToken ? `Bearer ${idToken}` : "",
-			workspace_id,
-		},
-		fetch,
-	});
-
-	const wsLink = new GraphQLWsLink(
-		createClient({
-			url: process.env.REACT_APP_SUBSCRIPTION_ENDPOINT,
-			connectionParams: {
-				authorization: idToken ? `Bearer ${idToken}` : "",
-				workspace_id,
-			},
-			webSocketImpl: typeof window === "undefined" ? ws : null,
-		})
-	);
-	const splitLink = split(
-		({ query }) => {
-			const definition = getMainDefinition(query);
-			return (
-				definition.kind === "OperationDefinition" &&
-				definition.operation === "subscription"
-			);
-		},
-		wsLink,
-		httpLink
-	);
-	const client = new ApolloClient({
-		link: splitLink,
-		cache: new InMemoryCache(),
-		credentials: "include",
-		headers: {
-			authorization: idToken ? `Bearer ${idToken}` : "",
-			workspace_id,
-		},
-	});
-	return client;
-};
 export default function ApolloAppContextProvider({ children }) {
-	let mounted = true;
+	const cookies = useCookies();
+	const getAuth = () => {
+		return {
+			Authorization: cookies.get("token"),
+			Workspace: cookies.get("workspace"),
+		};
+	};
 
-	const { user, getIdTokenClaims } = useAuth0();
+	const client = new ApolloClient({
+		cache: new InMemoryCache(), // TODO: add cache config
+		link: new ApolloLink.from([
+			setContext((_, { headers }) => {
+				return {
+					headers: {
+						...headers,
+						...getAuth(cookies),
+					},
+				};
+			}),
+			split(
+				({ query }) => {
+					const definition = getMainDefinition(query);
+					return (
+						definition.kind === "OperationDefinition" &&
+						definition.operation === "subscription"
+					);
+				},
+				new GraphQLWsLink(
+					createClient({
+						url: process.env.REACT_APP_SUBSCRIPTION_ENDPOINT,
 
-	const [clientState, setClientState] = useState({
-		client: apolloClientFactory(),
-		user: null,
-		status: "loading",
+						connectionParams: (
+							operation,
+							previousConnectionParams
+						) => {
+							return {
+								...previousConnectionParams,
+								...getAuth(cookies),
+							};
+						},
+						webSocketImpl:
+							typeof window === "undefined" ? ws : null,
+					})
+				),
+				new HttpLink({
+					uri: process.env.REACT_APP_API_ENDPOINT,
+					fetch,
+				})
+			),
+		]),
+		queryDeduplication: true,
 	});
-
-	useEffect(() => {
-		if (!user) return;
-		// creates a new apollo client when new firebase auth context is available
-		const asyncEffect = async () => {
-			const token = await getIdTokenClaims();
-			const newClient = apolloClientFactory(token.__raw);
-
-			mounted &&
-				setClientState({
-					client: newClient,
-					status: "ready",
-				});
-		};
-		asyncEffect();
-		return () => {
-			mounted = false;
-		};
-	}, [user]);
-
-	console.log("Rendering ApolloAppContextProvider", user);
 
 	return (
 		<Context.Provider
 			value={{
-				user: clientState.user,
 				definitions,
 				useQuery,
 				useLazyQuery,
@@ -117,13 +97,7 @@ export default function ApolloAppContextProvider({ children }) {
 				useApolloClient,
 			}}
 		>
-			<ApolloProvider
-				// ensure context re-renders when user changes
-				key={user?.uid}
-				client={clientState.client}
-			>
-				{children}
-			</ApolloProvider>
+			<ApolloProvider client={client}>{children}</ApolloProvider>
 		</Context.Provider>
 	);
 }
