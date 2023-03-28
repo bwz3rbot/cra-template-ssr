@@ -1,28 +1,35 @@
-import express from "express";
 import fs from "fs";
 import path from "path";
-
+import express from "express";
 import React from "react";
 import ReactDOMServer from "react-dom/server";
+
 import { StaticRouter } from "react-router-dom/server";
 import { HelmetProvider } from "react-helmet-async";
+
 import { SSRLocationContext } from "../../src/Head/SSRLocationContext";
 import App from "../../src/App";
 import Cookies from "../../src/Cookies";
 import cookieParser from "cookie-parser";
+import { SSRUserProvider } from "../../src/Auth";
+import { verify } from "jsonwebtoken";
 
 const app = express();
+
 let PORT = process.env.PORT || 8080;
-PORT = `${PORT}`; // convert to string
+PORT = `${PORT}`; // convert to string so SSRLocationContext doesn't break
 const build = path.resolve(__dirname, "..", "..", "build");
 const indexFilepath = path.resolve(build, "index.html");
+
 const createHash = str => {
+	// simple hash function used to generate page keys for reac-router-dom while in ssr mode
 	let hash = 0;
 	for (let i = 0; i < str.length; i++) {
 		hash = str.charCodeAt(i) + ((hash << 5) - hash);
 	}
 	return hash;
 };
+
 fs.readFile(indexFilepath, "utf-8", async (err, data) => {
 	app.use("/eb-health", (req, res) => {
 		// Elastic Beanstalk health check endpoint
@@ -32,9 +39,15 @@ fs.readFile(indexFilepath, "utf-8", async (err, data) => {
 	app.use(cookieParser());
 
 	app.get("*", async (req, res, next) => {
-		let htmlString = `${data}`;
+		let htmlString = `${data}`; // don't alter the original html string - instead make a copy
 
-		console.log("cookies: ", req.cookies);
+		const user = await new Promise(async (resolve, reject) => {
+			let token = req.cookies.token;
+			if (token) token = token.replace("Bearer ", "");
+			verify(token, process.env.JWT_SECRET, (err, decoded) => {
+				resolve(decoded);
+			});
+		});
 
 		const helmetContext = {};
 		const routerContext = {};
@@ -57,7 +70,9 @@ fs.readFile(indexFilepath, "utf-8", async (err, data) => {
 						}
 					>
 						<Cookies req={req} res={res}>
-							<App />
+							<SSRUserProvider user={user}>
+								<App />
+							</SSRUserProvider>
 						</Cookies>
 					</SSRLocationContext>
 				</StaticRouter>
