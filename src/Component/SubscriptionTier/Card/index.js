@@ -11,13 +11,14 @@ import { useSnackbar } from "notistack";
 import depthEffect from "../../../Theme/sx/depth-effect";
 
 const parseAmountToDollars = ({ amount, currency }) => {
-	return (amount / 100).toLocaleString(
-		navigator.language || navigator.userLanguage,
-		{
-			style: "currency",
-			currency: currency.toUpperCase(),
-		}
-	);
+	let language = "en-US";
+	if (typeof navigator !== "undefined") {
+		language = navigator.language || navigator.userLanguage;
+	}
+	return (amount / 100).toLocaleString(language, {
+		style: "currency",
+		currency: currency.toUpperCase(),
+	});
 };
 
 const IMG_HEIGHT = 140;
