@@ -4,7 +4,7 @@ import UploadWidget from "../../../../Component/Upload";
 
 import { Grid } from "@mui/material";
 
-export default function PageLanding() {
+export default function PageHome() {
 	return (
 		<>
 			<Grid container>

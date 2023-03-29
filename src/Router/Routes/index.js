@@ -25,12 +25,28 @@ import PageSubscribe from "./Page/Subscribe";
 import PageSignOut from "./Page/SignOut";
 import { useDynamicLocation } from "../../Head/SSRLocationContext";
 
-const ProtectedRoute = ({ component, ...args }) => {
+import { Grid, Typography } from "@mui/material";
+
+const ProtectedRoute = ({ component }) => {
+	const location = useDynamicLocation();
+
 	const Component = withAuthenticationRequired(component, {
-		onRedirecting: () => <div>not authorized</div>,
-		returnTo: "/",
+		onRedirecting: () => (
+			<Grid
+				container
+				sx={{
+					height: "var(--app-height)",
+					display: "flex",
+					justifyContent: "center",
+					alignItems: "center",
+				}}
+			>
+				<Typography>redirecting...</Typography>
+			</Grid>
+		),
+		returnTo: location.pathname,
 	});
-	return <Component {...args} />;
+	return <Component />;
 };
 
 export const Routes = () => {
@@ -42,6 +58,9 @@ export const Routes = () => {
 			// and navigating to a new page will not work
 			resetKeys={[location.pathname, location.search, location.hash]}
 			FallbackComponent={PageError}
+			onError={(error, componentStack, resetErrorBoundary) => {
+				console.log("error", error);
+			}}
 		>
 			<RouteContext>
 				<Route
