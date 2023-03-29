@@ -3,7 +3,7 @@ import { Helmet } from "react-helmet-async";
 import { useDynamicLocation } from "./SSRLocationContext";
 const RoundLogo = "logo/round-56x56.png";
 
-export default function HelmetContext() {
+export default function Head() {
 	// useDynamicLocation() is a wrapper around react-router-dom useLocation()
 	// this hook will get its state from the ssr server request if it exists
 	const { hostname, pathname, port, protocol } = useDynamicLocation();

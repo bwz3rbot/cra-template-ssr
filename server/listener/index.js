@@ -2,7 +2,6 @@ import fs from "fs";
 import path from "path";
 import express from "express";
 import React from "react";
-import ReactDOMServer from "react-dom/server";
 
 import { StaticRouter } from "react-router-dom/server";
 import { HelmetProvider } from "react-helmet-async";
@@ -13,7 +12,7 @@ import Cookies from "../../src/Cookies";
 import cookieParser from "cookie-parser";
 import { SSRUserProvider } from "../../src/Auth";
 import { verify } from "jsonwebtoken";
-
+import { renderToStringWithData } from "@apollo/client/react/ssr";
 const app = express();
 
 let PORT = process.env.PORT || 8080;
@@ -35,10 +34,17 @@ fs.readFile(indexFilepath, "utf-8", async (err, data) => {
 		// Elastic Beanstalk health check endpoint
 		res.send("OK");
 	});
-	app.use(express.static(build));
-	app.use(cookieParser());
 
-	app.get("*", async (req, res, next) => {
+	// serve all the static files to the client
+	app.use(
+		express.static(build, {
+			// don't serve the index.html page! redirect to the root instead
+			index: false,
+		})
+	);
+
+	app.get("*", cookieParser(), async (req, res, next) => {
+		console.log("handling request to ", req.url);
 		let htmlString = `${data}`; // don't alter the original html string - instead make a copy
 
 		const user = await new Promise(async (resolve, reject) => {
@@ -51,41 +57,54 @@ fs.readFile(indexFilepath, "utf-8", async (err, data) => {
 
 		const helmetContext = {};
 		const routerContext = {};
-		const markup = ReactDOMServer.renderToString(
-			<HelmetProvider context={helmetContext}>
-				<StaticRouter location={req.url} context={routerContext}>
-					<SSRLocationContext
-						hostname={req.hostname}
-						pathname={req.path}
-						port={
-							PORT === "80" || PORT === "443" || PORT === "8080"
-								? ""
-								: PORT
-						}
-						protocol={req.protocol}
-						hash={
-							req.url.includes("#")
-								? req.url.split("#")[1]
-								: createHash(req.url)
-						}
-					>
-						<Cookies req={req} res={res}>
-							<SSRUserProvider user={user}>
-								<App />
-							</SSRUserProvider>
-						</Cookies>
-					</SSRLocationContext>
-				</StaticRouter>
-			</HelmetProvider>
-		);
+		let markup;
+		try {
+			markup = await renderToStringWithData(
+				<HelmetProvider context={helmetContext}>
+					<StaticRouter location={req.url} context={routerContext}>
+						<SSRLocationContext
+							hostname={req.hostname}
+							pathname={req.path}
+							port={
+								PORT === "80" ||
+								PORT === "443" ||
+								PORT === "8080"
+									? ""
+									: PORT
+							}
+							protocol={req.protocol}
+							hash={
+								req.url.includes("#")
+									? req.url.split("#")[1]
+									: createHash(req.url)
+							}
+						>
+							<Cookies req={req} res={res}>
+								<SSRUserProvider user={user}>
+									<App />
+								</SSRUserProvider>
+							</Cookies>
+						</SSRLocationContext>
+					</StaticRouter>
+				</HelmetProvider>
+			);
+		} catch (e) {
+			console.log(e);
+		}
+		if (!markup) {
+			// Error building the app - redirect to the error page
+			return res.redirect(301, "/error");
+		}
+
 		const { helmet } = helmetContext;
 		if (routerContext.url) {
 			// Somewhere a `<Redirect>` was rendered
-			res.redirect(301, routerContext.url);
+			return res.redirect(301, routerContext.url);
 		} else {
 			// we're good, send the response
 		}
 
+		// extract the helmet data from the context
 		const head = `
 		  ${helmet.title.toString()}
 		  ${helmet.priority.toString()}
@@ -98,12 +117,10 @@ fs.readFile(indexFilepath, "utf-8", async (err, data) => {
 				.replace(
 					'<div id="root"></div>',
 					`<div id="root">${markup}</div>`
-				) // place the app in the root div
-				.replace("<head>", `<head>${head}`) // place the helmet data in the head
+				)
+				.replace("<head>", `<head>${head}`)
 		);
 	});
-
-	app.use(express.static(build));
 
 	app.listen(PORT, () => {
 		console.log(`App launched on ${PORT}`);

@@ -4,7 +4,9 @@ import { Grid, Typography, Button } from "@mui/material";
 import { Link } from "react-router-dom";
 export default function SettingsPageSubscriptionTab() {
 	const { definitions, useQuery } = useRequester();
-	const { data } = useQuery(definitions.stripe.query.getMySubscription);
+	const { data } = useQuery(definitions.stripe.query.getMySubscription, {
+		fetchPolicy: "network-only",
+	});
 
 	const plan = data?.stripe_getMySubscription?.plan;
 

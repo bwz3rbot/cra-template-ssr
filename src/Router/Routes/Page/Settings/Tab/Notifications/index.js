@@ -8,6 +8,7 @@ export default function SettingsPageNotificationsTab() {
 	const { data, loading } = useQuery(definitions.notifications.query.config, {
 		fetchPolicy: "network-only",
 	});
+	console.log("fetching notifications...", data, loading);
 	const [updateConfig] = useMutation(
 		definitions.notifications.mutation.config
 	);

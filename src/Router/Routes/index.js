@@ -113,6 +113,15 @@ export const Routes = () => {
 				/>
 
 				<Route
+					path="/error"
+					element={
+						<Suspend>
+							<PageError />
+						</Suspend>
+					}
+				/>
+
+				<Route
 					path="*"
 					element={
 						<Suspend>

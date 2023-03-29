@@ -9,6 +9,8 @@ import App from "./App";
 import Router from "./Router";
 import Cookies from "./Cookies";
 
+// TODO: uninstall unused deps - https://stackoverflow.com/questions/22675725/find-unused-npm-packages-in-package-json
+
 // this script is invoked when using npm run develop
 // this will only be called on the client so helmet provider must be passed here.
 // the ssr server passes its own instance of helmet provider to the app

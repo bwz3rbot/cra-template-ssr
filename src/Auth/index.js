@@ -2,7 +2,9 @@ import { useCookies } from "../Cookies";
 import { Auth0Provider, withAuth0, useAuth0 } from "@auth0/auth0-react";
 import { useEffect, createContext, useContext } from "react";
 import LoadingScreen from "../Component/LoadingScreen";
+// TODO: repalce useIsClient with useIsSSR from react-aria - note: only works if wrapped in SSrProvider. Not a good idea to install usehooks-ts simply for this when react-aria has it built in and more robust functionality
 import { useIsClient } from "usehooks-ts";
+import { useIsSSR } from "react-aria";
 
 const SSRUserContext = createContext({
 	user: null,

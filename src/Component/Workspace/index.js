@@ -70,8 +70,8 @@ export default function Workspace({ workspace }) {
 								)}
 							</Typography>
 							<Typography color="textSecondary" variant="body1">
-								{workspace.members.length} member
-								{workspace.members.length > 1 ? "s" : ""}
+								{workspace?.members.length} member
+								{workspace?.members.length > 1 ? "s" : ""}
 							</Typography>
 
 							<Divider />

@@ -15,6 +15,8 @@ export const SSRContext = createContext({
 	context available to call useLocation from.
  
 */
+// TODO: test do we still need this?
+// Not sure why the useLocation hook doesn't work while its wrapped in StaticRouter
 export const SSRLocationContext = ({
 	children,
 	hostname,
