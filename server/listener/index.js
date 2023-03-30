@@ -44,7 +44,6 @@ fs.readFile(indexFilepath, "utf-8", async (err, data) => {
 	);
 
 	app.get("*", cookieParser(), async (req, res, next) => {
-		console.log("handling request to ", req.url);
 		let htmlString = `${data}`; // don't alter the original html string - instead make a copy
 
 		const user = await new Promise(async (resolve, reject) => {

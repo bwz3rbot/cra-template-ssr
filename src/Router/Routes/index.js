@@ -62,7 +62,6 @@ const ProtectedRoute = ({ component }) => {
 
 export default function AppRoutes() {
 	const location = useLocation();
-	console.log("location", location);
 	return (
 		<ErrorBoundary
 			// resetKeys is used to reset the error boundary when the location changes
@@ -71,7 +70,11 @@ export default function AppRoutes() {
 			resetKeys={[location.pathname, location.search, location.hash]}
 			FallbackComponent={PageError}
 			onError={(error, componentStack, resetErrorBoundary) => {
-				console.log("error", error);
+				console.log("Error rendering route: ", {
+					error,
+					componentStack,
+					resetErrorBoundary,
+				});
 			}}
 		>
 			<Routes>

@@ -23,8 +23,6 @@ export default function ContactForm({ onSuccess }) {
 				component="form"
 				onSubmit={async e => {
 					e.preventDefault();
-					console.log("sending event");
-
 					try {
 						await submit(e);
 						onSuccess?.(true);

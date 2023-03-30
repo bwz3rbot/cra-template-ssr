@@ -69,7 +69,6 @@ export default function ThemeContextProvider({ children }) {
 		return null;
 	};
 	const storeSelectedTheme = theme => {
-		console.log("storing selected theme: ", theme);
 		cookies.set("theme", theme);
 	};
 	const recallStoredTheme = () => {
