@@ -33,6 +33,44 @@ useLayoutVariant.propTypes = {
 };
 
 const LOCAL_STORAGE_KEY_LOCATION_MAP = "LAYOUT-PROVIDER-LOCATION-MAP";
+export const AppHeight = ({
+	children,
+	debug = false,
+	overflowY = "scroll",
+	...other
+}) => {
+	return (
+		<div
+			style={{
+				height: `var(--app-height)`,
+				border: debug ? "1px solid red" : "none",
+				overflowY,
+				...other,
+			}}
+		>
+			{children}
+		</div>
+	);
+};
+export const BodyHeight = ({
+	children,
+	debug = false,
+	overflowY = "scroll",
+	...other
+}) => {
+	return (
+		<div
+			style={{
+				height: `var(--body-height)`,
+				border: debug ? "1px solid red" : "none",
+				overflowY,
+				...other,
+			}}
+		>
+			{children}
+		</div>
+	);
+};
 
 export default function LayoutProvider({ children, variant = "standard" }) {
 	const cookies = useCookies();
