@@ -34,9 +34,7 @@ export default function AccountWidget() {
 			<AccountMenu
 				anchorEl={menuAnchorEl}
 				onClose={() => setMenuAnchorEl(null)}
-				onSignInSuccess={() => {
-					navigate("/home");
-				}}
+				onSignInSuccess={() => navigate("/home")}
 			/>
 		</>
 	);

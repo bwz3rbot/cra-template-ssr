@@ -4,7 +4,8 @@ import { render, hydrate } from "react-dom";
 import { HelmetProvider } from "react-helmet-async";
 import { BrowserRouter } from "react-router-dom";
 
-import Auth from "./Auth";
+import Analytics from "./Google/Analytics";
+
 import App from "./App";
 import Router from "./Router";
 import Cookies from "./Cookies";
@@ -28,9 +29,9 @@ render(
 	<HelmetProvider>
 		<Router>
 			<Cookies>
-				<Auth>
+				<Analytics>
 					<App />
-				</Auth>
+				</Analytics>
 			</Cookies>
 		</Router>
 	</HelmetProvider>,

@@ -12,7 +12,7 @@ import {
 import { useAnalytics } from "../../../../../Google/Analytics";
 
 export default function ContactForm({ onSuccess }) {
-	const { closeSnackbar, enqueueSnackbar } = useSnackbar();
+	const { enqueueSnackbar } = useSnackbar();
 	const { sendEvent } = useAnalytics();
 	const [state, submit] = useForm(
 		process.env.REACT_APP_FORMSPREE_CONTACT_FORM_ID

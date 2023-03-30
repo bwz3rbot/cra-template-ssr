@@ -6,13 +6,13 @@ import React from "react";
 import { StaticRouter } from "react-router-dom/server";
 import { HelmetProvider } from "react-helmet-async";
 
-import { SSRLocationContext } from "../../src/Head/SSRLocationContext";
 import App from "../../src/App";
 import Cookies from "../../src/Cookies";
 import cookieParser from "cookie-parser";
-import { SSRUserProvider } from "../../src/Auth";
+import { Auth0SSRUserProvider } from "../../src/Auth";
 import { verify } from "jsonwebtoken";
 import { renderToStringWithData } from "@apollo/client/react/ssr";
+import { SSRProvider } from "react-aria";
 const app = express();
 
 let PORT = process.env.PORT || 8080;
@@ -62,29 +62,13 @@ fs.readFile(indexFilepath, "utf-8", async (err, data) => {
 			markup = await renderToStringWithData(
 				<HelmetProvider context={helmetContext}>
 					<StaticRouter location={req.url} context={routerContext}>
-						<SSRLocationContext
-							hostname={req.hostname}
-							pathname={req.path}
-							port={
-								PORT === "80" ||
-								PORT === "443" ||
-								PORT === "8080"
-									? ""
-									: PORT
-							}
-							protocol={req.protocol}
-							hash={
-								req.url.includes("#")
-									? req.url.split("#")[1]
-									: createHash(req.url)
-							}
-						>
-							<Cookies req={req} res={res}>
-								<SSRUserProvider user={user}>
+						<Cookies req={req} res={res}>
+							<SSRProvider>
+								<Auth0SSRUserProvider user={user}>
 									<App />
-								</SSRUserProvider>
-							</Cookies>
-						</SSRLocationContext>
+								</Auth0SSRUserProvider>
+							</SSRProvider>
+						</Cookies>
 					</StaticRouter>
 				</HelmetProvider>
 			);
@@ -100,8 +84,6 @@ fs.readFile(indexFilepath, "utf-8", async (err, data) => {
 		if (routerContext.url) {
 			// Somewhere a `<Redirect>` was rendered
 			return res.redirect(301, routerContext.url);
-		} else {
-			// we're good, send the response
 		}
 
 		// extract the helmet data from the context
@@ -112,6 +94,8 @@ fs.readFile(indexFilepath, "utf-8", async (err, data) => {
 		  ${helmet.link.toString()}
 		  ${helmet.script.toString()}`;
 
+		// update the html string with the new markup and the helmet data
+		// and return it to the client
 		res.send(
 			htmlString
 				.replace(

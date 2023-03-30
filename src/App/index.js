@@ -8,17 +8,17 @@ import Notifications from "../Notifications";
 import Layout from "../Layout";
 import Uploady from "../Upload";
 
-import { Routes } from "../Router/Routes";
+import Routes from "../Router/Routes";
 
-import Analytics from "../Google/Analytics";
+import Auth from "../Auth";
 import "./style.css";
 
 export default function App() {
 	return (
-		<Analytics>
+		<Theme>
 			<Head />
-			<Theme>
-				<Snackbar>
+			<Snackbar>
+				<Auth>
 					<Apollo>
 						<Notifications>
 							<Layout variant="standard">
@@ -28,8 +28,8 @@ export default function App() {
 							</Layout>
 						</Notifications>
 					</Apollo>
-				</Snackbar>
-			</Theme>
-		</Analytics>
+				</Auth>
+			</Snackbar>
+		</Theme>
 	);
 }

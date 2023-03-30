@@ -8,12 +8,20 @@ import SignOutIcon from "@mui/icons-material/Logout";
 import Menu, { Divider, ListItemIcon, MenuItem } from "../../../Component/Menu";
 
 import { useAuth0 } from "@auth0/auth0-react";
+import { useCookies } from "../../../Cookies";
 export default function AccountMenu({
 	anchorEl,
 	onClose = () => {},
 	onSignInSuccess = () => {},
 }) {
-	const { user, logout, loginWithPopup } = useAuth0();
+	const cookies = useCookies();
+	const {
+		user,
+		logout,
+		getAccessTokenWithPopup,
+		getAccessTokenSilently,
+		loginWithPopup,
+	} = useAuth0();
 
 	const handleSignIn = async ({ screen_hint }) => {
 		// close the dialog before starting the sign in flow -
@@ -25,6 +33,14 @@ export default function AccountMenu({
 				screen_hint,
 			},
 		});
+		const { id_token } = await getAccessTokenSilently({
+			detailedResponse: true,
+			authorizationParams: {
+				scope: "openid profile email offline_access",
+			},
+		});
+		cookies.set("token", `Bearer ${id_token}`);
+
 		onSignInSuccess?.();
 	};
 

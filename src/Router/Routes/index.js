@@ -1,4 +1,4 @@
-import { Routes as RouteContext, Route } from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { Suspend } from "../Suspend";
 import { ErrorBoundary } from "react-error-boundary";
@@ -23,12 +23,11 @@ import PageLanding from "./Page/Landing";
 import PageSettings from "./Page/Settings";
 import PageSubscribe from "./Page/Subscribe";
 import PageSignOut from "./Page/SignOut";
-import { useDynamicLocation } from "../../Head/SSRLocationContext";
 
 import { Grid, Typography } from "@mui/material";
 
 const ProtectedRoute = ({ component }) => {
-	const location = useDynamicLocation();
+	const location = useLocation();
 
 	const Component = withAuthenticationRequired(component, {
 		onRedirecting: () => (
@@ -49,8 +48,8 @@ const ProtectedRoute = ({ component }) => {
 	return <Component />;
 };
 
-export const Routes = () => {
-	const location = useDynamicLocation();
+export default function AppRoutes() {
+	const location = useLocation();
 	return (
 		<ErrorBoundary
 			// resetKeys is used to reset the error boundary when the location changes
@@ -62,7 +61,7 @@ export const Routes = () => {
 				console.log("error", error);
 			}}
 		>
-			<RouteContext>
+			<Routes>
 				<Route
 					path="/"
 					element={
@@ -148,7 +147,7 @@ export const Routes = () => {
 						</Suspend>
 					}
 				/>
-			</RouteContext>
+			</Routes>
 		</ErrorBoundary>
 	);
-};
+}

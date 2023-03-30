@@ -1,15 +1,13 @@
-import { Button, Grid, Typography, Card, Dialog } from "@mui/material";
+import { Button, Grid, Typography, Dialog } from "@mui/material";
 import { useState } from "react";
 import ContactForm from "./Form";
 import AlertPanel from "../../../../Component/ErrorPanel";
 import MarkEmailReadOutlinedIcon from "@mui/icons-material/MarkEmailReadOutlined";
 import { useNavigate } from "react-router-dom";
-import { useIsClient } from "usehooks-ts";
 
 export default function PageContact() {
 	const navigate = useNavigate();
 	const [successDialogOpen, setSuccessDialogOpen] = useState(false);
-	const isClient = useIsClient();
 	return (
 		<Grid
 			container

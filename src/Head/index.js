@@ -1,18 +1,14 @@
 import React from "react";
 import { Helmet } from "react-helmet-async";
-import { useDynamicLocation } from "./SSRLocationContext";
-const RoundLogo = "logo/round-56x56.png";
+import { useLocation } from "react-router-dom";
+const RoundLogo = "/logo/round-56x56.png";
 
 export default function Head() {
-	// useDynamicLocation() is a wrapper around react-router-dom useLocation()
-	// this hook will get its state from the ssr server request if it exists
-	const { hostname, pathname, port, protocol } = useDynamicLocation();
+	const { pathname } = useLocation();
 
-	const url = `${protocol}://${hostname}${port ? ":" + port : ""}${pathname}`;
+	const url = `${process.env.REACT_APP_SITE_URL}${pathname}`;
 
-	const Logo = `${protocol}://${hostname}${
-		port ? ":" + port : ""
-	}/${RoundLogo}`;
+	const Logo = `${process.env.REACT_APP_SITE_URL}${RoundLogo}`;
 
 	const keywords = process.env.REACT_APP_SITE_KEYWORDS || "";
 	const creator = process.env.REACT_APP_SITE_CREATOR || "@BangoBotto";

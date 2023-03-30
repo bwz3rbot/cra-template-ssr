@@ -69,14 +69,18 @@ export default function ThemeContextProvider({ children }) {
 		return null;
 	};
 	const storeSelectedTheme = theme => {
+		console.log("storing selected theme: ", theme);
 		cookies.set("theme", theme);
 	};
 	const recallStoredTheme = () => {
-		return cookies.get("theme");
+		let theme = cookies.get("theme");
+
+		if (!theme) theme = getDeviceTheme();
+		if (!theme) theme = "light";
+		cookies.set("theme", theme);
+		return theme;
 	};
-	const [theme, setTheme] = useState(
-		recallStoredTheme() || getDeviceTheme() || "light"
-	);
+	const [theme, setTheme] = useState(recallStoredTheme());
 
 	const handleSetTheme = theme => {
 		setTheme(theme);
