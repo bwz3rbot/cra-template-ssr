@@ -16,12 +16,14 @@ import { withAuthenticationRequired } from "@auth0/auth0-react";
 
 import Page404 from "./Page/404";
 import PageContact from "./Page/Contact";
-import PageSignIn from "./Page/SignIn";
 import PageHome from "./Page/Home";
 import PageAbout from "./Page/About";
 import PageLanding from "./Page/Landing";
 import PageSettings from "./Page/Settings";
 import PageSubscribe from "./Page/Subscribe";
+
+import PageAuthorize from "./Page/Authorize";
+import PageSignIn from "./Page/SignIn";
 import PageSignOut from "./Page/SignOut";
 
 import { Grid, Typography } from "@mui/material";
@@ -43,6 +45,16 @@ const ProtectedRoute = ({ component }) => {
 				<Typography>redirecting...</Typography>
 			</Grid>
 		),
+		loginOptions: {
+			authorizationParams: {
+				// /authorize page will redirect to the returnTo url
+				redirect_uri: `${process.env.REACT_APP_AUTH0_CALLBACK_URL}?returnTo=${location.pathname}`,
+				// these scopes are required to create the access token
+				// used to interact with the api
+				scope: "read:current_user offline_access",
+			},
+			fragment: location.pathname,
+		},
 		returnTo: location.pathname,
 	});
 	return <Component />;
@@ -50,6 +62,7 @@ const ProtectedRoute = ({ component }) => {
 
 export default function AppRoutes() {
 	const location = useLocation();
+	console.log("location", location);
 	return (
 		<ErrorBoundary
 			// resetKeys is used to reset the error boundary when the location changes
@@ -70,6 +83,14 @@ export default function AppRoutes() {
 						</Suspend>
 					}
 				/>
+				<Route
+					path="/authorize"
+					element={
+						<Suspend>
+							<PageAuthorize />
+						</Suspend>
+					}
+				></Route>
 				<Route
 					path="/contact"
 					element={

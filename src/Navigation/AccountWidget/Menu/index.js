@@ -8,39 +8,26 @@ import SignOutIcon from "@mui/icons-material/Logout";
 import Menu, { Divider, ListItemIcon, MenuItem } from "../../../Component/Menu";
 
 import { useAuth0 } from "@auth0/auth0-react";
-import { useCookies } from "../../../Cookies";
 export default function AccountMenu({
 	anchorEl,
 	onClose = () => {},
 	onSignInSuccess = () => {},
 }) {
-	const cookies = useCookies();
-	const {
-		user,
-		logout,
-		getAccessTokenWithPopup,
-		getAccessTokenSilently,
-		loginWithPopup,
-	} = useAuth0();
+	const { user, logout, loginWithPopup } = useAuth0();
 
 	const handleSignIn = async ({ screen_hint }) => {
-		// close the dialog before starting the sign in flow -
-		// otherwise the menu won't open when the sign in flow is complete
-		// because the menu overrides all mouse events
-		onClose?.();
 		await loginWithPopup({
 			authorizationParams: {
 				screen_hint,
+				// base authentication must contain scopes which
+				// exceed that required by the silent authentication
+				scope: "read:current_user offline_access",
 			},
 		});
-		const { id_token } = await getAccessTokenSilently({
-			detailedResponse: true,
-			authorizationParams: {
-				scope: "openid profile email offline_access",
-			},
-		});
-		cookies.set("token", `Bearer ${id_token}`);
 
+		// close the dialog menu
+		onClose?.();
+		// navigate to /home
 		onSignInSuccess?.();
 	};
 
