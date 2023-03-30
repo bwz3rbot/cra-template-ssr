@@ -1,31 +1,38 @@
-import React, { useEffect, useState, lazy } from "react";
-import Head from "../../src/Head";
-// const App = lazy(() => import("../../src/App"));
+import { HelmetProvider } from "react-helmet-async";
+import { StaticRouter } from "react-router-dom/server";
+import Cookies from "../../src/Cookies";
+import { SSRProvider } from "react-aria";
+import { Auth0SSRUserProvider } from "../../src/Auth";
+import InstantSearch from "../../src/InstantSearch";
 import App from "../../src/App";
-const useIsSsr = () => {
-	// we always start off in "SSR mode", to ensure our initial browser render
-	// matches the SSR render
-	const [isSsr, setIsSsr] = useState(true);
+export default function SSRApp({
+	req,
+	res,
+	user,
+	instantSearchState,
+	helmetContext,
+	routerContext,
+}) {
+	console.log("Rendering SSR App");
+	console.log("req?.url:", req?.url);
+	console.log("user:", user);
+	console.log("instantSearchState:", instantSearchState);
+	console.log("helmetContext:", helmetContext);
+	console.log("routerContext:", routerContext);
 
-	useEffect(() => {
-		// `useEffect` never runs on the server, so we must be on the client if
-		// we hit this block
-		setIsSsr(false);
-	}, []);
-
-	return isSsr;
-};
-
-/* 
-	This component's purpose is to render the head on the server and the app on the client.
-	We only want to render the head so that we can easily set the title and other meta tags
-	before returning the html to the client.
- */
-export default function SSRApp() {
-	const isSsr = useIsSsr();
-	// we're on the server, so we need to render the head -
-	// these values will be extracted using helmet context and then passed into the html template
-	if (isSsr) return <App />;
-	// we're on the client, so the head is rendered inside of the app
-	return <App />;
+	return (
+		<HelmetProvider context={helmetContext}>
+			<StaticRouter location={req.url} context={routerContext}>
+				<Cookies req={req} res={res}>
+					<SSRProvider>
+						<Auth0SSRUserProvider user={user}>
+							<InstantSearch initialState={instantSearchState}>
+								<App />
+							</InstantSearch>
+						</Auth0SSRUserProvider>
+					</SSRProvider>
+				</Cookies>
+			</StaticRouter>
+		</HelmetProvider>
+	);
 }

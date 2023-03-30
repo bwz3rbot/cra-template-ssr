@@ -3,16 +3,16 @@ import path from "path";
 import express from "express";
 import React from "react";
 
-import { StaticRouter } from "react-router-dom/server";
-import { HelmetProvider } from "react-helmet-async";
-
-import App from "../../src/App";
-import Cookies from "../../src/Cookies";
+import SSRApp from "../App";
 import cookieParser from "cookie-parser";
-import { Auth0SSRUserProvider } from "../../src/Auth";
 import { verify } from "jsonwebtoken";
 import { renderToStringWithData } from "@apollo/client/react/ssr";
-import { SSRProvider } from "react-aria";
+import { findResultsState } from "react-instantsearch-dom/server";
+
+import { searchClient } from "../../src/InstantSearch";
+
+// import template from "./template";
+
 const app = express();
 
 let PORT = process.env.PORT || 8080;
@@ -54,22 +54,49 @@ fs.readFile(indexFilepath, "utf-8", async (err, data) => {
 			});
 		});
 
+		console.log("awaiting resultsState...");
+		let resultsState = {};
+		// try {
+		// 	resultsState = await findResultsState(SSRApp, {
+		// 		searchClient,
+		// 		indexName: process.env.REACT_APP_ALGOLIA_INDEX_NAME,
+		// 		helmetContext: {},
+		// 		instantSearchState: {
+		// 			searchState: {},
+		// 			resultsState: {},
+		// 			widgetsCollector: () => {},
+		// 			searchClient,
+		// 		},
+		// 		req,
+		// 		res,
+		// 		user,
+		// 		routerContext: {},
+		// 	});
+		// } catch (err) {
+		// 	console.log("findResultsState error:", err);
+		// 	process.exit();
+		// }
+		console.log("after awaiting resultsState:", resultsState);
 		const helmetContext = {};
 		const routerContext = {};
+		const initialState = {
+			searchState: {},
+			resultsState,
+			searchClient,
+			widgetsCollector: () => {},
+		};
 		let markup;
+		console.log("awaiting renderToStringWithData...");
 		try {
 			markup = await renderToStringWithData(
-				<HelmetProvider context={helmetContext}>
-					<StaticRouter location={req.url} context={routerContext}>
-						<Cookies req={req} res={res}>
-							<SSRProvider>
-								<Auth0SSRUserProvider user={user}>
-									<App />
-								</Auth0SSRUserProvider>
-							</SSRProvider>
-						</Cookies>
-					</StaticRouter>
-				</HelmetProvider>
+				<SSRApp
+					helmetContext={helmetContext}
+					instantSearchState={initialState}
+					req={req}
+					res={res}
+					user={user}
+					routerContext={routerContext}
+				/>
 			);
 		} catch (e) {
 			console.log(e);
