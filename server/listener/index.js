@@ -52,7 +52,6 @@ fs.readFile(indexFilepath, "utf-8", async (err, data) => {
 			});
 		} catch (err) {
 			console.log("findResultsState error:", err);
-			process.exit();
 		}
 		const helmetContext = {};
 		const routerContext = {};
