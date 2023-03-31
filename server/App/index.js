@@ -9,24 +9,19 @@ export default function SSRApp({
 	req,
 	res,
 	user,
-	instantSearchState,
+	instantSearchResultsState,
 	helmetContext,
 	routerContext,
 }) {
-	console.log("Rendering SSR App");
-	console.log("req?.url:", req?.url);
-	console.log("user:", user);
-	console.log("instantSearchState:", instantSearchState);
-	console.log("helmetContext:", helmetContext);
-	console.log("routerContext:", routerContext);
-
 	return (
 		<HelmetProvider context={helmetContext}>
 			<StaticRouter location={req.url} context={routerContext}>
 				<Cookies req={req} res={res}>
 					<SSRProvider>
 						<Auth0SSRUserProvider user={user}>
-							<InstantSearch initialState={instantSearchState}>
+							<InstantSearch
+								resultsState={instantSearchResultsState}
+							>
 								<App />
 							</InstantSearch>
 						</Auth0SSRUserProvider>
