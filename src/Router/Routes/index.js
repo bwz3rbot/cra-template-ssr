@@ -4,6 +4,7 @@ import { Suspend } from "../Suspend";
 import { ErrorBoundary } from "react-error-boundary";
 import PageError from "./Page/Error"; // can't lazyload the error page. needs to be available immediately
 import { withAuthenticationRequired } from "@auth0/auth0-react";
+import LoadingScreen from "../../Component/LoadingScreen";
 
 // const Page404 = lazy(() => import("./Page/404"));
 // const PageContact = lazy(() => import("./Page/Contact"));
@@ -27,11 +28,13 @@ import PageAuthorize from "./Page/Authorize";
 import PageSignIn from "./Page/SignIn";
 import PageSignOut from "./Page/SignOut";
 
-import { Grid, Typography } from "@mui/material";
+import { Grid } from "@mui/material";
 
 const ProtectedRoute = ({ component }) => {
 	const location = useLocation();
+	const returnTo = location.pathname + location.search;
 
+	console.log({ returnTo });
 	const Component = withAuthenticationRequired(component, {
 		onRedirecting: () => (
 			<Grid
@@ -43,7 +46,7 @@ const ProtectedRoute = ({ component }) => {
 					alignItems: "center",
 				}}
 			>
-				<Typography>redirecting...</Typography>
+				<LoadingScreen loading />
 			</Grid>
 		),
 		loginOptions: {
@@ -56,7 +59,7 @@ const ProtectedRoute = ({ component }) => {
 			},
 			fragment: location.pathname,
 		},
-		returnTo: location.pathname,
+		returnTo,
 	});
 	return <Component />;
 };
