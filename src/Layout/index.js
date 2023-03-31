@@ -33,6 +33,10 @@ useLayoutVariant.propTypes = {
 };
 
 const LOCAL_STORAGE_KEY_LOCATION_MAP = "LAYOUT-PROVIDER-LOCATION-MAP";
+
+/**
+ * @description use to create a full screen component
+ */
 export const AppHeight = ({
 	children,
 	debug = false,
@@ -53,7 +57,6 @@ export const AppHeight = ({
 	);
 };
 
-// add a jsdoc to explain why you are not able to use the standard body height
 /**
  * @description Using this component without layout set to SPA will cause some extra padding to be added to the bottom of the page.
  */

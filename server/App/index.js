@@ -3,13 +3,14 @@ import { StaticRouter } from "react-router-dom/server";
 import Cookies from "../../src/Cookies";
 import { SSRProvider } from "react-aria";
 import { Auth0SSRUserProvider } from "../../src/Auth";
-import InstantSearch from "../../src/InstantSearch";
+import { InstantSearchSSRContextProvider } from "../../src/InstantSearch/server";
 import App from "../../src/App";
 export default function SSRApp({
 	req,
 	res,
 	user,
 	instantSearchResultsState,
+	instantSearchSearchState,
 	helmetContext,
 	routerContext,
 }) {
@@ -19,11 +20,12 @@ export default function SSRApp({
 				<Cookies req={req} res={res}>
 					<SSRProvider>
 						<Auth0SSRUserProvider user={user}>
-							<InstantSearch
+							<InstantSearchSSRContextProvider
 								resultsState={instantSearchResultsState}
+								searchState={instantSearchSearchState}
 							>
 								<App />
-							</InstantSearch>
+							</InstantSearchSSRContextProvider>
 						</Auth0SSRUserProvider>
 					</SSRProvider>
 				</Cookies>

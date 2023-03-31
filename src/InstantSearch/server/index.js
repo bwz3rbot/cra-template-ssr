@@ -1,12 +1,27 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { InstantSearch } from "react-instantsearch-dom";
+import { searchClient } from "../algoliasearch";
 import View from "../view";
 
-class App extends Component {
+export const InstantSearchSSRContextProvider = ({
+	children,
+	resultsState,
+	searchState,
+}) => {
+	let options = {
+		indexName: process.env.REACT_APP_ALGOLIA_INDEX_NAME,
+		searchClient,
+	};
+	if (resultsState) options.resultsState = resultsState;
+	if (searchState) options.searchState = searchState;
+	return <InstantSearch {...options}>{children}</InstantSearch>;
+};
+
+export default class PreRenderResultsProvider extends Component {
 	static propTypes = {
 		indexName: PropTypes.string.isRequired,
-		searchClient: PropTypes.object.isRequired,
+		// searchClient: PropTypes.object.isRequired,
 		searchState: PropTypes.object,
 		resultsState: PropTypes.oneOfType([
 			PropTypes.arrayOf(PropTypes.object),
@@ -22,11 +37,14 @@ class App extends Component {
 		searchState: this.props.searchState,
 	};
 
-	onSearchStateChange = nextSearchState =>
+	onSearchStateChange = nextSearchState => {
 		this.setState({ searchState: nextSearchState });
+	};
 
 	render() {
 		const { searchState } = this.state;
+
+		console.log("rendering with searchState:", searchState);
 
 		return (
 			<InstantSearch
@@ -39,5 +57,3 @@ class App extends Component {
 		);
 	}
 }
-
-export default App;

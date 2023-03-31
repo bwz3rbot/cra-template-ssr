@@ -9,7 +9,9 @@ import { renderToStringWithData } from "@apollo/client/react/ssr";
 import { findResultsState } from "react-instantsearch-dom/server";
 
 import { searchClient } from "../../src/InstantSearch/algoliasearch";
+
 import InstantSearch from "../../src/InstantSearch/server";
+import { urlToSearchState } from "../../src/InstantSearch/history/util";
 
 import SSRApp from "../App";
 
@@ -53,28 +55,34 @@ fs.readFile(indexFilepath, "utf-8", async (err, data) => {
 		console.log("got user back:", user);
 
 		let resultsState = {};
+		const searchState = urlToSearchState({
+			search: req.url,
+		});
 		try {
 			console.log("findResultsState");
 			resultsState = await findResultsState(InstantSearch, {
 				searchClient,
 				indexName: process.env.REACT_APP_ALGOLIA_INDEX_NAME,
+				searchState,
 			});
 		} catch (err) {
 			console.log("findResultsState error:", err);
 		}
+		console.log(resultsState);
+
 		const helmetContext = {};
 		const routerContext = {};
-		console.log(resultsState);
 
 		let markup;
 		try {
 			markup = await renderToStringWithData(
 				<SSRApp
-					helmetContext={helmetContext}
-					instantSearchResultsState={resultsState}
 					req={req}
 					res={res}
 					user={user}
+					instantSearchSearchState={searchState}
+					instantSearchResultsState={resultsState}
+					helmetContext={helmetContext}
 					routerContext={routerContext}
 				/>
 			);
@@ -87,13 +95,13 @@ fs.readFile(indexFilepath, "utf-8", async (err, data) => {
 			return res.redirect(301, "/error");
 		}
 
-		const { helmet } = helmetContext;
 		if (routerContext.url) {
 			// Somewhere a `<Redirect>` was rendered
 			return res.redirect(301, routerContext.url);
 		}
 
 		// extract the helmet data from the context
+		const { helmet } = helmetContext;
 		const head = `
 		  ${helmet.title.toString()}
 		  ${helmet.priority.toString()}
