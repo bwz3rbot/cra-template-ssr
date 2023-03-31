@@ -1,8 +1,9 @@
-import { BodyHeight } from "../../../../Layout";
+import { BodyHeight, useLayoutVariant } from "../../../../Layout";
 import InstantSearchView from "../../../../InstantSearch/view";
 export default function SubscribePage() {
+	useLayoutVariant({ variant: "SPA" });
 	return (
-		<BodyHeight debug>
+		<BodyHeight>
 			<InstantSearchView />
 		</BodyHeight>
 	);

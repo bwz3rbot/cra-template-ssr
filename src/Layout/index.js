@@ -52,6 +52,11 @@ export const AppHeight = ({
 		</div>
 	);
 };
+
+// add a jsdoc to explain why you are not able to use the standard body height
+/**
+ * @description Using this component without layout set to SPA will cause some extra padding to be added to the bottom of the page.
+ */
 export const BodyHeight = ({
 	children,
 	debug = false,
@@ -80,7 +85,17 @@ export default function LayoutProvider({ children, variant = "standard" }) {
 	const [currentVariant, setCurrentVariant] = useState(variant);
 	const getLocationLayoutMap = () => {
 		const locationMap = cookies.get(LOCAL_STORAGE_KEY_LOCATION_MAP);
-		return JSON.parse(locationMap || "{}");
+		let parsed = {};
+		try {
+			if (typeof locationMap === "string") {
+				parsed = JSON.parse(locationMap || "{}");
+			} else {
+				parsed = locationMap || {};
+			}
+		} catch (error) {
+			console.log("error parsing location map: ", error);
+		}
+		return parsed;
 	};
 	const storeLocationLayoutMap = map => {
 		cookies.set(LOCAL_STORAGE_KEY_LOCATION_MAP, JSON.stringify(map));
