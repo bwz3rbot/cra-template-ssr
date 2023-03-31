@@ -3,31 +3,21 @@ import path from "path";
 import express from "express";
 import React from "react";
 
-import SSRApp from "../App";
 import cookieParser from "cookie-parser";
 import { verify } from "jsonwebtoken";
 import { renderToStringWithData } from "@apollo/client/react/ssr";
 import { findResultsState } from "react-instantsearch-dom/server";
 
-import { searchClient } from "../../src/InstantSearch";
+import { searchClient } from "../../src/InstantSearch/algoliasearch";
+import InstantSearch from "../../src/InstantSearch/server";
 
-// import template from "./template";
+import SSRApp from "../App";
 
 const app = express();
 
-let PORT = process.env.PORT || 8080;
-PORT = `${PORT}`; // convert to string so SSRLocationContext doesn't break
+const PORT = process.env.PORT || 8080;
 const build = path.resolve(__dirname, "..", "..", "build");
 const indexFilepath = path.resolve(build, "index.html");
-
-const createHash = str => {
-	// simple hash function used to generate page keys for reac-router-dom while in ssr mode
-	let hash = 0;
-	for (let i = 0; i < str.length; i++) {
-		hash = str.charCodeAt(i) + ((hash << 5) - hash);
-	}
-	return hash;
-};
 
 fs.readFile(indexFilepath, "utf-8", async (err, data) => {
 	app.use("/eb-health", (req, res) => {
@@ -44,7 +34,7 @@ fs.readFile(indexFilepath, "utf-8", async (err, data) => {
 	);
 
 	app.get("*", cookieParser(), async (req, res, next) => {
-		let htmlString = `${data}`; // don't alter the original html string - instead make a copy
+		const htmlString = `${data}`; // don't alter the original html string - instead make a copy
 
 		const user = await new Promise(async (resolve, reject) => {
 			let token = req.cookies.token;
@@ -54,44 +44,25 @@ fs.readFile(indexFilepath, "utf-8", async (err, data) => {
 			});
 		});
 
-		console.log("awaiting resultsState...");
 		let resultsState = {};
-		// try {
-		// 	resultsState = await findResultsState(SSRApp, {
-		// 		searchClient,
-		// 		indexName: process.env.REACT_APP_ALGOLIA_INDEX_NAME,
-		// 		helmetContext: {},
-		// 		instantSearchState: {
-		// 			searchState: {},
-		// 			resultsState: {},
-		// 			widgetsCollector: () => {},
-		// 			searchClient,
-		// 		},
-		// 		req,
-		// 		res,
-		// 		user,
-		// 		routerContext: {},
-		// 	});
-		// } catch (err) {
-		// 	console.log("findResultsState error:", err);
-		// 	process.exit();
-		// }
-		console.log("after awaiting resultsState:", resultsState);
+		try {
+			resultsState = await findResultsState(InstantSearch, {
+				searchClient,
+				indexName: process.env.REACT_APP_ALGOLIA_INDEX_NAME,
+			});
+		} catch (err) {
+			console.log("findResultsState error:", err);
+			process.exit();
+		}
 		const helmetContext = {};
 		const routerContext = {};
-		const initialState = {
-			searchState: {},
-			resultsState,
-			searchClient,
-			widgetsCollector: () => {},
-		};
+
 		let markup;
-		console.log("awaiting renderToStringWithData...");
 		try {
 			markup = await renderToStringWithData(
 				<SSRApp
 					helmetContext={helmetContext}
-					instantSearchState={initialState}
+					instantSearchResultsState={resultsState}
 					req={req}
 					res={res}
 					user={user}
