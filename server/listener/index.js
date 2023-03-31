@@ -30,6 +30,8 @@ fs.readFile(indexFilepath, "utf-8", async (err, data) => {
 		express.static(build, {
 			// don't serve the index.html page! redirect to the root instead
 			index: false,
+			// don't cache the static files
+			maxAge: 0,
 		})
 	);
 
@@ -43,9 +45,11 @@ fs.readFile(indexFilepath, "utf-8", async (err, data) => {
 				resolve(decoded);
 			});
 		});
+		console.log("got user back:", user);
 
 		let resultsState = {};
 		try {
+			console.log("findResultsState");
 			resultsState = await findResultsState(InstantSearch, {
 				searchClient,
 				indexName: process.env.REACT_APP_ALGOLIA_INDEX_NAME,
@@ -55,6 +59,7 @@ fs.readFile(indexFilepath, "utf-8", async (err, data) => {
 		}
 		const helmetContext = {};
 		const routerContext = {};
+		console.log(resultsState);
 
 		let markup;
 		try {
@@ -73,6 +78,7 @@ fs.readFile(indexFilepath, "utf-8", async (err, data) => {
 		}
 		if (!markup) {
 			// Error building the app - redirect to the error page
+			console.log("Error building the app - redirect to the error page");
 			return res.redirect(301, "/error");
 		}
 
