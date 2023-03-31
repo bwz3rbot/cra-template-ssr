@@ -21,6 +21,7 @@ import PageAbout from "./Page/About";
 import PageLanding from "./Page/Landing";
 import PageSettings from "./Page/Settings";
 import PageSubscribe from "./Page/Subscribe";
+import PageLibrary from "./Page/Library";
 
 import PageAuthorize from "./Page/Authorize";
 import PageSignIn from "./Page/SignIn";
@@ -116,6 +117,14 @@ export default function AppRoutes() {
 					element={
 						<Suspend>
 							<ProtectedRoute component={PageHome} />
+						</Suspend>
+					}
+				/>
+				<Route
+					path="/library"
+					element={
+						<Suspend>
+							<ProtectedRoute component={PageLibrary} />
 						</Suspend>
 					}
 				/>

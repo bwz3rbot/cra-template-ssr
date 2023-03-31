@@ -4,6 +4,7 @@ import SettingsIcon from "@mui/icons-material/Settings";
 import ContactIcon from "@mui/icons-material/ContactMail";
 import PrivacyTip from "@mui/icons-material/PrivacyTip";
 import TermsOfServiceIcon from "@mui/icons-material/Description";
+import PhotoLibraryOutlinedIcon from "@mui/icons-material/PhotoLibraryOutlined";
 import ReactIconSrc from "./Icon/discord.svg";
 export const LinkSection = [
 	{
@@ -16,6 +17,11 @@ export const LinkSection = [
 				to: "/settings",
 				text: "Settings",
 				Icon: SettingsIcon,
+			},
+			{
+				to: "/library",
+				text: "Library",
+				Icon: PhotoLibraryOutlinedIcon,
 			},
 		],
 	},

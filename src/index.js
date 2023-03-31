@@ -1,9 +1,8 @@
 import React from "react";
-import { render, hydrate } from "react-dom";
+import { render } from "react-dom";
 
 import { HelmetProvider } from "react-helmet-async";
-import { BrowserRouter } from "react-router-dom";
-
+import InstantSearch from "./InstantSearch";
 import Analytics from "./Google/Analytics";
 
 import App from "./App";
@@ -30,7 +29,9 @@ render(
 		<Router>
 			<Cookies>
 				<Analytics>
-					<App />
+					<InstantSearch>
+						<App />
+					</InstantSearch>
 				</Analytics>
 			</Cookies>
 		</Router>
