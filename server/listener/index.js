@@ -20,8 +20,13 @@ const build = path.resolve(__dirname, "..", "..", "build");
 const indexFilepath = path.resolve(build, "index.html");
 
 fs.readFile(indexFilepath, "utf-8", async (err, data) => {
+	app.use("*", (req, res, next) => {
+		console.log("request:", req.url);
+		next();
+	});
 	app.use("/eb-health", (req, res) => {
 		// Elastic Beanstalk health check endpoint
+		console.log("eb-health check");
 		res.send("OK");
 	});
 

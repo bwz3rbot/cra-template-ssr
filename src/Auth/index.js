@@ -61,6 +61,7 @@ const Persistor = ({ children }) => {
 		asyncEffect();
 	}, [getAccessTokenSilently, user?.sub]);
 
+	console.log("rendering persistor", { isLoading, isSSR });
 	return (
 		<LoadingScreen
 			loading={
@@ -75,6 +76,10 @@ const Persistor = ({ children }) => {
 };
 
 export default function AuthContext({ children }) {
+	console.log("rendering auth context");
+	console.log("auth0 domain", process.env.REACT_APP_AUTH0_DOMAIN);
+	console.log("auth0 client id", process.env.REACT_APP_AUTH0_CLIENTID);
+	console.log("auth0 callback url", process.env.REACT_APP_AUTH0_CALLBACK_URL);
 	return (
 		<Auth0Provider
 			domain={process.env.REACT_APP_AUTH0_DOMAIN}

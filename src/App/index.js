@@ -14,6 +14,7 @@ import Auth from "../Auth";
 import "./style.css";
 
 export default function App() {
+	console.log("renmdering app");
 	return (
 		<Theme>
 			<Head />
