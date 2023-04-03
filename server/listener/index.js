@@ -20,7 +20,12 @@ const app = express();
 const PORT = process.env.PORT || 8080;
 const build = path.resolve(__dirname, "..", "..", "build");
 const indexFilepath = path.resolve(build, "index.html");
-
+const getProtocol = req => {
+	var proto = req.connection.encrypted ? "https" : "http";
+	// only do this if you trust the proxy
+	proto = req.headers["x-forwarded-proto"] || proto;
+	return proto.split(/\s*,\s*/)[0];
+};
 fs.readFile(indexFilepath, "utf-8", async (err, data) => {
 	app.use("*", (req, res, next) => {
 		console.log("request:", req.url);
@@ -30,6 +35,18 @@ fs.readFile(indexFilepath, "utf-8", async (err, data) => {
 		// Elastic Beanstalk health check endpoint
 		console.log("eb-health check");
 		res.send("OK");
+	});
+
+	app.get("*", (req, res, next) => {
+		// auto redirect to https if not in dev mode
+		if (
+			process.env.NODE_ENV === "production" &&
+			getProtocol(req) !== "https"
+		) {
+			res.redirect("https://" + req.headers.host + req.url);
+		} else {
+			next();
+		}
 	});
 
 	// serve all the static files to the client
